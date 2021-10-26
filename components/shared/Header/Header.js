@@ -1,15 +1,12 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { ChevronRightIcon, HomeIcon } from '@heroicons/react/outline'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import the FontAwesomeIcon component
+import { Disclosure } from '@headlessui/react'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Header() {
+export default function Header({ data }) {
   const pages = [
     { name: 'Pembelian', href: '#', current: true },
     { name: 'Pembayaran', href: '#', current: false },
@@ -17,6 +14,7 @@ export default function Header() {
   ]
 
   const rowLen = pages.length;
+
   return (
     <Disclosure as="nav" className="bg-white shadow z-10 fixed top-0 left-0 right-0">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,12 +22,13 @@ export default function Header() {
           <div className="flex">
             <div className="flex-shrink-0 flex items-center hidden lg:flex">
               <img
-                className="lg:block h-8 w-auto lg:mr-5"
+                className="lg:block lg:mr-5 h-8 w-auto"
                 src={`../png/logo.png`}
                 alt="XGO"
               />
             </div>
-            
+
+
             <nav className="flex lg:ml-32" aria-label="Breadcrumb">
               <ol role="list" className="flex items-center space-x-4">
                 {pages.map((page, index) => (

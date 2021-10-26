@@ -1,0 +1,6 @@
+.trapezoid{
+    border-left: 100vw solid #0285e4;
+    border-bottom: 21vw solid transparent;
+    width: 100vw;
+    min-height: 450px;
+}
