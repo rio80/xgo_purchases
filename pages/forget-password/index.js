@@ -1,11 +1,11 @@
 import BannerLoginPage from "../../components/BannerLoginPage/BannerLoginPage";
-import LoginPage from "../../components/LoginPage/LoginPage";
+import ResetPage from "../../components/ResetPage/ResetPage";
 
-export default function Login(){
-    return(
+export default function ForgetPassword(){
+    return (
         <div className="w-full flex">
             <BannerLoginPage />
-            <LoginPage />
+            <ResetPage />
         </div>
     )
 }

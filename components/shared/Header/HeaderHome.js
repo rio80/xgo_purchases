@@ -1,10 +1,9 @@
 import { Disclosure } from "@headlessui/react"
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+import { useRouter } from "next/router"
 
 export default function HeaderHome() {
+    const router = useRouter();
+    
     const home = [
         { name: 'Home', href: '#', current: true },
         { name: 'Product', href: '#', current: false } 
@@ -48,6 +47,7 @@ export default function HeaderHome() {
                                 type="button"
                                 className="w-full self-center items-center px-9 py-3 border border-transparent text-sm leading-4 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 style={{ backgroundColor: '#0285e4', boxShadow: '0 4px 31px 0 rgba(0, 0, 0, 0.15)' }}
+                                onClick={() => router.push('/login')}
                             >
                                 Login
                             </button>
