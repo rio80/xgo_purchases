@@ -20,28 +20,6 @@ export default function PurchasePage() {
     }
   ]
 
-  // const detail = [
-  //   {
-  //     paket: 'Paket 30 Hari VOD',
-  //     harga: 'Rp9.900',
-  //     hari: '/ 30 Hari',
-  //     detail: '*Hingga 31 Oktober 2021',
-  //     color: true
-  //   }, {
-  //     paket: 'Paket 7 Hari Linear TV + VOD',
-  //     harga: 'Rp9.900',
-  //     hari: '/ 30 Hari',
-  //     detail: '*Hingga 31 Oktober 2021',
-  //     color: false
-  //   }, {
-  //     paket: 'Paket 30 hari Linear TV + VOD',
-  //     harga: 'Rp9.900',
-  //     hari: '/ 30 Hari',
-  //     detail: '*Hingga 31 Oktober 2021',
-  //     color: false
-  //   }
-  // ]
-
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
@@ -89,7 +67,7 @@ export default function PurchasePage() {
             <p className="font-medium text-2xl text-center">Pembelian </p> <br />
             <p className="font-medium text-sm text-center text-gray-400">Untuk berlangganan, tersedia berbagai paket yang sesuai dengan kebutuhanmu. </p>
           </div>
-          <div className="pt-5 pb-20">
+          <div className="pt-5 pb-6">
             <div class="grid grid-cols-3 gap-20">
               <div className="w-72 rounded-lg py-6 px-8" style={{ backgroundColor: '#f6f9ff' }}>
                 <button
@@ -153,6 +131,21 @@ export default function PurchasePage() {
                 ))}
               </div>
             </div>
+
+            <div className="flex items-center h-5 mt-6">
+              <input
+                id="comments"
+                aria-describedby="comments-description"
+                name="comments"
+                type="checkbox"
+                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+              />
+              <div className="ml-3 text-sm">
+                <label htmlFor="comments" className="font-small text-xs text-gray-700">
+                  Saya menyetujui <a href="#" className="text-blue-600">Syarat dan Ketentuan</a>
+                </label>
+              </div>
+            </div>
           </div>
           <div className="relative">
             <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -161,18 +154,9 @@ export default function PurchasePage() {
           </div>
           <div className="py-5 mx-1">
             <div className="relative flex items-center">
-              <div className="flex items-center h-5">
-                <input
-                  id="comments"
-                  aria-describedby="comments-description"
-                  name="comments"
-                  type="checkbox"
-                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                />
-              </div>
-              <div className="ml-3 text-sm">
+              <div>
                 <label htmlFor="comments" className="font-small text-xs text-gray-700">
-                  Saya menyetujui <a href="#" className="text-blue-600">Syarat dan Ketentuan</a>
+                  Punya Voucher? <a href="#" className="text-blue-600">Aktivasi disini</a>
                 </label>
               </div>
 

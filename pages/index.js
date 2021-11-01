@@ -3,7 +3,9 @@ import FooterPage from '../components/FooterPage/FooterPage'
 import HomePage from '../components/HomePage/HomePage'
 import HeaderHome from '../components/shared/Header/HeaderHome'
 
-export default function Home() {
+export default function Home(props) {
+  const { id } = props
+  console.log(id)
   return (
     <>
       <Head>
@@ -17,3 +19,10 @@ export default function Home() {
     </>
   )
 }
+
+Home.getInitialProps = async ctx => {
+  const { query } = ctx;
+  return {
+    id: query ? query.id : '',
+  };
+};

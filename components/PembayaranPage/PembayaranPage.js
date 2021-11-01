@@ -1,7 +1,11 @@
 import { useState, Fragment } from 'react'
 import { RadioGroup, Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
+import { createOrderMinipack, createRequestPayment } from '../../utils/apiHandlers'
+import { useRouter } from 'next/router'
+import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 
 const plans = [
     { name: 'Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px' },
@@ -20,10 +24,42 @@ function classNames(...classes) {
 }
 
 export default function PembayaranPage() {
+    const router = useRouter()
     const [selected, setSelected] = useState(plans[0])
     const [selected2, setSelected2] = useState(people[0])
+    const [loading, setLoading] = useState(false)
+
+    const handleBayar = async () => {
+        setLoading(true)
+        const createorder = JSON.parse(localStorage.getItem('checkout'))
+        const datapayment = JSON.parse(localStorage.getItem('payment'))
+
+        // if(typeof Cookies.get('order_id') === 'undefined'){
+        //     const postData = await createOrderMinipack(createorder);
+        // }
+
+        const postData = await createOrderMinipack(createorder);
+        if (postData.status) {
+            const orderId = postData?.data?.result?.order_id.split('-')[1]
+            Cookies.set('order_id', orderId)
+            let submit = {
+                ...datapayment,
+                order_id: orderId
+            }
+            const reqPayment = await createRequestPayment(submit)
+            router.push(reqPayment?.data?.result?.url_doku)
+        }
+        setLoading(false)
+    }
     return (
         <>
+
+            {loading &&
+                <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
+                    <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
+                </div>
+            }
+
             <div className="grid grid-col-2 overflow-auto hidden lg:block">
                 <div className="absolute top-0 left-0 w-2/4 min-h-screen pb-10 pl-56" style={{ backgroundColor: '#f6f9ff' }}>
                     <p className="font-medium text-2xl mt-24">
@@ -72,7 +108,7 @@ export default function PembayaranPage() {
                     </div>
 
 
-                    <div className="w-5/6 bg-white shadow mt-8 px-8 py-7 rounded-lg" style={{boxShadow: '0 4px 40px 0 rgba(112, 144, 176, 0.2)'}}>
+                    <div className="w-5/6 bg-white shadow mt-8 px-8 py-7 rounded-lg" style={{ boxShadow: '0 4px 40px 0 rgba(112, 144, 176, 0.2)' }}>
                         <p className="font-medium text-base">
                             Metode Pembayaran
                         </p>
@@ -253,6 +289,7 @@ export default function PembayaranPage() {
                             type="button"
                             className="font-normal text-base text-white mt-8 w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-lg shadow-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             style={{ backgroundColor: '#1d6eef' }}
+                            onClick={handleBayar}
                         >
                             Lanjut Bayar
                         </button>
@@ -408,7 +445,7 @@ export default function PembayaranPage() {
                                 </RadioGroup>
                             </div>
 
-                            {selected.name === 'Pulsa' &&
+                            {/* {selected.name === 'Pulsa' &&
                                 <>
                                     <div className="sm:col-span-3">
                                         <div className="mt-6">
@@ -481,7 +518,7 @@ export default function PembayaranPage() {
                                         </div>
                                     </div>
                                 </>
-                            }
+                            } */}
                         </div>
                     </div>
                     <div className="sticky bottom-0 mt-2 bg-white drop-shadow-3xl h-20 px-4 z-50">

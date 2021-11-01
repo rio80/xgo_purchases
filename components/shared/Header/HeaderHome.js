@@ -10,7 +10,7 @@ export default function HeaderHome() {
     ]
 
     return (
-        <Disclosure as="nav" className="bg-white z-10 fixed top-0 left-0 right-0 py-8 z-20">
+        <Disclosure as="nav" className="bg-white z-10 fixed top-0 left-0 right-0 py-8 z-20" style={{boxShadow: '0 4px 31px 0 rgba(74, 105, 134, 0.1'}}>
             <div className="mx-auto px-28" style={{maxWidth: '1024px'}}>
                 <div className="flex justify-between items-center">
                     <div className="flex">

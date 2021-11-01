@@ -1,14 +1,20 @@
-export default function FooterPage() {
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
+
+export default function FooterPage({variant}) {
     return (
-        <footer aria-labelledby="footer-heading" style={{ backgroundColor: '#112d57' }}>
+        <footer aria-labelledby="footer-heading" style={{ backgroundColor: '#112d57' }} className={classNames(variant ? "bottom-0 relative w-full" : "")}>
 
             <div className="flex justify-between items-center h-32 px-16">
                 <div className="flex">
                     <div className="flex-shrink-0 flex items-center hidden lg:flex">
                         <img
-                            className="w-52 h-6"
+                            className="h-5"
                             src={`../png/transvision-light.png`}
                             alt="XGO"
+                            width="204px"
+                            
 
                         />
                     </div>

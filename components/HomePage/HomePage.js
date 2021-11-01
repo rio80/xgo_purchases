@@ -1,10 +1,26 @@
+import * as React from 'react'
 import css from './HomePage.module.css'
+import { getToken } from '../../utils/apiHandlers'
+import { useRouter } from 'next/router';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function HomePage() {
+    const router = useRouter();
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const getTamu = await getToken();
+                console.log(getTamu)
+            } catch (e) {
+                console.log(e)
+            }
+        })();
+    }, []);
+
     return (
         <>
             <div>
@@ -80,6 +96,7 @@ export default function HomePage() {
                                                 type="button"
                                                 className="mt-10 w-48 self-center items-center px-9 py-3 border border-transparent text-sm leading-4 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                 style={{ backgroundColor: '#00b6f0', boxShadow: '0 4px 31px 0 rgba(0, 0, 0, 0.15)' }}
+                                                onClick={() => router.push('/pembelian-minipack')}
                                             >
                                                 Berlangganan
                                             </button>
@@ -93,7 +110,7 @@ export default function HomePage() {
                         </div>
 
                         <div className="flex justify-center">
-                            <div className="grid grid-cols-2 mt-12 px-28" style={{ maxWidth: '1100px' }}>
+                            <div className="grid grid-cols-2 mt-16 px-28" style={{ maxWidth: '1100px' }}>
                                 <div>
                                     <div className="w-full">
                                         <div className="pt-44">
@@ -115,16 +132,9 @@ export default function HomePage() {
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-
-
-
-
             </div>
-
         </>
     )
 }
