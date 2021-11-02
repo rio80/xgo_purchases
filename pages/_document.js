@@ -5,10 +5,7 @@ export default class MyDocument extends Document {
     render() {
         return (
             <Html lang="en">
-                <Head>
-                    <title>Payment - XGO</title>
-                    <link rel="icon" href={'../png/logo.png'} />
-                </Head>
+                <Head></Head>
                 <body>
                     <Main />
                     <NextScript />

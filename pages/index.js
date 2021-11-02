@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import FooterPage from '../components/FooterPage/FooterPage'
-import HomePage from '../components/HomePage/HomePage'
 import HeaderHome from '../components/shared/Header/HeaderHome'
+import * as rdd from 'react-device-detect';
+import dynamic from 'next/dynamic'
 
-export default function Home(props) {
-  const { id } = props
-  console.log(id)
+export default function Home() {
+  const Home = dynamic(() => rdd.isDesktop ? import('../components/HomePage/desktop/HomePage') : import('../components/HomePage/mobile/HomePage'))
   return (
     <>
       <Head>
@@ -14,15 +14,8 @@ export default function Home(props) {
       </Head>
 
       <HeaderHome />
-      <HomePage />
+      <Home />
       <FooterPage />
     </>
   )
 }
-
-Home.getInitialProps = async ctx => {
-  const { query } = ctx;
-  return {
-    id: query ? query.id : '',
-  };
-};

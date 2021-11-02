@@ -1,6 +1,6 @@
 import * as React from 'react'
 import css from './HomePage.module.css'
-import { getToken } from '../../utils/apiHandlers'
+import { getToken } from '../../../utils/apiHandlers'
 import { useRouter } from 'next/router';
 
 function classNames(...classes) {
