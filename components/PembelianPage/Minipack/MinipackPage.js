@@ -98,9 +98,13 @@ export default function MinipackPage() {
 
     const handleCheckout = (status) => {
         if (status) {
+            // let dataPaket = {
+            //     paket,
+            //     durasi : paketdata[idxpaket]?.plans[idxdurasi]?.duration
+            // }
+            // localStorage.setItem('paket', JSON.stringify(dataPaket));
             localStorage.setItem('checkout', JSON.stringify(data));
             localStorage.setItem('payment', JSON.stringify(payment));
-            // localStorage.setItem('checkout', JSON.stringify(data));
             router.push('/pembayaran')
         }
     }
@@ -217,15 +221,15 @@ export default function MinipackPage() {
                                 {paketdata[idxpaket].plans.map((data, index) => (
                                     <div className="w-full flex justify-center">
                                         <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
-                                            <p className={classNames(idxdurasi === index ? "text-white":"text-black","text-xl font-semibold")}>{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
+                                            <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xl font-semibold")}>{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
                                             <div className="flex gap-x-2">
                                                 <div className="self-center">
-                                                    <p className={classNames(idxdurasi === index ? "text-white":"text-black","mt-12 text-3xl font-bold")}>{convertToRupiah(data.price)}</p>
+                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-3xl font-bold")}>{convertToRupiah(data.price)}</p>
                                                 </div>
                                                 <div>
-                                                    <p className={classNames(idxdurasi === index ? "text-white":"text-black","mt-12 font-semibold text-xl")}>
+                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>
                                                         RP
-                                                        <p className={classNames(idxdurasi === index ? "text-white":"text-black","text-xs font-normal")}>/bulan</p>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
                                                     </p>
                                                 </div>
 

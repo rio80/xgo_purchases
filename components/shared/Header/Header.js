@@ -22,9 +22,9 @@ export default function Header({ data }) {
           <div className="flex">
             <div className="flex-shrink-0 flex items-center hidden lg:flex">
               <img
-                className="lg:block lg:mr-5 h-8 w-auto"
-                src={`../png/logo.png`}
-                alt="XGO"
+              className="h-4 w-40"
+              src={`../png/transvision.png`}
+              alt="TRANSVISION"
               />
             </div>
 

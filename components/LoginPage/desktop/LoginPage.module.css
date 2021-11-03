@@ -1,0 +1,8 @@
+.vector2 {
+    width: 33px;
+    height: 33.5px;
+    flex-grow: 0;
+    margin: 9px 300.9px 48.5px 0;
+    /* transform: rotate(-270deg); */
+    background-color: #fff;
+  }

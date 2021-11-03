@@ -12,7 +12,7 @@ export default function LoginPage() {
     const router = useRouter()
 
     return (
-        <div className="ml-32 pt-36 w-96">
+        <div className="pt-36 w-full px-12">
             <div>
                 <p className="text-3xl font-bold">Masuk</p>
                 <p className="mt-2.5 text-normal text-gray-400">Masuk ke akun Anda untuk pengalaman <br /> menonton yang hebat dengan aplikasi XGO</p>

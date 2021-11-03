@@ -40,7 +40,7 @@ export default function PembayaranPage() {
 
         const postData = await createOrderMinipack(createorder);
         if (postData.status) {
-            const orderId = postData?.data?.result?.order_id.split('-')[1]
+            const orderId = postData?.data?.result?.order_id
             Cookies.set('order_id', orderId)
             let submit = {
                 ...datapayment,
@@ -81,6 +81,7 @@ export default function PembayaranPage() {
                                         name="first-name"
                                         id="first-name"
                                         autoComplete="given-name"
+                                        defaultValue={'testprojectrans@gmail.com'}
                                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     />
                                 </div>
@@ -266,7 +267,7 @@ export default function PembayaranPage() {
                             Paket 30 Hari Gratis VOD
                         </p>
                         <p className="font-normal text-xs text-white mt-1">
-                            beruangair@gmail.com
+                            testprojectrans@gmail.com
                         </p>
                         <div className="flex mt-5">
                             <div className="self-center">
@@ -313,7 +314,7 @@ export default function PembayaranPage() {
                                 Paket 30 Hari Gratis VOD
                             </p>
                             <p className="font-normal text-xs text-white mt-1">
-                                beruangair@gmail.com
+                                testprojectrans@gmail.com
                             </p>
                             <div className="flex mt-5">
                                 <div className="self-center">

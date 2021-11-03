@@ -3,6 +3,8 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { Head } from 'next/document';
 config.autoAddCss = false;
+import NextNProgress from 'nextjs-progressbar';
+
 
 function MyApp({ Component, pageProps }) {
   <Head>
@@ -10,7 +12,10 @@ function MyApp({ Component, pageProps }) {
     <link rel="icon" href={'../png/logo.png'} />
   </Head>
 
-  return <Component {...pageProps} />
+  return <>
+    <NextNProgress />
+    <Component {...pageProps} />
+  </>
 }
 
 export default MyApp

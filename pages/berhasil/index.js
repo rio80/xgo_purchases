@@ -1,10 +1,10 @@
 import BerhasilPage from "../../components/BerhasilPage/BerhasilPage";
-import Header from "../../components/shared/Header/Header";
+import HeaderHome from "../../components/shared/Header/HeaderHome";
 
 export default function berhasil() {
     return (
         <>
-            <Header />
+            <HeaderHome />
             <BerhasilPage />
         </>
     )
