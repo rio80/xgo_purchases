@@ -5,7 +5,6 @@
     "build": "next build",
     "start": "next start",
     "deploy:start": "TAILWIND_MODE=build yarn build && node server.js"
-
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -17,7 +16,9 @@
     "@tailwindcss/forms": "^0.3.4",
     "axios": "^0.24.0",
     "date-fns": "^2.25.0",
+    "express": "^4.17.1",
     "js-cookie": "^3.0.1",
+    "morgan": "^1.10.0",
     "next": "latest",
     "nextjs-progressbar": "^0.0.13",
     "nprogress": "^0.2.0",
