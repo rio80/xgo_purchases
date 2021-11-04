@@ -10,7 +10,7 @@ import './MinipackPage.module.css';
 SwiperCore.use([Pagination, Navigation]);
 
 import * as React from 'react'
-import { getMinipack } from "../../../utils/apiHandlers";
+import { getMinipack } from "../../../../utils/apiHandlers";
 import { useRouter } from 'next/router';
 
 function classNames(...classes) {
@@ -29,7 +29,7 @@ export default function MinipackPage() {
     const [open, setOpen] = React.useState(false)
     const [data, setData] = React.useState({
         email: 'testprojectrans@gmail.com',
-        payment_method_id: '4',
+        payment_method_id: '6',
         package_id: '381',
         receiver_email: 'testprojectrans@gmail.com',
         receiver_type: 'SELF',
