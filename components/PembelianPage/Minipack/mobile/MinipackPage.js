@@ -29,7 +29,7 @@ export default function MinipackPage() {
     const [open, setOpen] = React.useState(false)
     const [data, setData] = React.useState({
         email: 'testprojectrans@gmail.com',
-        payment_method_id: '4',
+        payment_method_id: '6',
         package_id: '381',
         receiver_email: 'testprojectrans@gmail.com',
         receiver_type: 'SELF',
@@ -182,15 +182,15 @@ export default function MinipackPage() {
                                 <SwiperSlide>
                                     <div className="w-full flex justify-center">
                                         <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-6 pt-12 py-6")}>
-                                            <p className={classNames(idxdurasi === index ? "text-white" : "text-black" , "text-sm font-semibold")}>{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
+                                            <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-sm font-semibold")}>{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
                                             <div className="flex gap-x-2">
                                                 <div className="self-center">
-                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black" , "mt-12 text-base font-bold")}>{convertToRupiah(data.price)}</p>
+                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-base font-bold")}>{convertToRupiah(data.price)}</p>
                                                 </div>
                                                 <div>
-                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black" , "mt-12 font-semibold text-xs")}>
+                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xs")}>
                                                         RP
-                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black" , "text-xs font-normal")}>/bulan</p>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
                                                     </p>
                                                 </div>
 
@@ -222,6 +222,7 @@ export default function MinipackPage() {
                         name="comments"
                         type="checkbox"
                         className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        onClick={() => setOpen(!open)}
                     />
                     <div className="ml-3 text-sm">
                         <label htmlFor="comments" className="font-small text-xs text-gray-700">
@@ -233,7 +234,10 @@ export default function MinipackPage() {
                 <div className=" mt-4">
                     <button
                         type="button"
-                        className="w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        // className="w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className={classNames(open && data?.minipack_id ? 'text-white bg-blue-600 hover:bg-blue-700' : 'text-gray-600 bg-gray-300 hover:bg-gray-200', 'w-96 self-center items-center px-8 py-4 border border-transparent text-base leading-4 font-base rounded-full shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500')}
+                        style={open && data?.minipack_id ? { backgroundColor: '#0285e4' } : { backgroundColor: '' }}
+                        onClick={open && data?.minipack_id ? () => handleCheckout(1) : () => handleCheckout(0)}
                     >
                         Pilih Paket
                     </button>

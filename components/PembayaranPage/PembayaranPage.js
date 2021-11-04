@@ -527,6 +527,7 @@ export default function PembayaranPage() {
                             <button
                                 type="button"
                                 className="w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                onClick={handleBayar}
                             >
                                 Lanjut Bayar
                             </button>
