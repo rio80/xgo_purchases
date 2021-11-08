@@ -1,11 +1,13 @@
-import PembayaranPage from "../../components/PembayaranPage/PembayaranPage";
-import Header from "../../components/shared/Header/Header";
+import dynamic from "next/dynamic";
+import HeaderHome from "../../components/shared/Header/HeaderHome";
+import * as rdd from "react-device-detect"
 
 export default function Pembayaran() {
+    const Pembayaran = dynamic(() => rdd.isDesktop ? import('../../components/PembayaranPage/desktop/PembayaranPage') : import('../../components/PembayaranPage/mobile/PembayaranPage'))
     return (
         <>
-            <Header />
-            <PembayaranPage />
+            <HeaderHome />
+            <Pembayaran />
         </>
     )
 }

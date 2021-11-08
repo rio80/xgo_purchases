@@ -18,9 +18,7 @@ function classNames(...classes) {
 }
 
 export default function MinipackPage() {
-    const [minipack, setMinipack] = React.useState([])
-    const [error, setError] = React.useState(false)
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(true)
     const router = useRouter()
     const [paket, setPaket] = React.useState('')
     const [idxpaket, setIdxPaket] = React.useState('')
@@ -35,7 +33,6 @@ export default function MinipackPage() {
         receiver_type: 'SELF',
         activation_process: 'IMMEDIATE'
     })
-
     const [payment, setPayment] = React.useState({
         app_id: "webxgo",
         payment_type: "internal_app",
@@ -46,23 +43,10 @@ export default function MinipackPage() {
         app_url_callback: "https://xgo.co.id"
     })
 
-    React.useEffect(() => {
-        (async () => {
-            setLoading(true)
-            try {
-                const getData = await getMinipack();
-                setPaketdata(getData?.data?.result)
-                setLoading(false)
-            } catch (e) {
-                console.log(e)
-                setLoading(false)
-            }
-        })();
-    }, []);
-
     const handleDurasi = (paket, idx) => {
         setPaket(paket)
         setIdxPaket(idx)
+        setIdxDurasi('')
     }
 
     const convertToRupiah = (angka) => {
@@ -109,6 +93,119 @@ export default function MinipackPage() {
         }
     }
 
+    const Listpaket = () => {
+        return (
+            <div>
+                <div className="max-w-3xl mx-auto hidden lg:block">
+                    <div className="mt-16">
+                        <p className="text-center font-semibold text-xl">Pilih Durasi</p>
+                    </div>
+                </div>
+                {paketdata[idxpaket].plans.length > 3 ?
+                    <>
+                        <div className="max-w-5xl mx-auto hidden lg:block mt-5">
+                            <Swiper
+                                slidesPerView={3}
+                                spaceBetween={30}
+                                slidesPerGroup={1}
+                                loop={false}
+                                loopFillGroupWithBlank={true}
+                                navigation={true}
+                                className="mySwiper"
+                                style={{ padding: '0 50px', overflow: 'hidden' }}
+                            >
+                                {paketdata[idxpaket].plans.map((data, index) => (
+                                    <SwiperSlide key={index}>
+                                        <div className="w-full flex justify-center">
+                                            <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
+                                                <p className="text-xl font-semibold">{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
+                                                <div className="flex gap-x-2">
+                                                    <div className="self-center">
+                                                        <p className="mt-12 text-3xl font-bold">{convertToRupiah(data.price)}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>RP</p>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
+                                                    </div>
+
+                                                </div>
+                                                <div className="flex w-full mt-6">
+                                                    <button
+                                                        type="button"
+                                                        className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                        style={{ backgroundColor: '#00b6f0' }}
+                                                        onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
+                                                    >
+                                                        Pilih Durasi
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
+                    </>
+                    :
+                    <div className="max-w-5xl mx-auto hidden lg:block mt-5 px-12">
+                        <div className="w-full flex justify-between gap-x-8">
+                            {paketdata[idxpaket].plans.map((data, index) => (
+                                <div className="w-full flex justify-center" key={index}>
+                                    <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
+                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xl font-semibold")}>{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
+                                        <div className="flex gap-x-2">
+                                            <div className="self-center">
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-3xl font-bold")}>{convertToRupiah(data.price)}</p>
+                                            </div>
+                                            <div>
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>RP</p>
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
+                                            </div>
+
+                                        </div>
+                                        <div className="flex w-full mt-6">
+                                            <button
+                                                type="button"
+                                                className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                style={{ backgroundColor: '#00b6f0' }}
+                                                onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
+                                            >
+                                                Pilih Durasi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                }
+            </div>
+        )
+    }
+
+    React.useEffect(() => {
+        (async () => {
+            setLoading(true)
+            try {
+                const getData = await getMinipack();
+                setPaketdata(getData?.data?.result)
+                setLoading(false)
+            } catch (e) {
+                console.log(e)
+                setLoading(false)
+            }
+        })();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden flex flex-col items-center justify-center">
+                <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
+            </div>
+        )
+
+    }
+
     return (
         <>
             <div className="max-w-3xl mx-auto hidden lg:block">
@@ -124,134 +221,41 @@ export default function MinipackPage() {
             </div>
 
             <div className="max-w-5xl mx-auto hidden lg:block mt-5">
-                {loading ?
-                    <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
-                    :
-                    <Swiper
-                        slidesPerView={3}
-                        spaceBetween={30}
-                        slidesPerGroup={1}
-                        loop={false}
-                        loopFillGroupWithBlank={true}
-                        navigation={true}
-                        className="mySwiper"
-                        style={{ padding: '0 50px', overflow: 'hidden' }}
-                    >
-
-                        {paketdata.map((data, index) => (
-                            <SwiperSlide>
-                                <div className="flex justify-center">
-                                    <div className={classNames(idxpaket === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg h-56 px-12 py-12")}>
-                                        <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-2xl font-semibold")}>{data.minipack}</p>
-                                        <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-xs font-normal")}>{data.description}</p>
-                                        <div className="w-full mt-7">
-                                            <button
-                                                type="button"
-                                                className="w-full self-center items-center py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                style={{ backgroundColor: '#00b6f0' }}
-                                                onClick={() => handleDurasi(data.minipack, index)}
-                                            >
-                                                Pilih Paket
-                                            </button>
-                                        </div>
+                <Swiper
+                    slidesPerView={3}
+                    spaceBetween={30}
+                    slidesPerGroup={1}
+                    loop={false}
+                    loopFillGroupWithBlank={true}
+                    navigation={true}
+                    className="mySwiper"
+                    style={{ padding: '0 50px', overflow: 'hidden' }}
+                >
+                    {paketdata.map((data, index) => (
+                        <SwiperSlide key={index}>
+                            <div className="flex justify-center">
+                                <div className={classNames(idxpaket === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg h-56 px-12 py-12")}>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-2xl font-semibold")}>{data.minipack}</p>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-xs font-normal")}>{data.description}</p>
+                                    <div className="w-full mt-7">
+                                        <button
+                                            type="button"
+                                            className="w-full self-center items-center py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                            style={{ backgroundColor: '#00b6f0' }}
+                                            onClick={() => handleDurasi(data.minipack, index)}
+                                        >
+                                            Pilih Paket
+                                        </button>
                                     </div>
                                 </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                }
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
-            {paket &&
-                <>
-                    <div className="max-w-3xl mx-auto hidden lg:block">
-                        <div className="mt-16">
-                            <p className="text-center font-semibold text-xl">Pilih Durasi</p>
-                        </div>
-                    </div>
-                    {paketdata[idxpaket].plans.length > 3 ?
-                        <>
-                            <div className="max-w-5xl mx-auto hidden lg:block mt-5">
-                                <Swiper
-                                    slidesPerView={3}
-                                    spaceBetween={30}
-                                    slidesPerGroup={1}
-                                    loop={false}
-                                    loopFillGroupWithBlank={true}
-                                    navigation={true}
-                                    className="mySwiper"
-                                    style={{ padding: '0 50px', overflow: 'hidden' }}
-                                >
-                                    {paketdata[idxpaket].plans.map((data, index) => (
-                                        <SwiperSlide>
-                                            <div className="w-full flex justify-center">
-                                                <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
-                                                    <p className="text-xl font-semibold">{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
-                                                    <div className="flex gap-x-2">
-                                                        <div className="self-center">
-                                                            <p className="mt-12 text-3xl font-bold">{convertToRupiah(data.price)}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p className="mt-12 font-semibold text-xl">
-                                                                RP
-                                                                <p className="text-xs font-normal">/bulan</p>
-                                                            </p>
-                                                        </div>
 
-                                                    </div>
-                                                    <div className="flex w-full mt-6">
-                                                        <button
-                                                            type="button"
-                                                            className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                            style={{ backgroundColor: '#00b6f0' }}
-                                                            onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
-                                                        >
-                                                            Pilih Durasi
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            </div>
-                        </>
-                        :
-                        <div className="max-w-5xl mx-auto hidden lg:block mt-5 px-12">
-                            <div className="w-full flex justify-between gap-x-8">
-                                {paketdata[idxpaket].plans.map((data, index) => (
-                                    <div className="w-full flex justify-center">
-                                        <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
-                                            <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xl font-semibold")}>{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
-                                            <div className="flex gap-x-2">
-                                                <div className="self-center">
-                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-3xl font-bold")}>{convertToRupiah(data.price)}</p>
-                                                </div>
-                                                <div>
-                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>
-                                                        RP
-                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
-                                                    </p>
-                                                </div>
+            {paket ? <Listpaket /> : ''}
 
-                                            </div>
-                                            <div className="flex w-full mt-6">
-                                                <button
-                                                    type="button"
-                                                    className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                    style={{ backgroundColor: '#00b6f0' }}
-                                                    onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
-                                                >
-                                                    Pilih Durasi
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    }
-                </>
-            }
             <div className="py-16 flex justify-center">
                 <div className="flex items-center h-5 mt-6">
                     <input
