@@ -1,6 +1,5 @@
 import * as React from 'react'
 import css from './HomePage.module.css'
-import { getToken } from '../../../utils/apiHandlers'
 import { useRouter } from 'next/router';
 
 function classNames(...classes) {
@@ -9,17 +8,6 @@ function classNames(...classes) {
 
 export default function HomePage() {
     const router = useRouter();
-
-    React.useEffect(() => {
-        (async () => {
-            try {
-                const getTamu = await getToken();
-                console.log(getTamu)
-            } catch (e) {
-                console.log(e)
-            }
-        })();
-    }, []);
 
     return (
         <>

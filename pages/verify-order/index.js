@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import * as React from 'react'
 import Loader from 'react-loader-spinner';
 import BerhasilPage from '../../components/BerhasilPage/BerhasilPage';
@@ -16,6 +17,9 @@ export default function VerifyOrder(props) {
                 const getData = await getStatusOrder(order_id);
                 setStatus(getData?.data?.result?.transaction_status)
                 setPrice(getData?.data?.result?.gross_amount)
+                Cookies.remove('order_id')
+                localStorage.removeItem('payment')
+                localStorage.removeItem('checkout')
             } catch (e) {
                 console.log(e)
             }

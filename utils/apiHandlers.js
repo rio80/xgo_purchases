@@ -1,11 +1,12 @@
 import { apiGet, apiPost } from './requestApi';
+import config from '../utils/config'
 
 const body = {
-    client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-    client_secret: process.env.NEXT_PUBLIC_CLIENT_SECRET,
-    grant_type: process.env.NEXT_PUBLIC_GRANT_TYPE,
-    provision_key: process.env.NEXT_PUBLIC_PROVISION_KEY,
-    authenticated_userid: process.env.NEXT_PUBLIC_AUTHENTICATED_USERID,
+    client_id: config.client_id,
+    client_secret: config.client_secret,
+    grant_type: config.grant_type,
+    provision_key: config.provision_key,
+    authenticated_userid: config.authenticated_userid
 };
 
 export function getToken() {

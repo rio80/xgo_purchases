@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import config from '../utils/config'
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_GATEWAY = process.env.NEXT_PUBLIC_API_GATEWAY;
+const API_GATEWAY = config.apiHost;
 
 export const Axios = axios.create({
   baseURL: API_GATEWAY,
@@ -10,12 +10,13 @@ export const Axios = axios.create({
 });
 
 const body = {
-  client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-  client_secret: process.env.NEXT_PUBLIC_CLIENT_SECRET,
-  grant_type: process.env.NEXT_PUBLIC_GRANT_TYPE,
-  provision_key: process.env.NEXT_PUBLIC_PROVISION_KEY,
-  authenticated_userid: process.env.NEXT_PUBLIC_AUTHENTICATED_USERID,
+  client_id: config.clientId,
+  client_secret: config.clientSecret,
+  grant_type: config.clientGrantType,
+  provision_key: config.provisionKey,
+  authenticated_userid: config.authenticatedUserid
 };
+
 
 // auth token
 const refreshAccessToken = () => {
@@ -82,6 +83,6 @@ export const apiPost = (url, data) =>
         resolve({ data: res.data, status: res?.status });
       })
       .catch((err) => {
-        reject({ err, status: err?.status });
+        reject({ err,res: err?.response, status: err?.status });
       });
   });

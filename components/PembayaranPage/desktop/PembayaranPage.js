@@ -6,6 +6,7 @@ import { createOrderMinipack, createRequestPayment } from '../../../utils/apiHan
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
+import Alert from '../../../pages/shared/alert/Alert'
 
 const plans = [
     { name: 'Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px' },
@@ -28,38 +29,63 @@ export default function PembayaranPage() {
     const [selected, setSelected] = useState(plans[0])
     const [selected2, setSelected2] = useState(people[0])
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const [open, setOpen] = useState(false);
 
     const handleBayar = async () => {
+
         setLoading(true)
-        const createorder = JSON.parse(localStorage.getItem('checkout'))
-        const datapayment = JSON.parse(localStorage.getItem('payment'))
-
-        // if(typeof Cookies.get('order_id') === 'undefined'){
-        //     const postData = await createOrderMinipack(createorder);
-        // }
-
-        const postData = await createOrderMinipack(createorder);
-        if (postData.status) {
-            const orderId = postData?.data?.result?.order_id
-            Cookies.set('order_id', orderId)
-            let submit = {
-                ...datapayment,
-                order_id: orderId
-            }
-            const reqPayment = await createRequestPayment(submit)
-            router.push(reqPayment?.data?.result?.url_doku)
+        if (typeof Cookies.get('order_id') === 'undefined') {
+            // await createOrder()
+            createOrder()
+        } else {
+            // await checkPayment()
+            checkPayment()
         }
         setLoading(false)
     }
 
+    const checkPayment = async () => {
+        const datapayment = JSON.parse(localStorage.getItem('payment'))
+        try {
+            let submit = {
+                ...datapayment,
+                order_id: Cookies.get('order_id')
+            }
+            const reqPayment = await createRequestPayment(submit)
+            router.push(reqPayment?.data?.result?.url_doku)
+        } catch (e) {
+            createOrder()
+        }
+    }
+
+    const createOrder = async () => {
+        try {
+            const createorder = JSON.parse(localStorage.getItem('checkout'))
+            let postData = await createOrderMinipack(createorder);
+            const orderId = postData?.data?.result?.order_id
+            Cookies.set('order_id', orderId)
+            checkPayment()
+        } catch (e) {
+            setError(e?.res?.data?.message[0])
+            setOpen(true)
+            setLoading(false)
+        }
+    }
+
+    const closeModal = (data) => {
+        setOpen(data);
+    };
+
     return (
         <>
-
             {loading &&
                 <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
                     <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
                 </div>
             }
+
+            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={'/pembelian-minipack'} close={closeModal} />}
 
             <div className="grid grid-col-2 overflow-auto">
                 <div className="absolute top-0 left-0 w-2/4 min-h-screen pb-10 pt-12 pl-56" style={{ backgroundColor: '#f6f9ff' }}>
@@ -160,15 +186,14 @@ export default function PembayaranPage() {
                                                         >
 
                                                             {plan.name === 'Pulsa' ?
-                                                                <div className="grid grid-cols-2">
-                                                                    <div>
+                                                                <span className="grid grid-cols-2">
+                                                                    <span>
                                                                         <img src={'../png/telkomsel.png'} width="66px" height="16px" className="self-center" />
-
-                                                                    </div>
-                                                                    <div className="ml-4">
+                                                                    </span>
+                                                                    <span className="ml-4">
                                                                         <img src={'../png/smartfren.png'} width="56px" height="9px" className="self-center mt-1" />
-                                                                    </div>
-                                                                </div>
+                                                                    </span>
+                                                                </span>
                                                                 :
                                                                 <img src={plan.logo} width={plan.width} height={plan.height} />
                                                             }
