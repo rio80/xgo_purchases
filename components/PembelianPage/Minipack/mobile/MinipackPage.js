@@ -41,7 +41,7 @@ export default function MinipackPage() {
         customer_email: "chandrawira@gmail.com",
         customer_mobilephone: "081211111111",
         app_url_validation: "https://xgo.co.id/api/validate/id=123321",
-        app_url_callback: "https://xgo.co.id"
+        app_url_callback: "https://my2-dev.transvision.co.id/verify-order"
     })
 
     const handleDurasi = (paket, idx) => {
