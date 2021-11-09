@@ -1,5 +1,5 @@
 module.exports = {
-    apiHost: 'https://servicebuss.transvision.co.id:9443',
+    apiHost: 'https://servicebuss.transvision.co.id',
     clientId: '1013140c470ccbdb.servicebuss.transvision.co.id',
     clientSecret: '5dd510be503f2a9d',
     clientGrantType: 'client_credentials',
