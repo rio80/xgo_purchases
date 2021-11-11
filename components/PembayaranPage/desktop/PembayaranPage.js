@@ -1,5 +1,5 @@
 import { useState, Fragment } from 'react'
-import { RadioGroup, Listbox, Transition } from '@headlessui/react'
+import { RadioGroup, Listbox, Transition, Popover } from '@headlessui/react'
 import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
 import { createOrderMinipack, createRequestPayment } from '../../../utils/apiHandlers'
@@ -7,12 +7,15 @@ import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import Alert from '../../../pages/shared/alert/Alert'
+import Tooltip from '../Tooltip'
+import { useDispatch } from 'react-redux'
+import { KodeAction } from '../../../store/kodeBayar/action'
 
 const plans = [
-    { name: 'Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px' },
-    { name: 'Doku OVO', logo: '../png/dokuovo.png', width: '51px', height: '21px' },
-    { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px' },
-    { name: 'Pulsa', logo: '../png/telkomsel.png', width: '66px', height: '16px' },
+    { name: 'Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
+    { name: 'Doku OVO', logo: '../png/dokuovo.png', width: '51px', height: '21px', id: '6' },
+    { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px', id: '' },
+    { name: 'Pulsa', logo: '../png/telkomsel.png', width: '66px', height: '16px', id: '' },
 ]
 
 const people = [
@@ -25,6 +28,7 @@ function classNames(...classes) {
 }
 
 export default function PembayaranPage() {
+    const dispatch = useDispatch()
     const router = useRouter()
     const [selected, setSelected] = useState(plans[0])
     const [selected2, setSelected2] = useState(people[0])
@@ -33,16 +37,7 @@ export default function PembayaranPage() {
     const [open, setOpen] = useState(false);
 
     const handleBayar = async () => {
-
-        setLoading(true)
-        if (typeof Cookies.get('order_id') === 'undefined') {
-            // await createOrder()
-            createOrder()
-        } else {
-            // await checkPayment()
-            checkPayment()
-        }
-        setLoading(false)
+        createOrder()
     }
 
     const checkPayment = async () => {
@@ -53,21 +48,37 @@ export default function PembayaranPage() {
                 order_id: Cookies.get('order_id')
             }
             const reqPayment = await createRequestPayment(submit)
+            setLoading(false)
             router.push(reqPayment?.data?.result?.url_doku)
         } catch (e) {
-            createOrder()
+            setLoading(false)
+            console.log(e)
         }
     }
 
     const createOrder = async () => {
+        setLoading(true)
         try {
             const createorder = JSON.parse(localStorage.getItem('checkout'))
-            let postData = await createOrderMinipack(createorder);
+            let submit = {
+                ...createorder,
+                payment_method_id: selected.id
+            }
+            let postData = await createOrderMinipack(submit);
             const orderId = postData?.data?.result?.order_id
             Cookies.set('order_id', orderId)
-            checkPayment()
+            if (selected.id === '6') {
+                checkPayment()
+            } else {
+                dispatch({
+                    type: KodeAction.SET_KODE,
+                    kode: postData?.data?.result?.payment_code,
+                });
+                router.push('/kode-bayar')
+            }
         } catch (e) {
-            setError(e?.res?.data?.message[0])
+            setLoading(false)
+            setError(e?.res?.data?.message?.[0])
             setOpen(true)
             setLoading(false)
         }
@@ -295,12 +306,36 @@ export default function PembayaranPage() {
                         <p className="font-normal text-xs text-white mt-1">
                             testprojectrans@gmail.com
                         </p>
+                        <div className="flex mt-7">
+                            <div className="self-center">
+                                <p className="text-xs text-white">Paket 30 hari Gratis VOD</p>
+                            </div>
+                            <div className="text-xs text-white ml-auto">
+                                <p>RP 9000</p>
+                            </div>
+                        </div>
+                        <div className="flex mt-2">
+                            <div className="self-center">
+                                <div className="flex flex-row">
+                                    <div className="self-center"><p className="text-xs text-white">Biaya Admin OVO </p></div>
+                                    <div className="pt-1"><Tooltip className="self-center" /></div>
+                                </div>
+                            </div>
+                            <div className="text-xs text-white ml-auto mt-1">
+                                <p>RP 5000</p>
+                            </div>
+                        </div>
+                        <div className="relative mt-2.5">
+                            <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div className="w-full border-t border-gray-100" />
+                            </div>
+                        </div>
                         <div className="flex mt-5">
                             <div className="self-center">
                                 <p className="text-xs text-white">Total</p>
                             </div>
                             <div className="text-lg font-semibold text-white ml-auto">
-                                <p>RP 9000</p>
+                                <p>RP 14000</p>
                             </div>
                         </div>
                         <p className="font-normal text-xs text-white mt-6">
@@ -314,8 +349,8 @@ export default function PembayaranPage() {
                     <div className="w-80">
                         <button
                             type="button"
-                            className="font-normal text-base text-white mt-8 w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-full shadow-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            style={{ backgroundColor: '#1d6eef' }}
+                            className="font-normal text-base text-white mt-8 w-full self-center items-center px-8 py-4 border border-transparent text-xs leading-4 font-light rounded-full shadow-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            style={{ backgroundColor: '#0285e4' }}
                             onClick={handleBayar}
                         >
                             Lanjut Bayar

@@ -17,8 +17,15 @@ const body = {
   authenticated_userid: config.authenticatedUserid
 };
 
-const refreshAccessToken = () => {
-  return Axios.post("/transvisionplus/oauth2/token", body)
+const refreshAccessToken = (dataUrl) => {
+  let url = '';
+  if (dataUrl === 'billing') {
+    url = '/billing/payment/doku/web/pay/ovo/oauth2/token'
+  } else {
+    url = '/transvisionplus/oauth2/token'
+  }
+
+  return Axios.post(url, body)
     .then(function (response) {
       return response.data.access_token;
     })
@@ -28,36 +35,46 @@ const refreshAccessToken = () => {
 };
 
 Axios.interceptors.request.use(
-    async (config) => {
-      const token = await Cookies.get("token");
-      if (token) {
-        config.headers = {
-          Authorization: `Bearer ${token}`,
-        };
-      }
-      return config;
-    },
-    (error) => Promise.reject(error),
-    null,
-    { synchronous: true }
+  async (config) => {
+    const url = config.url.split('/')[1]
+    let token = ''
+    if (url === 'billing') {
+      token = await Cookies.get("token_billing");
+    } else {
+      token = await Cookies.get("token");
+    }
+    // const token = await Cookies.get("token");
+    if (token) {
+      config.headers = {
+        Authorization: `Bearer ${token}`,
+      };
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+  null,
+  { synchronous: true }
 );
 
 Axios.interceptors.response.use(
-(response) => response,
-async (error) => {
+  (response) => response,
+  async (error) => {
+    const url = error.config.url.split('/')[1]
     const config = error.config;
-    // console.log(error);
     if (error?.response?.status === 401 && !config._retry) {
-    config._retry = true;
-    const refreshToken = await refreshAccessToken();
-    Axios.defaults.headers.common.authorization = `Bearer ${refreshToken}`;
-    Cookies.set("token", refreshToken);
-
-    return Axios(config);
+      config._retry = true;
+      const refreshToken = await refreshAccessToken(url);
+      Axios.defaults.headers.common.authorization = `Bearer ${refreshToken}`;
+      if (url === 'biling') {
+        Cookies.set("token_billing", refreshToken);
+      } else {
+        Cookies.set("token", refreshToken);
+      }
+      return Axios(config);
     }
 
     return Promise.reject(error);
-}
+  }
 );
 
 export const apiGet = (url, params = {}) =>
@@ -78,6 +95,6 @@ export const apiPost = (url, data) =>
         resolve({ data: res.data, status: res?.status });
       })
       .catch((err) => {
-        reject({ err,res: err?.response, status: err?.status });
+        reject({ err, res: err?.response, status: err?.status });
       });
   });

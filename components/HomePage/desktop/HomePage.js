@@ -37,7 +37,7 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                <div className="lg:pt-72 xl:pt-60">
+                <div className="lg:pt-72 xl:pt-60 overflow-x-hidden">
                     <div className={classNames(css.trapezoid, 'mt-10 rotate-180')} ></div>
                     <div className="w-full" style={{ backgroundColor: '#0285e4' }}>
                         <div className="w-full">

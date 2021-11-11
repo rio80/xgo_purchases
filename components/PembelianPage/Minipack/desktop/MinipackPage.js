@@ -12,6 +12,7 @@ SwiperCore.use([Pagination, Navigation]);
 import * as React from 'react'
 import { getMinipack } from "../../../../utils/apiHandlers";
 import { useRouter } from 'next/router';
+import Alert from "../../../../pages/shared/alert/Alert";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -24,10 +25,10 @@ export default function MinipackPage() {
     const [idxpaket, setIdxPaket] = React.useState('')
     const [idxdurasi, setIdxDurasi] = React.useState('')
     const [paketdata, setPaketdata] = React.useState([])
+    const [error, setError] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const [data, setData] = React.useState({
         email: 'testprojectrans@gmail.com',
-        payment_method_id: '6',
         package_id: '381',
         receiver_email: 'testprojectrans@gmail.com',
         receiver_type: 'SELF',
@@ -193,9 +194,14 @@ export default function MinipackPage() {
             } catch (e) {
                 console.log(e)
                 setLoading(false)
+                setError(true)
             }
         })();
     }, []);
+
+    const closeModal = (data) => {
+        setError(data);
+    };
 
     if (loading) {
         return (
@@ -208,6 +214,7 @@ export default function MinipackPage() {
 
     return (
         <>
+            {error && <Alert type={0} title={'Terjadi Kesalahan'} message={'Silahkan coba beberapa saat lagi'} close={closeModal} />}
             <div className="max-w-3xl mx-auto hidden lg:block">
                 <div className="overflow-hidden mt-36">
                     <div className="px-4 py-5 sm:px-6">
