@@ -39,6 +39,9 @@ export default function PembayaranPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [open, setOpen] = useState(false);
+    const today = new Date()
+    const start = format(today, 'dd MMM yyyy')
+    const sum = addMonths(today, paket.durasi);
 
     const handleBayar = async () => {
         createOrder()
@@ -92,15 +95,11 @@ export default function PembayaranPage() {
         setOpen(data);
     };
 
-    const convertToRupiah = (angka) => {
+    const convertToRupiah = (angka = 0) => {
         var rupiah = '';
         var angkarev = angka.toString().split('').reverse().join('');
         for (var i = 0; i < angkarev.length; i++) if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
         return rupiah.split('', rupiah.length - 1).reverse().join('');
-    }
-
-    if (datapayment === null) {
-        router.push('/pembelian-minipack')
     }
 
     const sumAmount = () => {
@@ -113,12 +112,6 @@ export default function PembayaranPage() {
 
         return totalHarga
     }
-
-    const today = new Date()
-    const start = format(today, 'dd MMM yyyy')
-    const sum = addMonths(today, paket.durasi);
-    console.log(format(sum, 'dd MMMM yyyy'))
-    console.log(start)
 
     return (
         <>
@@ -343,7 +336,7 @@ export default function PembayaranPage() {
                                 <p className="text-xs text-white">Paket {paket?.durasi} Bulan {paket.paket}</p>
                             </div>
                             <div className="text-xs text-white ml-auto">
-                                <p>RP {convertToRupiah(datapayment.amount)}</p>
+                                <p>RP {convertToRupiah(datapayment?.amount)}</p>
                             </div>
                         </div>
                         {selected.id === '6' ? (

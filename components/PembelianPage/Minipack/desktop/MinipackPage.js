@@ -35,7 +35,7 @@ export default function MinipackPage() {
         receiver_type: 'SELF',
         activation_process: 'IMMEDIATE'
     })
-    
+
     const [payment, setPayment] = React.useState({
         app_id: "webxgo",
         payment_type: "internal_app",
@@ -87,12 +87,17 @@ export default function MinipackPage() {
         if (status) {
             let dataPaket = {
                 paket,
-                durasi : paketdata[idxpaket]?.plans[idxdurasi]?.duration
+                durasi: paketdata[idxpaket]?.plans[idxdurasi]?.duration
             }
             Cookies.set('paket', JSON.stringify(dataPaket));
             localStorage.setItem('checkout', JSON.stringify(data));
             localStorage.setItem('payment', JSON.stringify(payment));
-            router.push('/pembayaran')
+            const auth = Cookies.get('auth')
+            if (typeof auth === 'undefined') {
+                router.push('/login')
+            } else {
+                router.push('/pembayaran')
+            }
         }
     }
 
@@ -216,7 +221,7 @@ export default function MinipackPage() {
 
     return (
         <>
-            {error && <Alert type={0} title={'Terjadi Kesalahan'} message={'Silahkan coba beberapa saat lagi'} close={closeModal} />}
+            {error && <Alert type={0} title={'Terjadi Kesalahan Server'} message={'Silahkan coba beberapa saat lagi'} close={closeModal} />}
             <div className="max-w-3xl mx-auto hidden lg:block">
                 <div className="overflow-hidden mt-36">
                     <div className="px-4 py-5 sm:px-6">

@@ -160,6 +160,7 @@ export default function MinipackPage() {
             } catch (e) {
                 // console.log(e)
                 setLoading(false)
+                setError(true)
             }
         })();
     }, []);

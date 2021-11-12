@@ -29,5 +29,9 @@ export function getStatusOrder(data){
     return apiPost("/billing/payment/doku/check", {order_id:data});
 }
 
+export function postLogin(data){
+    return apiPost("/mytrans/v2/auth/login", data);
+}
+
 
 

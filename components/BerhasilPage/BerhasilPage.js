@@ -26,7 +26,7 @@ export default function BerhasilPage({ harga }) {
                         </p>
                         <div className="flex mt-4">
                             <p className="text-gray-400 font-base text-base lg:text-left text-center">
-                                Terimakasih atas pembayaran Anda. Paket XGO Anda langsung bisa digunakan sekarang.
+                                Terimakasih atas pembayaran Anda. Paket Anda langsung bisa aktif sekarang.
                             </p>
                         </div>
                         <p className="font-base text-sm text-gray-400 lg:text-left text-center mt-8 lg:mt-0">
@@ -36,7 +36,7 @@ export default function BerhasilPage({ harga }) {
                             <div className="flex flex-col">
                                 <div>
                                     <p className="text-gray-600 font-semibold text-2xl my-auto">
-                                        Rp {convertToRupiah(harga)}
+                                        Rp {convertToRupiah(harga + 5000)}
                                     </p>
                                 </div>
 

@@ -26,6 +26,8 @@ export default function KodeBayarPage() {
     const copy = () => {
         navigator.clipboard.writeText(kode_bayar)
         setCopied('Kode Bayar berhasil di salin!');
+        localStorage.removeItem('payment')
+        localStorage.removeItem('checkout')
     }
 
     return (

@@ -30,7 +30,7 @@ function classNames(...classes) {
 
 export default function PembayaranPage() {
     const datapayment = JSON.parse(localStorage.getItem('payment'))
-    const createorder = JSON.parse(localStorage.getItem('checkout'))
+    const auth = Cookies.get('auth')
     const paket = JSON.parse(Cookies.get('paket'))
     const dispatch = useDispatch()
     const router = useRouter()
@@ -39,6 +39,9 @@ export default function PembayaranPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [open, setOpen] = useState(false);
+    const today = new Date()
+    const start = format(today, 'dd MMM yyyy')
+    const sum = addMonths(today, paket.durasi);
 
     const handleBayar = async () => {
         createOrder()
@@ -99,10 +102,6 @@ export default function PembayaranPage() {
         return rupiah.split('', rupiah.length - 1).reverse().join('');
     }
 
-    if (datapayment === null) {
-        router.push('/pembelian-minipack')
-    }
-
     const sumAmount = () => {
         let totalHarga = 0
         if (selected.id === '6') {
@@ -114,10 +113,7 @@ export default function PembayaranPage() {
         return totalHarga
     }
 
-    const today = new Date()
-    const start = format(today, 'dd MMM yyyy')
-    const sum = addMonths(today, paket.durasi);
-
+   
 
     return (
         <>
