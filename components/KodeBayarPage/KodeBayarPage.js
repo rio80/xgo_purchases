@@ -12,6 +12,11 @@ export default function KodeBayarPage() {
     
     let kode = ''
     if (typeof cookie_kode_bayar !== 'undefined') {
+        if(kode_bayar !== ''){
+            if(kode_bayar !== cookie_kode_bayar){
+                Cookies.set('kode_bayar', kode_bayar)
+            }
+        }
         kode = Cookies.get('kode_bayar')
     }else{
         Cookies.set('kode_bayar', kode_bayar)
@@ -32,8 +37,8 @@ export default function KodeBayarPage() {
                 <p className="text-lg font-light">Silahkan simpan kode bayar Anda berikut ini</p>
             </div>
  
-            <div className="flex justify-center mt-20">
-                <div className="w-2/4 relative flex">
+            <div className="flex justify-center mt-20 px-8 lg:px-0">
+                <div className="w-full lg:w-2/4 relative flex">
                     <input
                         type="text"
                         name="first-name"

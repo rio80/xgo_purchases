@@ -9,7 +9,8 @@ import Loader from 'react-loader-spinner'
 import Alert from '../../../pages/shared/alert/Alert'
 import Tooltip from '../Tooltip'
 import { useDispatch } from 'react-redux'
-import { KodeAction } from '../../../store/kodeBayar/action'
+import { KodeAction } from '../../../store/KodeBayar/KodeBayarAction'
+import { addMonths, compareAsc, format } from 'date-fns'
 
 const plans = [
     { name: 'Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
@@ -28,6 +29,9 @@ function classNames(...classes) {
 }
 
 export default function PembayaranPage() {
+    const datapayment = JSON.parse(localStorage.getItem('payment'))
+    const createorder = JSON.parse(localStorage.getItem('checkout'))
+    const paket = JSON.parse(Cookies.get('paket'))
     const dispatch = useDispatch()
     const router = useRouter()
     const [selected, setSelected] = useState(plans[0])
@@ -87,6 +91,34 @@ export default function PembayaranPage() {
     const closeModal = (data) => {
         setOpen(data);
     };
+
+    const convertToRupiah = (angka) => {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for (var i = 0; i < angkarev.length; i++) if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+        return rupiah.split('', rupiah.length - 1).reverse().join('');
+    }
+
+    if (datapayment === null) {
+        router.push('/pembelian-minipack')
+    }
+
+    const sumAmount = () => {
+        let totalHarga = 0
+        if (selected.id === '6') {
+            totalHarga = datapayment.amount + 5000
+        } else {
+            totalHarga = datapayment.amount
+        }
+
+        return totalHarga
+    }
+
+    const today = new Date()
+    const start = format(today, 'dd MMM yyyy')
+    const sum = addMonths(today, paket.durasi);
+    console.log(format(sum, 'dd MMMM yyyy'))
+    console.log(start)
 
     return (
         <>
@@ -301,30 +333,33 @@ export default function PembayaranPage() {
 
                     <div className="w-80 bg-white shadow mt-8 p-6 rounded-lg" style={{ background: 'linear-gradient(90deg, rgba(0,36,3,1) 0%, rgba(212,13,150,1) 0%, rgba(73,88,218,1) 100%)' }}>
                         <p className="font-normal text-base text-white">
-                            Paket 30 Hari Gratis VOD
+                            Paket {paket?.durasi} Bulan {paket.paket}
                         </p>
                         <p className="font-normal text-xs text-white mt-1">
                             testprojectrans@gmail.com
                         </p>
                         <div className="flex mt-7">
                             <div className="self-center">
-                                <p className="text-xs text-white">Paket 30 hari Gratis VOD</p>
+                                <p className="text-xs text-white">Paket {paket?.durasi} Bulan {paket.paket}</p>
                             </div>
                             <div className="text-xs text-white ml-auto">
-                                <p>RP 9000</p>
+                                <p>RP {convertToRupiah(datapayment.amount)}</p>
                             </div>
                         </div>
-                        <div className="flex mt-2">
-                            <div className="self-center">
-                                <div className="flex flex-row">
-                                    <div className="self-center"><p className="text-xs text-white">Biaya Admin OVO </p></div>
-                                    <div className="pt-1"><Tooltip className="self-center" /></div>
+                        {selected.id === '6' ? (
+                            <div className="flex mt-2">
+                                <div className="self-center">
+                                    <div className="flex flex-row">
+                                        <div className="self-center"><p className="text-xs text-white">Biaya Admin OVO </p></div>
+                                        <div className="pt-1"><Tooltip className="self-center" /></div>
+                                    </div>
+                                </div>
+
+                                <div className="text-xs text-white ml-auto mt-1">
+                                    <p>RP {convertToRupiah(5000)}</p>
                                 </div>
                             </div>
-                            <div className="text-xs text-white ml-auto mt-1">
-                                <p>RP 5000</p>
-                            </div>
-                        </div>
+                        ) : ('')}
                         <div className="relative mt-2.5">
                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
                                 <div className="w-full border-t border-gray-100" />
@@ -335,11 +370,11 @@ export default function PembayaranPage() {
                                 <p className="text-xs text-white">Total</p>
                             </div>
                             <div className="text-lg font-semibold text-white ml-auto">
-                                <p>RP 14000</p>
+                                <p>RP {convertToRupiah(sumAmount())}</p>
                             </div>
                         </div>
                         <p className="font-normal text-xs text-white mt-6">
-                            Mulai 8 Okt 2021 - 8 Nov 2021
+                            Mulai {start} - {format(sum, 'dd MMMM yyyy')}
                         </p>
                         <p className="font-light text-xs text-white mt-1">
                             <u>Syarat dan ketentuan</u> berlaku

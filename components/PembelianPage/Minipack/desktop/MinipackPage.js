@@ -13,6 +13,7 @@ import * as React from 'react'
 import { getMinipack } from "../../../../utils/apiHandlers";
 import { useRouter } from 'next/router';
 import Alert from "../../../../pages/shared/alert/Alert";
+import Cookies from "js-cookie";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -34,6 +35,7 @@ export default function MinipackPage() {
         receiver_type: 'SELF',
         activation_process: 'IMMEDIATE'
     })
+    
     const [payment, setPayment] = React.useState({
         app_id: "webxgo",
         payment_type: "internal_app",
@@ -83,11 +85,11 @@ export default function MinipackPage() {
 
     const handleCheckout = (status) => {
         if (status) {
-            // let dataPaket = {
-            //     paket,
-            //     durasi : paketdata[idxpaket]?.plans[idxdurasi]?.duration
-            // }
-            // localStorage.setItem('paket', JSON.stringify(dataPaket));
+            let dataPaket = {
+                paket,
+                durasi : paketdata[idxpaket]?.plans[idxdurasi]?.duration
+            }
+            Cookies.set('paket', JSON.stringify(dataPaket));
             localStorage.setItem('checkout', JSON.stringify(data));
             localStorage.setItem('payment', JSON.stringify(payment));
             router.push('/pembayaran')

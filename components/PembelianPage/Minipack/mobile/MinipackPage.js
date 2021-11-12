@@ -12,6 +12,8 @@ SwiperCore.use([Pagination, Navigation]);
 import * as React from 'react'
 import { getMinipack } from "../../../../utils/apiHandlers";
 import { useRouter } from 'next/router';
+import Alert from "../../../../pages/shared/alert/Alert";
+import Cookies from "js-cookie";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -24,10 +26,10 @@ export default function MinipackPage() {
     const [idxpaket, setIdxPaket] = React.useState('')
     const [idxdurasi, setIdxDurasi] = React.useState('')
     const [paketdata, setPaketdata] = React.useState([])
+    const [error, setError] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const [data, setData] = React.useState({
         email: 'testprojectrans@gmail.com',
-        payment_method_id: '6',
         package_id: '381',
         receiver_email: 'testprojectrans@gmail.com',
         receiver_type: 'SELF',
@@ -83,11 +85,11 @@ export default function MinipackPage() {
 
     const handleCheckout = (status) => {
         if (status) {
-            // let dataPaket = {
-            //     paket,
-            //     durasi : paketdata[idxpaket]?.plans[idxdurasi]?.duration
-            // }
-            // localStorage.setItem('paket', JSON.stringify(dataPaket));
+            let dataPaket = {
+                paket,
+                durasi : paketdata[idxpaket]?.plans[idxdurasi]?.duration
+            }
+            Cookies.set('paket', JSON.stringify(dataPaket));
             localStorage.setItem('checkout', JSON.stringify(data));
             localStorage.setItem('payment', JSON.stringify(payment));
             router.push('/pembayaran')
@@ -162,6 +164,10 @@ export default function MinipackPage() {
         })();
     }, []);
 
+    const closeModal = (data) => {
+        setError(data);
+    };
+
     if (loading) {
         return (
             <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden flex flex-col items-center justify-center">
@@ -172,6 +178,7 @@ export default function MinipackPage() {
 
     return (
         <>
+            {error && <Alert type={0} title={'Terjadi Kesalahan'} message={'Silahkan coba beberapa saat lagi'} close={closeModal} />}
             <div className="w-full mx-auto px-5">
                 <div className="overflow-hidden mt-36">
                     <div className="py-5">

@@ -1,4 +1,4 @@
-import { KodeAction } from './action';
+import { KodeAction } from './KodeBayarAction';
 
 const initialState = {
     kode: '',
