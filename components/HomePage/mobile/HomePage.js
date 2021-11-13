@@ -1,6 +1,11 @@
 import * as React from 'react'
 import css from './HomePage.module.css'
 import { useRouter } from 'next/router';
+import Image from 'next/image'
+import Iphone from '../../../public/png/iphone_white.png'
+import GooglePlay from '../../../public/png/google_play.png'
+import AppleStore from '../../../public/png/apple_store.png'
+import Background from '../../../public/png/background.png'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -24,7 +29,11 @@ export default function HomePage() {
                     </p>
                 </div>
                 <div className="absolute z-10 mt-16 w-full">
-                    <img src={'../png/background.png'} />
+                    <Image
+                        src={Background}
+                        alt="main background"
+                        priority
+                    />
                 </div>
 
                 <div className="pt-52">
@@ -96,12 +105,28 @@ export default function HomePage() {
                                         <div className="pt-6 pr-5">
                                             <p className="text-md text-center md:text-lg font-light text-white">Download aplikasi Transvision XGO di App Store atau Play Store melalui link dibawah ini</p>
                                         </div>
-                                        <div className="flex w-full flex-col gap-x-4 gap-y-4 pt-6">
-                                            <img src={'../png/google_play.png'} className="mx-auto" width="220px" height="64px" />
-                                            <img src={'../png/apple_store.png'} className="mx-auto" width="220px" height="64px" />
+                                        <div className="flex w-full flex-col gap-x-4 pt-6">
+                                            <div className="w-56 mx-auto my-4">
+                                                <Image
+                                                    src={GooglePlay}
+                                                    alt="google play"
+                                                    className="my-4"
+                                                />
+                                            </div>
+                                            <div className="w-56 mx-auto my-4">
+                                                <Image
+                                                    src={AppleStore}
+                                                    alt="apple store"
+
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="w-full mt-16">
-                                            <img src={'../png/iphone_white.png'} className="mx-auto" />
+                                        <div className="w-full mt-10">
+                                            <Image
+                                                src={Iphone}
+                                                alt="iphone white"
+
+                                            />
                                         </div>
                                     </div>
                                 </div>

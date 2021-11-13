@@ -8,11 +8,6 @@ export default function Home() {
   const Home = dynamic(() => rdd.isDesktop ? import('../components/HomePage/desktop/HomePage') : import('../components/HomePage/mobile/HomePage'))
   return (
     <>
-      <Head>
-        <title>Payment - XGO</title>
-        <link rel="icon" href={'../png/logo.png'} />
-      </Head>
-
       <HeaderHome />
       <Home />
       <FooterPage />

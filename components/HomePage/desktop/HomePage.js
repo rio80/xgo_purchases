@@ -1,6 +1,11 @@
 import * as React from 'react'
 import css from './HomePage.module.css'
 import { useRouter } from 'next/router';
+import Image from 'next/image'
+import Iphone from '../../../public/png/iphone.png'
+import GooglePlay from '../../../public/png/google_play.png'
+import AppleStore from '../../../public/png/apple_store.png'
+import Background from '../../../public/png/background.png'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -33,7 +38,11 @@ export default function HomePage() {
                     </p>
 
                     <div className="absolute z-10 px-24 mt-2" style={{ maxWidth: '1024px' }}>
-                        <img src={'../png/background.png'} />
+                        <Image 
+                            src={Background}
+                            alt="main background"
+                            priority
+                        />
                     </div>
                 </div>
 
@@ -108,14 +117,27 @@ export default function HomePage() {
                                             <p className="text-xl md:text-lg font-light text-white">Download aplikasi Transvision XGO di App Store atau Play Store melalui link dibawah ini</p>
                                         </div>
                                         <div className="flex w-full gap-x-4 pt-6">
-                                            <img src={'../png/google_play.png'} width="181px" height="54px" />
-                                            <img src={'../png/apple_store.png'} width="181px" height="54px" />
+                                            <Image
+                                                src={GooglePlay}
+                                                alt="google play"
+                                                width={'181px'}
+                                                height={'54px'}
+                                            />
+                                            <Image
+                                                src={AppleStore}
+                                                alt="apple store"
+                                                width={'181px'}
+                                                height={'54px'}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="w-full">
-                                        <img src={'../png/iphone.png'} className="ml-14 md:ml-12" />
+                                    <div className="w-full ml-14 md:ml-12" style={{ fontSize: 0 }}>
+                                        <Image
+                                            src={Iphone}
+                                            alt="iphone"
+                                        />
                                     </div>
                                 </div>
                             </div>
