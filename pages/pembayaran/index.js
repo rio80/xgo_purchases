@@ -16,7 +16,7 @@ export default function Pembayaran() {
             payment = localStorage.getItem('payment');
         }
 
-        console.log(payment)
+        // console.log(payment)
 
         if (typeof auth !== 'undefined' && payment !== null) {
             setLoadPage(true);

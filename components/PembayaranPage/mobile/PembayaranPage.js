@@ -29,8 +29,13 @@ function classNames(...classes) {
 }
 
 export default function PembayaranPage() {
-    const datapayment = JSON.parse(localStorage.getItem('payment'))
+    const CryptoJS = require("crypto-js");
+    const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
+    const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
     const auth = Cookies.get('auth')
+    const decrypted = CryptoJS.AES.decrypt(auth, key, {iv:iv, padding: CryptoJS.pad.ZeroPadding}).toString(CryptoJS.enc.Utf8);
+
+    const datapayment = JSON.parse(localStorage.getItem('payment'))
     const paket = JSON.parse(Cookies.get('paket'))
     const dispatch = useDispatch()
     const router = useRouter()
@@ -141,7 +146,7 @@ export default function PembayaranPage() {
                                 Paket {paket?.durasi} Bulan {paket.paket}
                             </p>
                             <p className="font-normal text-xs text-white mt-1">
-                                testprojectrans@gmail.com
+                                {decrypted}
                             </p>
                             <div className="flex mt-5">
                                 <div className="self-center">
@@ -201,7 +206,7 @@ export default function PembayaranPage() {
                                         type="text"
                                         name="first-name"
                                         id="first-name"
-                                        defaultValue={'testprojectrans@gmail.com'}
+                                        defaultValue={decrypted}
                                         autoComplete="given-name"
                                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     />
