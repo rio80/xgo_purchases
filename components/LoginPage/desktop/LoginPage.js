@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { postLogin } from '../../../utils/apiHandlers';
 import Cookies from 'js-cookie';
 import Alert from '../../../pages/shared/alert/Alert';
+import Loader from 'react-loader-spinner';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -53,9 +54,15 @@ export default function LoginPage() {
         setOpen(data);
     };
 
+
     return (
         <>
             {error && <Alert type={0} title={'Data tidak ditemukan'} message={message} close={closeModal} />}
+            {load &&
+                <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
+                    <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
+                </div>
+            }
             <div className="ml-32 pt-36 w-96">
                 <div>
                     <p className="text-3xl font-bold">Masuk</p>
