@@ -1,4 +1,4 @@
-import config from '../utils/config'
+import config from './config'
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -17,6 +17,16 @@ const body = {
   authenticated_userid: config.authenticatedUserid
 };
 
+const getAccessToken = (url) => {
+  return axios.post(`${config.apiHost}${url}/oauth2/token`, body)
+    .then(function (response) {
+      return response.data.access_token;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
 const refreshAccessToken = () => {
   return Axios.post("/transvisionplus/oauth2/token", body)
     .then(function (response) {
@@ -28,36 +38,47 @@ const refreshAccessToken = () => {
 };
 
 Axios.interceptors.request.use(
-    async (config) => {
+  async (config) => {
+    const url = config.url
+    const splitUrl = config.url.split('/')[1]
+    if (splitUrl === 'transvisionplus') {
       const token = await Cookies.get("token");
       if (token) {
         config.headers = {
           Authorization: `Bearer ${token}`,
         };
       }
-      return config;
-    },
-    (error) => Promise.reject(error),
-    null,
-    { synchronous: true }
+    } else {
+      const getToken = await getAccessToken(url)
+      if (getToken) {
+        config.headers = {
+          Authorization: `Bearer ${getToken}`,
+        };
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+  null,
+  { synchronous: true }
 );
 
 Axios.interceptors.response.use(
-(response) => response,
-async (error) => {
+  (response) => response,
+  async (error) => {
     const config = error.config;
     // console.log(error);
     if (error?.response?.status === 401 && !config._retry) {
-    config._retry = true;
-    const refreshToken = await refreshAccessToken();
-    Axios.defaults.headers.common.authorization = `Bearer ${refreshToken}`;
-    Cookies.set("token", refreshToken);
+      config._retry = true;
+      const refreshToken = await refreshAccessToken();
+      Axios.defaults.headers.common.authorization = `Bearer ${refreshToken}`;
+      Cookies.set("token", refreshToken);
 
-    return Axios(config);
+      return Axios(config);
     }
 
     return Promise.reject(error);
-}
+  }
 );
 
 export const apiGet = (url, params = {}) =>
@@ -78,6 +99,7 @@ export const apiPost = (url, data) =>
         resolve({ data: res.data, status: res?.status });
       })
       .catch((err) => {
-        reject({ err,res: err?.response, status: err?.status });
+        reject({ err, res: err?.response, status: err?.status });
       });
   });
+

@@ -1,11 +1,14 @@
 import css from './BerhasilPage.module.css'
-import { compareAsc, format } from 'date-fns'
+import { format } from 'date-fns'
+import router from 'next/router';
+import { useRouter } from 'next/router';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function BerhasilPage({ harga }) {
+    const router = useRouter()
     const convertToRupiah = (angka) => {
         var rupiah = '';
         var angkarev = angka.toString().split('').reverse().join('');
@@ -29,17 +32,16 @@ export default function BerhasilPage({ harga }) {
                                 Terimakasih atas pembayaran Anda. Paket Anda langsung bisa aktif sekarang.
                             </p>
                         </div>
-                        <p className="font-base text-sm text-gray-400 lg:text-left text-center mt-8 lg:mt-0">
+                        <p className="font-base text-sm text-gray-400 lg:text-left text-center mt-8 lg:mt-4">
                             {format(new Date(), 'dd MMMM yyyy')}
                         </p>
                         <div className="flex flex-col lg:flex-row gap-x-12 lg:mt-7 mt-2 text-center">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col self-center">
                                 <div>
                                     <p className="text-gray-600 font-semibold text-2xl my-auto">
                                         Rp {convertToRupiah(harga + 5000)}
                                     </p>
                                 </div>
-
                             </div>
                             <div className="flex flex-col mt-8 lg:mt-0">
                                 <div>
@@ -57,6 +59,7 @@ export default function BerhasilPage({ harga }) {
                                 type="button"
                                 className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 style={{ backgroundColor: '#0285e4' }}
+                                onClick={()=>router.push('/')}
                             >
                                 Kembali ke beranda
                             </button>

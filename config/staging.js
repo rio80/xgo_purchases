@@ -6,4 +6,5 @@ module.exports = {
     provisionKey: 'CuT0xc9am8smutZkrRNSsTM2l9LOvOGw',
     authenticatedUserid: 'testing',
     secretCookiePassword: 'CuT0c9am8smuanindithatZkrRNSsTM2l9LanungOvOGw',
+    idPackage: '381',
 };

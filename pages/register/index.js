@@ -6,18 +6,18 @@ export default function Login() {
     const BannerLoginPage = dynamic(import('../../components/BannerLoginPage/BannerLoginPage'))
     const Header = dynamic(import('../../components/shared/Header/HeaderHome'))
     const Footer = dynamic(import('../../components/FooterPage/FooterPage'))
-    const Login = dynamic(() => rdd.isDesktop ? import('../../components/LoginPage/desktop/LoginPage') : import('../../components/LoginPage/mobile/LoginPage'))
+    const Register = dynamic(() => rdd.isDesktop ? import('../../components/RegisterPage/desktop/RegisterPage') : import('../../components/RegisterPage/mobile/RegisterPage'))
 
     return (
         <>
             <Head>
-                <title>Masuk | My Transvision 2.0</title>
+                <title>Daftar | My Transvision 2.0</title>
                 <link rel="icon" href={'../png/logo.png'} />
             </Head>
             <div className="w-full flex">
                 {rdd.isMobile && <Header />}
                 {rdd.isDesktop && <BannerLoginPage />}
-                <Login />
+                <Register />
             </div>
         </>
     )

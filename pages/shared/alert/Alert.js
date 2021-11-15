@@ -13,7 +13,7 @@ export default function Alert({ message = '', title = '', type = 1, link = '', c
 
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="fixed z-20 inset-0 overflow-y-auto" onClose={() => { setOpen(false), close(false) }}>
+            <Dialog as="div" className="fixed z-20 inset-0 overflow-y-auto" onClose={() => { setOpen(false), close(false), link !== '' ? router.push(link): '' }}>
                 <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                     <Transition.Child
                         as={Fragment}
@@ -60,9 +60,9 @@ export default function Alert({ message = '', title = '', type = 1, link = '', c
                                     type="button"
                                     className="w-full self-center items-center px-8 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
                                     style={{ backgroundColor: '#0285e4' }}
-                                    onClick={() => { setOpen(false), close(false), router.push(link) }}
+                                    onClick={() => { setOpen(false), close(false), link !== '' ? router.push(link): '' }}
                                 >
-                                    Kembali
+                                    {type === 0 ? 'Kembali':'Oke'}
                                 </button>
                             </div>
                         </div>

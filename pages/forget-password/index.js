@@ -1,11 +1,18 @@
 import BannerLoginPage from "../../components/BannerLoginPage/BannerLoginPage";
-import ResetPage from "../../components/ResetPage/ResetPage";
+import ForgetPage from "../../components/ForgetPasswordPage/ForgetPasswordPage";
+import Head from 'next/head';
 
-export default function ForgetPassword(){
+export default function ForgetPassword() {
     return (
-        <div className="w-full flex">
-            <BannerLoginPage />
-            <ResetPage />
-        </div>
+        <>
+            <Head>
+                <title>Lupa Password | My Transvision 2.0</title>
+                <link rel="icon" href={'../png/logo.png'} />
+            </Head>
+            <div className="w-full flex">
+                <BannerLoginPage />
+                <ForgetPage />
+            </div>
+        </>
     )
 }

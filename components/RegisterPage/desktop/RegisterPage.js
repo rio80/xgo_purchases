@@ -2,7 +2,7 @@ import * as React from 'react'
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { postLogin } from '../../../utils/apiHandlers';
+import { postRegister } from '../../../utils/apiHandlers';
 import Cookies from 'js-cookie';
 import Alert from '../../../pages/shared/alert/Alert';
 import Loader from 'react-loader-spinner';
@@ -11,7 +11,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const router = useRouter()
     const [Password, setPassword] = React.useState(false);
     const [load, setLoad] = React.useState(false);
@@ -21,27 +21,25 @@ export default function LoginPage() {
     const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
     const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
     const [error, setError] = React.useState(false)
+    const [success, setSuccess] = React.useState(false)
     const [message, setMessage] = React.useState('')
+    const [phone, setPhone] = React.useState('')
 
-    const handleLogin = async (handleSubmit) => {
-        const datapayment = JSON.parse(localStorage.getItem('payment'))
+    const handleRegister = async (handleSubmit) => {
         setLoad(true)
         const newState = { ...handleSubmit }
+        const name = handleSubmit.email.split('@')[0]
         const encrypted = CryptoJS.AES.encrypt(handleSubmit.password, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString();
         newState.password = encrypted
+        newState.phone_number = phone
+        newState.name = name
 
         try {
-            const login = await postLogin(newState)
-            if (login) {
-                const exp = new Date().getTime() + (60 * 60 * 24 * 1000 * 7);
-                Cookies.set("auth", CryptoJS.AES.encrypt(login?.data?.result?.email, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(), {
-                    expires: exp,
-                });
-                if (datapayment !== null) {
-                    router.push('/pembayaran')
-                } else {
-                    router.push('/')
-                }
+            const register = await postRegister(newState)
+            if (register.data.status) {
+                setLoad(false);
+                setSuccess(true)
+                setMessage('Kami telah mengirimkan email verifikasi ke : '+handleSubmit.email+'. Klik tautan untuk menyelesaikan pendaftaran')
             }
         } catch (e) {
             setError(true)
@@ -54,9 +52,14 @@ export default function LoginPage() {
         setOpen(data);
     };
 
+    const handlePhone = (e) => {
+        e.target.validity.valid && setPhone(e.target.value)
+    }
+
     return (
         <>
-            {error && <Alert type={0} title={'Data tidak ditemukan'} message={message} close={closeModal} />}
+            {error && <Alert type={0} title={'Registrasi Gagal'} message={message} close={closeModal} />}
+            {success && <Alert type={1} title={'Harap verifikasi email Anda'} link={'/'} message={message} close={closeModal} />}
             {load &&
                 <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
                     <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
@@ -64,9 +67,9 @@ export default function LoginPage() {
             }
             <div className="ml-32 pt-36 w-96">
                 <div>
-                    <p className="text-3xl font-bold">Masuk</p>
-                    <p className="mt-2.5 text-normal text-gray-400">Masuk ke akun Anda untuk pengalaman <br /> menonton yang hebat dengan aplikasi XGO</p>
-                    <form onSubmit={handleSubmit(handleLogin)}>
+                    <p className="text-3xl font-bold">Daftar</p>
+                    <p className="mt-2.5 text-normal text-gray-400">Buat akun Anda agar dapat menikmati semua <br /> konten hiburan dari Transvision</p>
+                    <form onSubmit={handleSubmit(handleRegister)}>
                         <div className="mt-5">
                             <div>
                                 <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
@@ -83,8 +86,31 @@ export default function LoginPage() {
                                     />
                                 </div>
                                 {errors.email && (
-                                    <p class="mt-1 text-red-500 text-xs">
+                                    <p className="mt-1 text-red-500 text-xs">
                                         Mohon masukkan email anda dengan format yang benar
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mt-4">
+                                <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                                    Nomor Telepon
+                                </label>
+                                <div className="mt-3.5">
+                                    <input
+                                        type="text"
+                                        pattern="[0-9]*"
+                                        name="phone"
+                                        id="phone"
+                                        placeholder="Nomor Telepon Anda"
+                                        onInput={handlePhone}
+                                        value={phone}
+                                        {...register("phone_number", { required: true })}
+                                        className="py-4 px-7 w-full text-sm shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-full"
+                                    />
+                                </div>
+                                {errors.phone_number && (
+                                    <p className="mt-1 text-red-500 text-xs">
+                                        Mohon masukkan nomor telepon anda
                                     </p>
                                 )}
                             </div>
@@ -97,7 +123,7 @@ export default function LoginPage() {
                                         type={Password ? "text" : "password"}
                                         name="password"
                                         placeholder="Password Anda"
-                                        {...register("password", { required: true })}
+                                        {...register("password", { required: true, minLength: 8 })}
                                         className="py-4 px-7 block w-full sm:text-sm border-gray-300 rounded-full"
                                     />
                                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
@@ -117,41 +143,19 @@ export default function LoginPage() {
                                     </div>
                                 </div>
                                 {errors.password && (
-                                    <p class="mt-1 text-red-500 text-xs">
-                                        Mohon masukkan password anda
+                                    <p className="mt-1 text-red-500 text-xs">
+                                        Password harus berisi minimal 8 karakter
                                     </p>
                                 )}
                             </div>
 
-                            <div className="flex items-center h-5 mt-4">
-                                <input
-                                    id="comments"
-                                    aria-describedby="comments-description"
-                                    name="comments"
-                                    type="checkbox"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                />
-                                <div className="ml-3 text-sm">
-                                    <label htmlFor="comments" className="font-small text-xs text-gray-700">
-                                        Ingat Password
-                                    </label>
-                                </div>
-
-                                <div className="ml-auto text-sm">
-                                    <label htmlFor="comments" className="font-small text-xs text-gray-700">
-                                        <a onClick={() => router.push('/forget-password')} className="text-blue-600 cursor-pointer hover:text-blue-800">Lupa Password?</a>
-                                    </label>
-                                </div>
-
-                            </div>
                             <div className="mt-10">
                                 <button
                                     type="submit"
                                     className="w-full self-center items-center px-8 py-5 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     style={{ backgroundColor: '#0285e4' }}
-
                                 >
-                                    Login
+                                    Daftar
                                 </button>
                             </div>
 
@@ -175,11 +179,18 @@ export default function LoginPage() {
                                     </div>
                                 </button>
                             </div>
+
+                            <div className="mt-4 px-16 text-center">
+                                <label className="font-small text-xs text-gray-500">
+                                    Dengan mendaftar Anda berarti menyetujui <a href="#" className="text-blue-600">syarat dan ketentuan</a> yang berlaku.
+                                </label>
+
+                            </div>
                         </div>
                     </form>
-                    <div className="mt-12 flex justify-center">
+                    <div className="mt-14 mb-28 flex justify-center">
                         <label htmlFor="comments" className="font-small text-base text-gray-700">
-                            Belum punya akun? <a href={'/register'} className="text-blue-600">Daftar</a>
+                            Sudah punya akun? <a href={'/login'} className="text-blue-600">Masuk</a>
                         </label>
 
                     </div>
