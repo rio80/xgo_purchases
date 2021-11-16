@@ -18,6 +18,13 @@ export default function HeaderHome() {
         { name: 'Product', href: '#', current: false }
     ]
 
+    const pages = [
+        { name: 'Pembelian', href: '#', current: true },
+        { name: 'Pembayaran', href: '#', current: false },
+        { name: 'Verifikasi', href: '#', current: false },
+      ]
+    
+
     const logout = () => {
         Cookies.remove('auth')
         router.push('/')
