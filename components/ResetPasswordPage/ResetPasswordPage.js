@@ -7,7 +7,6 @@ import Alert from '../../pages/shared/alert/Alert';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 
 export default function ResetPasswordPage(props) {
-    console.log()
     const [load, setLoad] = React.useState(false);
     const { handleSubmit, register, formState: { errors } } = useForm();
     const [error, setError] = React.useState(false)
@@ -46,6 +45,7 @@ export default function ResetPasswordPage(props) {
 
     const closeModal = (data) => {
         setOpen(data);
+        setError(data);
     };
 
     return (

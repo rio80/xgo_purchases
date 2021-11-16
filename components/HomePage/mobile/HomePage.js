@@ -6,6 +6,8 @@ import Iphone from '../../../public/png/iphone_white.png'
 import GooglePlay from '../../../public/png/google_play.png'
 import AppleStore from '../../../public/png/apple_store.png'
 import Background from '../../../public/png/background.png'
+import Xstream from '../../../public/png/xstream.png'
+import Xgo from '../../../public/png/xgo.png'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -67,6 +69,11 @@ export default function HomePage() {
                                             </button>
                                         </div>
                                         <div className="flex justify-center">
+                                            <Image
+                                                src={Xgo}
+                                                alt="xgo"
+                                                className="my-4 mx-4"
+                                            />
                                             <img src={'../png/xgo.png'} width="293px" height="253px" className="mt-7" />
                                         </div>
                                     </div>
@@ -89,7 +96,11 @@ export default function HomePage() {
                                             </button>
                                         </div>
                                         <div className="flex justify-center">
-                                            <img src={'../png/xstream.png'} width="319px" height="251px" className="mt-7" />
+                                            <Image
+                                                src={Xstream}
+                                                alt="xstream"
+                                                className="my-4 mx-4"
+                                            />
                                         </div>
                                     </div>
                                 </div>

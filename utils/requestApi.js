@@ -6,7 +6,7 @@ const API_GATEWAY = config.apiHost;
 
 export const Axios = axios.create({
   baseURL: API_GATEWAY,
-  timeout: 10000,
+  timeout: 15000,
 });
 
 const body = {
