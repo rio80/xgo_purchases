@@ -50,6 +50,7 @@ export default function RegisterPage() {
 
     const closeModal = (data) => {
         setOpen(data);
+        setError(data);
     };
 
     const handlePhone = (e) => {
