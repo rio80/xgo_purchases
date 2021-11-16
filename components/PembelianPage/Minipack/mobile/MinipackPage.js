@@ -29,9 +29,7 @@ export default function MinipackPage() {
     const [error, setError] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const [data, setData] = React.useState({
-        email: 'testprojectrans@gmail.com',
         package_id: '381',
-        receiver_email: 'testprojectrans@gmail.com',
         receiver_type: 'SELF',
         activation_process: 'IMMEDIATE'
     })
@@ -39,9 +37,6 @@ export default function MinipackPage() {
     const [payment, setPayment] = React.useState({
         app_id: "webxgo",
         payment_type: "internal_app",
-        customer_name: "Chandra",
-        customer_email: "chandrawira@gmail.com",
-        customer_mobilephone: "081211111111",
         app_url_validation: "https://xgo.co.id/api/validate/id=123321",
         app_url_callback: "https://my2-dev.transvision.co.id/verify-order"
     })

@@ -1,8 +1,8 @@
-import { useState, Fragment } from 'react'
+import { useEffect,useState, Fragment } from 'react'
 import { RadioGroup, Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
-import { createOrderMinipack, createRequestPayment } from '../../../utils/apiHandlers'
+import { createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -29,6 +29,7 @@ function classNames(...classes) {
 }
 
 export default function PembayaranPage() {
+    const [profil, setProfil] = useState([])
     const CryptoJS = require("crypto-js");
     const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
     const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
@@ -57,7 +58,10 @@ export default function PembayaranPage() {
         try {
             let submit = {
                 ...datapayment,
-                order_id: Cookies.get('order_id')
+                order_id: Cookies.get('order_id'),
+                customer_email: profil?.data?.result?.email,
+                customer_mobilephone: profil?.data?.result?.phone_number,
+                customer_name: profil?.data?.result?.name
             }
             const reqPayment = await createRequestPayment(submit)
             setLoading(false)
@@ -74,7 +78,9 @@ export default function PembayaranPage() {
             const createorder = JSON.parse(localStorage.getItem('checkout'))
             let submit = {
                 ...createorder,
-                payment_method_id: selected.id
+                payment_method_id: selected.id,
+                email: profil?.data?.result?.email,
+                receiver_email: profil?.data?.result?.email
             }
             let postData = await createOrderMinipack(submit);
             const orderId = postData?.data?.result?.order_id
@@ -117,6 +123,20 @@ export default function PembayaranPage() {
 
         return totalHarga
     }
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true)
+            try {
+                const getData = await getProfil(decrypted);
+                setProfil(getData)
+                setLoading(false)
+            } catch (e) {
+                console.log(e)
+                setLoading(false)
+            }
+        })();
+    }, []);
 
    
 

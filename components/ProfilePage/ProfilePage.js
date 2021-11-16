@@ -32,12 +32,12 @@ export default function ProfilePage() {
         })();
     }, []);
 
-    const sisa = (end) => {
-        const sisaHari = intervalToDuration({
-            start: new Date(),
-             end: new Date(end)
-          })
-        return sisaHari
+    const sisa = (start,end) => {
+        const date1 = new Date(start);
+        const date2 = new Date(end);
+        const Difference_In_Time = date2.getTime() - date1.getTime();
+        const Difference_In_Days = Math.floor(Difference_In_Time / (1000 * 3600 * 24));
+        return Difference_In_Days
     }
 
     if (loading) {
@@ -89,7 +89,7 @@ export default function ProfilePage() {
                             </div>
                             <div className="grid grid-cols-2 mb-24">
                                 <div className="flex">
-                                    <p className="self-center text-2xl" style={{ color: '#0285e4' }}>{sisa(data?.end_date).days}</p>
+                                    <p className="self-center text-2xl" style={{ color: '#0285e4' }}>{sisa(data?.start_date,data?.end_date)}</p>
                                     <p className="ml-4 self-center text-gray-500 text-2xl">Hari Tersisa</p>
                                 </div>
                                 <div>
