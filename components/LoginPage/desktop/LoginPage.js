@@ -7,10 +7,6 @@ import Cookies from 'js-cookie';
 import Alert from '../../../pages/shared/alert/Alert';
 import Loader from 'react-loader-spinner';
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-
 export default function LoginPage() {
     const router = useRouter()
     const [Password, setPassword] = React.useState(false);

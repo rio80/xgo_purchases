@@ -18,7 +18,8 @@ const body = {
 };
 
 const getAccessToken = (url) => {
-  return axios.post(`${config.apiHost}${url}/oauth2/token`, body)
+  const splitParam = url.split('?')[0]
+  return axios.post(`${config.apiHost}${splitParam}/oauth2/token`, body)
     .then(function (response) {
       return response.data.access_token;
     })

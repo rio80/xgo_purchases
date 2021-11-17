@@ -123,7 +123,7 @@ export default function MinipackPage() {
                                     <SwiperSlide key={index}>
                                         <div className="w-full flex justify-center">
                                             <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
-                                                <p className="text-xl font-semibold">{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
+                                                <p className="text-xl font-semibold">{data.title}</p>
                                                 <div className="flex gap-x-2">
                                                     <div className="self-center">
                                                         <p className="mt-12 text-3xl font-bold">{convertToRupiah(data.price)}</p>
@@ -157,7 +157,7 @@ export default function MinipackPage() {
                             {paketdata[idxpaket].plans.map((data, index) => (
                                 <div className="w-full flex justify-center" key={index}>
                                     <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
-                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xl font-semibold")}>{data.duration}{' '}{data.unit_duration === 'MONTH' && 'Bulan'}</p>
+                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xl font-semibold")}>{data.title}</p>
                                         <div className="flex gap-x-2">
                                             <div className="self-center">
                                                 <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-3xl font-bold")}>{convertToRupiah(data.price)}</p>

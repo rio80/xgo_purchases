@@ -27,6 +27,8 @@ export default function HeaderHome() {
 
     const logout = () => {
         Cookies.remove('auth')
+        localStorage.removeItem('checkout')
+        localStorage.removeItem('payment')
         router.push('/')
     }
 
