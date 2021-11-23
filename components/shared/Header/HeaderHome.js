@@ -104,7 +104,7 @@ export default function HeaderHome({ variant = 'default' }) {
                                                         <a
                                                             key={item.name}
                                                             href={variant !== 'default' ? '/' : item.href}
-                                                            onClick={variant === 'default' ? empty : () => scrollToSection(item.name)}
+                                                            onClick={variant === 'default' ? () => scrollToSection(item.name) : empty}
                                                             className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
                                                         >
                                                             <span className="ml-3 text-base font-medium text-gray-900">{item.name}</span>
