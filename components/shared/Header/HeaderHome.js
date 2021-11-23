@@ -1,15 +1,17 @@
 import { Fragment } from 'react'
 import Cookies from "js-cookie";
 import { useRouter } from "next/router"
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import Router from 'next/router'
+import { Popover, Disclosure, Menu, Transition } from '@headlessui/react'
 import Head from 'next/head';
+import { scroller } from "react-scroll";
+import { ChevronDownIcon, MenuIcon } from '@heroicons/react/solid';
+import { XIcon } from '@heroicons/react/outline'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function HeaderHome() {
+export default function HeaderHome({ variant = 'default' }) {
     const router = useRouter();
     const auth = Cookies.get('auth')
 
@@ -22,8 +24,7 @@ export default function HeaderHome() {
         { name: 'Pembelian', href: '#', current: true },
         { name: 'Pembayaran', href: '#', current: false },
         { name: 'Verifikasi', href: '#', current: false },
-      ]
-    
+    ]
 
     const logout = () => {
         Cookies.remove('auth')
@@ -32,6 +33,20 @@ export default function HeaderHome() {
         router.push('/')
     }
 
+    const scrollToSection = (name) => {
+        scroller.scrollTo(name, {
+            duration: 800,
+            delay: 0,
+            smooth: "easeInOutQuart",
+            offset: name !== 'Home' ? 10 : -200
+        });
+    };
+
+    const empty = () => {
+        //nothing
+    }
+
+
     return (
         <>
             <Head>
@@ -39,25 +54,103 @@ export default function HeaderHome() {
                 <link rel="icon" href={'../png/logo.png'} />
             </Head>
             <Disclosure as="nav" className="bg-white fixed top-0 left-0 right-0 py-8 z-20" style={{ boxShadow: '0 4px 31px 0 rgba(74, 105, 134, 0.1' }}>
-                <div className="mx-auto px-28" style={{ maxWidth: '1024px' }}>
-                    <div className="flex justify-between items-center">
+                <div className="mx-8 lg:mx-auto px-0 lg:px-28" style={{ maxWidth: '1024px' }}>
+                    <div className="flex lg:justify-between items-center">
                         <div className="flex">
-                            <div className="flex-shrink-0 flex items-center hidden lg:flex">
+                            <div className="flex-shrink-0 flex items-center ">
                                 <img
-                                    className="h-4 w-40"
+                                    className="h-4"
                                     src={`../png/transvision.png`}
                                     alt="TRANSVISION"
                                 />
                             </div>
                         </div>
 
-                        <nav className="flex" aria-label="Breadcrumb">
+                        <Popover className="flex w-full lg:hidden">
+                            <Popover.Button className="ml-auto bg-white rounded-md p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                                <span className="sr-only">Open menu</span>
+                                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                            </Popover.Button>
+                            <Transition
+                                as={Fragment}
+                                enter="duration-200 ease-out"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="duration-100 ease-in"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <Popover.Panel focus className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
+                                    <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
+                                        <div className="pt-5 pb-6 px-5">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <img
+                                                        className="h-4"
+                                                        src={`../png/transvision.png`}
+                                                        alt="TRANSVISION"
+                                                    />
+                                                </div>
+                                                <div className="-mr-2">
+                                                    <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                                                        <span className="sr-only">Close menu</span>
+                                                        <XIcon className="h-6 w-6" aria-hidden="true" />
+                                                    </Popover.Button>
+                                                </div>
+                                            </div>
+                                            <div className="mt-6">
+                                                <nav className="grid gap-y-8">
+                                                    {home.map((item) => (
+                                                        <a
+                                                            key={item.name}
+                                                            href={variant !== 'default' ? '/' : item.href}
+                                                            onClick={variant === 'default' ? empty : () => scrollToSection(item.name)}
+                                                            className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                                                        >
+                                                            <span className="ml-3 text-base font-medium text-gray-900">{item.name}</span>
+                                                        </a>
+                                                    ))}
+                                                    {typeof auth === 'undefined' ? (
+                                                        <a
+                                                            href={'/login'}
+                                                            className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                                                        >
+                                                            <span className="ml-3 text-base font-medium text-gray-900">Login</span>
+                                                        </a>
+                                                    ) : (
+                                                        <>
+                                                        <a
+                                                            href={'/profile'}
+                                                            className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                                                        >
+                                                            <span className="ml-3 text-base font-medium text-gray-900">Your Profile</span>
+                                                        </a>
+                                                        <a
+                                                            onClick={logout}
+                                                            className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                                                        >
+                                                            <span className="ml-3 text-base font-medium text-gray-900">Sign Out</span>
+                                                        </a>
+                                                        </>
+                                                    )}
+
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Popover.Panel>
+                            </Transition>
+                        </Popover>
+
+
+                        <nav className="hidden lg:flex" aria-label="Breadcrumb">
                             <ol role="list" className="flex items-center space-x-4">
                                 {home.map((page, index) => (
                                     <li key={page.name}>
                                         <div className="flex items-center">
                                             <a
                                                 href={page.href}
+                                                onClick={() => scrollToSection(page.name)}
                                                 className="text-gray-600 hover:text-gray-600 mr-4 text-sm font-base"
                                                 aria-current={page.current ? 'page' : undefined}
                                             >

@@ -38,11 +38,7 @@ export default function LoginPage() {
                 Cookies.set("auth", CryptoJS.AES.encrypt(login?.data?.result?.email, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(), {
                     expires: exp,
                 });
-                if (typeof datapayment !== 'undefined') {
-                    router.push('/pembayaran')
-                } else {
-                    router.push('/')
-                }
+                router.push('/')
 
             }
         } catch (e) {
@@ -54,6 +50,7 @@ export default function LoginPage() {
 
     const closeModal = (data) => {
         setOpen(data);
+        setError(data);
     };
 
     return (

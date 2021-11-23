@@ -15,7 +15,7 @@ export default function Login() {
                 <link rel="icon" href={'../png/logo.png'} />
             </Head>
             <div className="w-full flex">
-                {rdd.isMobile && <Header />}
+                {rdd.isMobile && <Header variant={'login'} />}
                 {rdd.isDesktop && <BannerLoginPage />}
                 <Login />
             </div>

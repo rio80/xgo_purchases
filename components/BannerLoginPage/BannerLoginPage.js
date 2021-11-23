@@ -1,8 +1,16 @@
+import Image from 'next/image'
+import BannerLogin from '../../public/png/login.png'
+
 export default function BannerLoginPage() {
     return (
         <div className="w-2/5 relative">
             <div className="w-2/5 fixed">
-                <img src={'../png/login.png'} className="w-full h-screen object-cover" />
+                <Image
+                    src={BannerLogin}
+                    alt="main background"
+                    priority
+                    className="w-full h-screen object-cover" 
+                />
                 <div className="absolute top-16 ml-20 w-3/5">
                     <img src={'../png/transvision-light.png'} className="w-52" height="23px" />
                     <div className="mt-32 w-full">

@@ -31,6 +31,7 @@ export default function ForgetPasswordPage() {
 
     const closeModal = (data) => {
         setOpen(data);
+        setError(data);
     };
 
     return (

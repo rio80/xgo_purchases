@@ -16,7 +16,7 @@ export default function HomePage() {
 
     return (
         <>
-            <div>
+            <div id="Home">
                 <div className="mt-44 flex justify-center">
                     <p className="text-5xl font-semibold">
                         Satu Aplikasi, Jutaan Hiburan
@@ -38,7 +38,7 @@ export default function HomePage() {
                     </p>
 
                     <div className="absolute z-10 px-24 mt-2" style={{ maxWidth: '1024px' }}>
-                        <Image 
+                        <Image
                             src={Background}
                             alt="main background"
                             priority
@@ -46,9 +46,9 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                <div className="lg:pt-72 xl:pt-60 overflow-x-hidden">
-                    <div className={classNames(css.trapezoid, 'mt-10 rotate-180')} ></div>
-                    <div className="w-full" style={{ backgroundColor: '#0285e4' }}>
+                <div className="lg:pt-72 xl:pt-60 overflow-x-hidden" >
+                    <div className={classNames(css.trapezoid, 'mt-10 rotate-180')}></div>
+                    <div className="w-full" style={{ backgroundColor: '#0285e4' }} id="Product">
                         <div className="w-full">
                             <div className="flex justify-center">
                                 <p className="text-4xl text-white">Pilih Produk</p>
@@ -148,3 +148,4 @@ export default function HomePage() {
         </>
     )
 }
+

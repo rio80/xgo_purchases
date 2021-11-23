@@ -18,7 +18,7 @@ export default function HomePage() {
 
     return (
         <>
-            <div>
+            <div id="Home">
                 <div className="mt-44 flex justify-center">
                     <p className="text-4xl text-center font-semibold">
                         Satu Aplikasi, <br />Jutaan Hiburan
@@ -40,7 +40,7 @@ export default function HomePage() {
 
                 <div className="pt-52">
                     <div className={classNames(css.trapezoidM, 'mt-10 rotate-180')} ></div>
-                    <div className="w-full" style={{ backgroundColor: '#0285e4' }}>
+                    <div className="w-full" style={{ backgroundColor: '#0285e4' }} id="Product">
                         <div className="w-full">
                             <div className="flex justify-center">
                                 <p className="text-4xl text-white">Pilih Produk</p>
@@ -74,7 +74,6 @@ export default function HomePage() {
                                                 alt="xgo"
                                                 className="my-4 mx-4"
                                             />
-                                            <img src={'../png/xgo.png'} width="293px" height="253px" className="mt-7" />
                                         </div>
                                     </div>
                                 </div>

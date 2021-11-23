@@ -48,6 +48,7 @@ export default function LoginPage() {
 
     const closeModal = (data) => {
         setOpen(data);
+        setError(data);
     };
 
     return (
@@ -173,11 +174,10 @@ export default function LoginPage() {
                             </div>
                         </div>
                     </form>
-                    <div className="mt-12 flex justify-center">
+                    <div className="mt-12 mb-28 flex justify-center">
                         <label htmlFor="comments" className="font-small text-base text-gray-700">
                             Belum punya akun? <a href={'/register'} className="text-blue-600">Daftar</a>
                         </label>
-
                     </div>
                 </div>
             </div>
