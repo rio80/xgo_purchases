@@ -62,6 +62,7 @@ export default function HeaderHome({ variant = 'default' }) {
                                     className="h-4"
                                     src={`../png/transvision.png`}
                                     alt="TRANSVISION"
+                                    style={{ width: '171px', height: '19px' }}
                                 />
                             </div>
                         </div>
@@ -119,18 +120,18 @@ export default function HeaderHome({ variant = 'default' }) {
                                                         </a>
                                                     ) : (
                                                         <>
-                                                        <a
-                                                            href={'/profile'}
-                                                            className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
-                                                        >
-                                                            <span className="ml-3 text-base font-medium text-gray-900">Your Profile</span>
-                                                        </a>
-                                                        <a
-                                                            onClick={logout}
-                                                            className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
-                                                        >
-                                                            <span className="ml-3 text-base font-medium text-gray-900">Sign Out</span>
-                                                        </a>
+                                                            <a
+                                                                href={'/profile'}
+                                                                className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                                                            >
+                                                                <span className="ml-3 text-base font-medium text-gray-900">Your Profile</span>
+                                                            </a>
+                                                            <a
+                                                                onClick={logout}
+                                                                className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                                                            >
+                                                                <span className="ml-3 text-base font-medium text-gray-900">Sign Out</span>
+                                                            </a>
                                                         </>
                                                     )}
 
@@ -149,9 +150,9 @@ export default function HeaderHome({ variant = 'default' }) {
                                     <li key={page.name}>
                                         <div className="flex items-center">
                                             <a
-                                                href={page.href}
-                                                onClick={() => scrollToSection(page.name)}
-                                                className="text-gray-600 hover:text-gray-600 mr-4 text-sm font-base"
+                                                href={variant !== 'default' ? '/' : page.href}
+                                                onClick={variant === 'default' ? () => scrollToSection(page.name) : empty}
+                                                className="text-gray-600 hover:text-gray-600 mr-4 text-base font-bold font-nunito"
                                                 aria-current={page.current ? 'page' : undefined}
                                             >
                                                 {page.name}

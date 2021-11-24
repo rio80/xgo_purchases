@@ -124,12 +124,12 @@ export default function MinipackPage() {
             <div className="w-full mx-auto px-5">
                 <div className="overflow-hidden mt-36">
                     <div className="py-5">
-                        <p className="font-medium text-4xl text-center">Pembelian </p> <br />
+                        <p className="font-bold text-4xl text-center font-nunito">Pembelian </p> <br />
                         <p className="font-medium px-4 text-sm text-center text-gray-400">Untuk berlangganan, tersedia berbagai paket yang sesuai dengan kebutuhanmu. </p>
                     </div>
                 </div>
                 <div className="max-w-5xl mx-auto px-6 mt-16">
-                    <p className="text-left font-semibold text-xl">Pilih Paket</p>
+                    <p className="text-left font-bold text-xl font-nunito">Pilih Paket</p>
                 </div>
             </div>
 
@@ -148,16 +148,16 @@ export default function MinipackPage() {
                         <SwiperSlide key={index}>
                             <div className="flex justify-center">
                                 <div className={classNames(idxpaket === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg h-56 px-6 py-12")}>
-                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-center text-2xl font-semibold")}>{data.minipack}</p>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-center text-2xl font-bold font-nunito")}>{data.minipack}</p>
                                     <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-center text-xs font-normal")}>{data.description}</p>
                                     <div className="w-full mt-7">
                                         <button
                                             type="button"
-                                            className="w-full self-center items-center py-3 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                            style={{ backgroundColor: '#00b6f0' }}
+                                            className="w-full self-center items-center py-3 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600"
+                                            style={{ backgroundColor: idxpaket === index ? 'white' : '#00b6f0', color : idxpaket === index ? '#00b6f0' : '' }}
                                             onClick={() => handleDurasi(data.minipack, index)}
                                         >
-                                            Pilih Paket
+                                            {idxpaket === index ? 'Terpilih' : 'Pilih Paket'}
                                         </button>
                                     </div>
                                 </div>
@@ -189,7 +189,7 @@ export default function MinipackPage() {
                                 <SwiperSlide key={index}>
                                     <div className="w-full flex justify-center">
                                         <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-6 pt-12 py-6")}>
-                                            <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-sm font-semibold")}>{data.title}</p>
+                                            <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-sm font-bold font-nunito")}>{data.title}</p>
                                             <div className="flex gap-x-2">
                                                 <div className="self-center">
                                                     <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-base font-bold")}>{convertToRupiah(data.price)}</p>
@@ -203,11 +203,11 @@ export default function MinipackPage() {
                                             <div className="flex w-full mt-6">
                                                 <button
                                                     type="button"
-                                                    className="w-full self-center items-center py-3 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                    style={{ backgroundColor: '#00b6f0' }}
+                                                    className="w-full self-center items-center py-3 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600"
+                                                    style={{ backgroundColor: idxdurasi === index ? 'white' : '#00b6f0', color : idxdurasi === index ? '#00b6f0' : '' }}
                                                     onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
                                                 >
-                                                    Pilih Durasi
+                                                      {idxdurasi === index ? 'Terpilih' : 'Pilih Durasi'}
                                                 </button>
                                             </div>
                                         </div>

@@ -5,7 +5,7 @@ export default function Minipack() {
     const Minipack = dynamic(() => rdd.isDesktop ? import('../../components/PembelianPage/Minipack/desktop/MinipackPage') : import('../../components/PembelianPage/Minipack/mobile/MinipackPage'))
     return (
         <>
-            <HeaderHome />
+            <HeaderHome variant="pastlogin" />
             <Minipack />
         </>
     )

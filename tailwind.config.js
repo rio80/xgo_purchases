@@ -6,6 +6,9 @@ module.exports = {
     extend: {
       dropShadow: {
         '3xl': '0 5px 20px rgba(0, 0, 0, 0.2)',
+      },
+      fontFamily: {
+        'nunito': ['nunito', 'serif'] 
       }
     },
   },

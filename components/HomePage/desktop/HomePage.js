@@ -18,7 +18,7 @@ export default function HomePage() {
         <>
             <div id="Home">
                 <div className="mt-44 flex justify-center">
-                    <p className="text-5xl font-semibold">
+                    <p className="text-5xl font-bold font-nunito">
                         Satu Aplikasi, Jutaan Hiburan
                     </p>
                 </div>
@@ -51,7 +51,7 @@ export default function HomePage() {
                     <div className="w-full" style={{ backgroundColor: '#0285e4' }} id="Product">
                         <div className="w-full">
                             <div className="flex justify-center">
-                                <p className="text-4xl text-white">Pilih Produk</p>
+                                <p className="text-4xl text-white font-nunito font-semibold">Pilih Produk</p>
                             </div>
                             <div className="flex justify-center mt-2">
                                 <p className="text-base text-white text-center" style={{ width: '565px' }}>
@@ -64,9 +64,9 @@ export default function HomePage() {
                             <div className="mt-14 px-28" style={{ maxWidth: '1024px' }}>
                                 <div className="grid gap-8 grid-cols-2">
                                     <div className="bg-white rounded-lg py-12 px-10">
-                                        <p className="text-3xl font-semibold text-center">XGO</p>
+                                        <p className="text-3xl text-center font-nunito font-bold">XGO</p>
                                         <div className="flex justify-center mt-7">
-                                            <p className="text-gray-400 text-center">GRATIS! tayangan 42+ Live Channel TV dan 1000+ Video on Demand Premium</p>
+                                            <p className="text-gray-500 text-center">GRATIS! tayangan 42+ Live Channel TV dan 1000+ Video on Demand Premium</p>
                                         </div>
                                         <div className="flex justify-center items-center">
                                             <button
@@ -84,9 +84,9 @@ export default function HomePage() {
 
 
                                     <div className="bg-white rounded-lg py-12">
-                                        <p className="text-3xl font-semibold text-center">Xstream Seru Minipack</p>
+                                        <p className="text-3xl text-center font-nunito font-bold">Xstream Seru Minipack</p>
                                         <div className="flex justify-center mt-7 px-10">
-                                            <p className="text-gray-400 text-center">GRATIS! tayangan 42+ Live Channel TV dan 1000+ Video on Demand Premium</p>
+                                            <p className="text-gray-500 text-center">GRATIS! tayangan 42+ Live Channel TV dan 1000+ Video on Demand Premium</p>
                                         </div>
                                         <div className="flex justify-center items-center">
                                             <button
@@ -111,9 +111,9 @@ export default function HomePage() {
                                 <div>
                                     <div className="w-full">
                                         <div className="pt-44">
-                                            <p className="text-4xl md:text-3xl font-medium text-white">Download aplikasi <br />Transvision XGO sekarang </p>
+                                            <p className="text-4xl md:text-3xl font-bold text-white font-nunito">Download aplikasi <br />Transvision XGO sekarang </p>
                                         </div>
-                                        <div className="pt-6 pr-5">
+                                        <div className="pt-5 pr-5">
                                             <p className="text-xl md:text-lg font-light text-white">Download aplikasi Transvision XGO di App Store atau Play Store melalui link dibawah ini</p>
                                         </div>
                                         <div className="flex w-full gap-x-4 pt-6">
