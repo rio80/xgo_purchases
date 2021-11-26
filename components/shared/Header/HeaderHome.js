@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { scroller } from "react-scroll";
 import { ChevronDownIcon, MenuIcon } from '@heroicons/react/solid';
 import { XIcon } from '@heroicons/react/outline'
+import css from './HeaderHome.module.css'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -17,7 +18,8 @@ export default function HeaderHome({ variant = 'default' }) {
 
     const home = [
         { name: 'Home', href: '#', current: true },
-        { name: 'Product', href: '#', current: false }
+        { name: 'Product', href: '#', current: false },
+        { name: 'FAQ', href: '#', current: false }
     ]
 
     const pages = [
@@ -54,7 +56,7 @@ export default function HeaderHome({ variant = 'default' }) {
                 <link rel="icon" href={'../png/logo.png'} />
             </Head>
             <Disclosure as="nav" className="bg-white fixed top-0 left-0 right-0 py-8 z-20" style={{ boxShadow: '0 4px 31px 0 rgba(74, 105, 134, 0.1' }}>
-                <div className="mx-8 lg:mx-auto px-0 lg:px-28" style={{ maxWidth: '1024px' }}>
+                <div className="mx-8 lg:mx-auto px-0" style={{ maxWidth: '1024px' }}>
                     <div className="flex lg:justify-between items-center">
                         <div className="flex">
                             <div className="flex-shrink-0 flex items-center ">
@@ -152,7 +154,7 @@ export default function HeaderHome({ variant = 'default' }) {
                                             <a
                                                 href={variant !== 'default' ? '/' : page.href}
                                                 onClick={variant === 'default' ? () => scrollToSection(page.name) : empty}
-                                                className="text-gray-600 hover:text-gray-600 mr-4 text-base font-bold font-nunito"
+                                                className={classNames(css.page, "text-black mr-4 text-base font-normal font-nunito")}
                                                 aria-current={page.current ? 'page' : undefined}
                                             >
                                                 {page.name}
@@ -168,7 +170,7 @@ export default function HeaderHome({ variant = 'default' }) {
                                 {typeof auth === 'undefined' ? (
                                     <button
                                         type="button"
-                                        className="w-full self-center items-center px-9 py-3 border border-transparent text-sm leading-4 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        className="w-full self-center items-center px-11 py-3.5 border border-transparent text-lg leading-6 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         style={{ backgroundColor: '#0285e4', boxShadow: '0 4px 31px 0 rgba(0, 0, 0, 0.15)' }}
                                         onClick={() => router.push('/login')}
                                     >

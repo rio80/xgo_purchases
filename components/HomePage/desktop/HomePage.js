@@ -6,6 +6,9 @@ import Iphone from '../../../public/png/iphone.png'
 import GooglePlay from '../../../public/png/google_play.png'
 import AppleStore from '../../../public/png/apple_store.png'
 import Background from '../../../public/png/background.png'
+import MinipackSection from './MinipackSection';
+import ActivationSection from './ActivationSection';
+import FaqSection from './FaqSection';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -46,7 +49,7 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                <div className="lg:pt-72 xl:pt-60 overflow-x-hidden" >
+                <div className="lg:pt-72 xl:pt-60 overflow-x-hidden">
                     <div className={classNames(css.trapezoid, 'mt-10 rotate-180')}></div>
                     <div className="w-full" style={{ backgroundColor: '#0285e4' }} id="Product">
                         <div className="w-full">
@@ -106,15 +109,19 @@ export default function HomePage() {
                             </div>
                         </div>
 
-                        <div className="flex justify-center">
+                        <MinipackSection />
+                        <ActivationSection />
+                        <FaqSection />
+
+                        <div className="flex justify-center" style={{backgroundColor: '#e1f1fd'}}>
                             <div className="grid grid-cols-2 mt-16 px-28" style={{ maxWidth: '1100px' }}>
                                 <div>
                                     <div className="w-full">
                                         <div className="pt-44">
-                                            <p className="text-4xl md:text-3xl font-bold text-white font-nunito">Download aplikasi <br />Transvision XGO sekarang </p>
+                                            <p className="text-4xl md:text-3xl font-bold text-black font-nunito">Download aplikasi <br />Transvision XGO sekarang </p>
                                         </div>
                                         <div className="pt-5 pr-5">
-                                            <p className="text-xl md:text-lg font-light text-white">Download aplikasi Transvision XGO di App Store atau Play Store melalui link dibawah ini</p>
+                                            <p className="text-xl md:text-lg font-base text-black">Download aplikasi Transvision XGO di App Store atau Play Store melalui link dibawah ini</p>
                                         </div>
                                         <div className="flex w-full gap-x-4 pt-6">
                                             <Image

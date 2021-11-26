@@ -2,5 +2,14 @@
     border-left: 100vw solid #0285e4;
     border-bottom: 21vw solid transparent;
     width: 100vw;
-    min-height: 450px;
+    min-height: 500px;
+}
+
+.activation{
+    transition: height 0.5s, transform 0.5s;
+}
+
+.input{
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.37);
 }
