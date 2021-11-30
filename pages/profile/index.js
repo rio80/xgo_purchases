@@ -5,7 +5,7 @@ import HeaderHome from "../../components/shared/Header/HeaderHome";
 export default function Profile(){
     return(
         <>
-        <HeaderHome />
+        <HeaderHome variant={'profile'} />
         <ProfilePage />
         <FooterPage />
         </>

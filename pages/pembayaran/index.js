@@ -33,7 +33,7 @@ export default function Pembayaran() {
     const Pembayaran = dynamic(() => rdd.isDesktop ? import('../../components/PembayaranPage/desktop/PembayaranPage') : import('../../components/PembayaranPage/mobile/PembayaranPage'))
     return (
         <>
-            <HeaderHome />
+            <HeaderHome variant={'pastlogin'} />
             <Pembayaran />
         </>
     )

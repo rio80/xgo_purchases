@@ -1,4 +1,4 @@
-import { useEffect,useState, Fragment } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { RadioGroup, Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
@@ -34,7 +34,7 @@ export default function PembayaranPage() {
     const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
     const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
     const auth = Cookies.get('auth')
-    const decrypted = CryptoJS.AES.decrypt(auth, key, {iv:iv, padding: CryptoJS.pad.ZeroPadding}).toString(CryptoJS.enc.Utf8);
+    const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
 
     const datapayment = JSON.parse(localStorage.getItem('payment'))
     const paket = JSON.parse(Cookies.get('paket'))
@@ -48,6 +48,12 @@ export default function PembayaranPage() {
     const today = new Date()
     const start = format(today, 'dd MMM yyyy')
     const sum = addMonths(today, paket.durasi);
+
+    const [coming, setComing] = useState(false);
+
+    const closeComing = (data) => {
+        setComing(data);
+    };
 
     const handleBayar = async () => {
         createOrder()
@@ -138,7 +144,12 @@ export default function PembayaranPage() {
         })();
     }, []);
 
-   
+    const handleComing = (data) => {
+        if(data === 'Gopay' || data === 'Pulsa'){
+            setComing(!coming)
+        }
+    }
+
 
     return (
         <>
@@ -150,8 +161,9 @@ export default function PembayaranPage() {
             }
 
             {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={'/pembelian-minipack'} close={closeModal} />}
+            {coming && <Alert type={1} title={'Coming Soon'} message={''} close={closeComing} />}
 
-            <div className="absolute top-0 left-0 w-full min-h-screen lg:hidden" style={{ backgroundColor: '#f6f9ff' }}>
+            <div className="absolute top-0 left-0 w-full min-h-screen lg:hidden mt-12" style={{ backgroundColor: '#f6f9ff' }}>
                 <div className="flex flex-col min-h-screen relative">
                     <div className="w-full px-7 mt-24">
                         <p className="font-medium text-2xl flex justify-center">
@@ -264,63 +276,66 @@ export default function PembayaranPage() {
                                     <RadioGroup.Label className="sr-only">Pricing plans</RadioGroup.Label>
                                     <div className="relative bg-white rounded-md -space-y-px">
                                         {plans.map((plan, planIdx) => (
-                                            <RadioGroup.Option
-                                                key={plan.name}
-                                                value={plan}
-                                                className={({ checked }) =>
-                                                    classNames(
-                                                        planIdx === 0 ? 'rounded-tl-md rounded-tr-md' : '',
-                                                        planIdx === plans.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
-                                                        checked ? 'bg-indigo-50 border-indigo-200 z-10' : 'border-gray-200',
-                                                        'relative block border p-4 cursor-pointer focus:outline-none sm:flex sm:justify-between'
-                                                    )
-                                                }
-                                            >
-                                                {({ active, checked }) => (
-                                                    <>
-                                                        <div className="flex items-center text-sm">
-                                                            <span
-                                                                className={classNames(
-                                                                    checked ? 'bg-indigo-600 border-transparent' : 'bg-white border-gray-300',
-                                                                    active ? 'ring-2 ring-offset-2 ring-indigo-500' : '',
-                                                                    'h-4 w-4 rounded-full border flex items-center justify-center'
-                                                                )}
-                                                                aria-hidden="true"
-                                                            >
-                                                                <span className="rounded-full bg-white w-1.5 h-1.5" />
-                                                            </span>
-                                                            <RadioGroup.Label
-                                                                as="span"
-                                                                className={classNames(checked ? 'text-indigo-900' : 'text-gray-900', 'ml-3 font-medium')}
-                                                            >
-                                                                {plan.name}
-                                                            </RadioGroup.Label>
-                                                            <RadioGroup.Description
-                                                                className={classNames(
-                                                                    checked ? 'text-indigo-700' : 'text-gray-500',
-                                                                    'mt-2 flex ml-auto text-sm sm:mt-0 sm:block sm:ml-4 sm:text-right"'
-                                                                )}
-                                                            >
+                                            <div onClick={() => handleComing(plan.name)} key={plan.name}>
+                                                <RadioGroup.Option
+                                                    key={plan.name}
+                                                    value={plan}
+                                                    className={({ checked }) =>
+                                                        classNames(
+                                                            planIdx === 0 ? 'rounded-tl-md rounded-tr-md' : '',
+                                                            planIdx === plans.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
+                                                            checked ? 'bg-indigo-50 border-indigo-200 z-10' : 'border-gray-200',
+                                                            'relative block border p-4 cursor-pointer focus:outline-none sm:flex sm:justify-between'
+                                                        )
+                                                    }
+                                                    disabled={plan.name === 'Gopay' || plan.name === 'Pulsa' ? true : false}
+                                                >
+                                                    {({ active, checked }) => (
+                                                        <>
+                                                            <div className="flex items-center text-sm">
+                                                                <span
+                                                                    className={classNames(
+                                                                        checked ? 'bg-indigo-600 border-transparent' : 'bg-white border-gray-300',
+                                                                        active ? 'ring-2 ring-offset-2 ring-indigo-500' : '',
+                                                                        'h-4 w-4 rounded-full border flex items-center justify-center'
+                                                                    )}
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <span className="rounded-full bg-white w-1.5 h-1.5" />
+                                                                </span>
+                                                                <RadioGroup.Label
+                                                                    as="span"
+                                                                    className={classNames(checked ? 'text-indigo-900' : 'text-gray-900', 'ml-3 font-medium')}
+                                                                >
+                                                                    {plan.name}
+                                                                </RadioGroup.Label>
+                                                                <RadioGroup.Description
+                                                                    className={classNames(
+                                                                        checked ? 'text-indigo-700' : 'text-gray-500',
+                                                                        'mt-2 flex ml-auto text-sm sm:mt-0 sm:block sm:ml-4 sm:text-right"'
+                                                                    )}
+                                                                >
 
-                                                                {plan.name === 'Pulsa' ?
-                                                                    <div className="grid grid-cols-2">
-                                                                        <div>
-                                                                            <img src={'../png/telkomsel.png'} width="66px" height="16px" className="self-center" />
+                                                                    {plan.name === 'Pulsa' ?
+                                                                        <div className="grid grid-cols-2">
+                                                                            <div>
+                                                                                <img src={'../png/telkomsel.png'} width="66px" height="16px" className="self-center" />
 
+                                                                            </div>
+                                                                            <div className="ml-4">
+                                                                                <img src={'../png/smartfren.png'} width="56px" height="9px" className="self-center mt-1" />
+                                                                            </div>
                                                                         </div>
-                                                                        <div className="ml-4">
-                                                                            <img src={'../png/smartfren.png'} width="56px" height="9px" className="self-center mt-1" />
-                                                                        </div>
-                                                                    </div>
-                                                                    :
-                                                                    <img src={plan.logo} className="ml-auto" width={plan.width} height={plan.height} />
-                                                                }
-                                                            </RadioGroup.Description>
-                                                        </div>
+                                                                        :
+                                                                        <img src={plan.logo} className="ml-auto" width={plan.width} height={plan.height} />
+                                                                    }
+                                                                </RadioGroup.Description>
+                                                            </div>
 
-                                                    </>
-                                                )}
-                                            </RadioGroup.Option>
+                                                        </>
+                                                    )}
+                                                </RadioGroup.Option>
+                                            </div>
                                         ))}
                                     </div>
                                 </RadioGroup>

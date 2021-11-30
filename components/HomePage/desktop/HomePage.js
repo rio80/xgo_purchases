@@ -9,6 +9,8 @@ import Background from '../../../public/png/background.png'
 import MinipackSection from './MinipackSection';
 import ActivationSection from './ActivationSection';
 import FaqSection from './FaqSection';
+import Alert from '../../../pages/shared/alert/Alert';
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -16,9 +18,16 @@ function classNames(...classes) {
 
 export default function HomePage() {
     const router = useRouter();
+    const [open, setOpen] = React.useState(false);
+
+    const closeModal = (data) => {
+        setOpen(data);
+    };
 
     return (
         <>
+            {open && <Alert type={1} title={'Coming Soon'} message={''} close={closeModal} />}
+
             <div id="Home">
                 <div className="mt-44 flex justify-center">
                     <p className="text-5xl font-bold font-nunito">
@@ -76,6 +85,7 @@ export default function HomePage() {
                                                 type="button"
                                                 className="mt-10 w-48 self-center items-center px-9 py-3 border border-transparent text-sm leading-4 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                 style={{ backgroundColor: '#00b6f0', boxShadow: '0 4px 31px 0 rgba(0, 0, 0, 0.15)' }}
+                                                onClick={() => setOpen(!open)}
                                             >
                                                 Berlangganan
                                             </button>
@@ -113,7 +123,7 @@ export default function HomePage() {
                         <ActivationSection />
                         <FaqSection />
 
-                        <div className="flex justify-center" style={{backgroundColor: '#e1f1fd'}}>
+                        <div className="flex justify-center" style={{ backgroundColor: '#e1f1fd' }}>
                             <div className="grid grid-cols-2 mt-16 px-28" style={{ maxWidth: '1100px' }}>
                                 <div>
                                     <div className="w-full">

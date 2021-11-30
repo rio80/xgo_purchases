@@ -38,7 +38,11 @@ export default function LoginPage() {
                 Cookies.set("auth", CryptoJS.AES.encrypt(login?.data?.result?.email, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(), {
                     expires: exp,
                 });
-                router.push('/')
+                if (datapayment !== null) {
+                    router.push('/pembayaran')
+                } else {
+                    router.push('/')
+                }
 
             }
         } catch (e) {

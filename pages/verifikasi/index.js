@@ -1,10 +1,10 @@
-import Header from "../../components/shared/Header/Header";
+import HeaderHome from "../../components/shared/Header/HeaderHome";
 import VerificationPage from "../../components/VerificationPage/VerificationPage";
 
 export default function Verifikasi() {
     return (
         <>
-            <Header />
+            <HeaderHome variant={'pastlogin'} />
             <VerificationPage />
         </>
     )

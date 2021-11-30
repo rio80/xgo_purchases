@@ -8,6 +8,7 @@ import AppleStore from '../../../public/png/apple_store.png'
 import Background from '../../../public/png/background.png'
 import Xstream from '../../../public/png/xstream.png'
 import Xgo from '../../../public/png/xgo.png'
+import Alert from '../../../pages/shared/alert/Alert';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -15,9 +16,17 @@ function classNames(...classes) {
 
 export default function HomePage() {
     const router = useRouter();
+    const [open, setOpen] = React.useState(false);
+
+    const closeModal = (data) => {
+        setOpen(data);
+    };
+
 
     return (
         <>
+            {open && <Alert type={1} title={'Coming Soon'} message={''} close={closeModal} />}
+
             <div id="Home">
                 <div className="mt-44 flex justify-center">
                     <p className="text-4xl text-center font-semibold">
@@ -64,6 +73,7 @@ export default function HomePage() {
                                                 type="button"
                                                 className="mt-10 w-48 self-center items-center px-9 py-3 border border-transparent text-sm leading-4 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                 style={{ backgroundColor: '#00b6f0', boxShadow: '0 4px 31px 0 rgba(0, 0, 0, 0.15)' }}
+                                                onClick={() => setOpen(!open)}
                                             >
                                                 Berlangganan
                                             </button>
