@@ -24,16 +24,16 @@ export default function MinipackSection() {
             {open && <Alert type={1} title={'Coming Soon'} message={''} close={closeModal} />}
 
             <div className="flex justify-center">
-                <div className="w-full mt-24 py-40 gap-x-6 px-56 bg-white">
-                    <div className="flex flex-row">
-                        <div className="w-1/2">
-                            <p className="font-nunito font-bold text-4xl">Beli Xstream Seru!</p>
-                            <p className="text-lg pr-20 mt-8">Ubah TV biasa menjadi Smart TV dengan OTT Box
+                <div className="w-full mt-24 py-40 gap-x-6 px-8 lg:px-56 bg-white">
+                    <div className="flex flex-col-reverse lg:flex-row">
+                        <div className="w-full lg:w-1/2 lg:block">
+                            <p className="font-nunito font-bold text-4xl text-center px-8 mt-12 lg:mt-0 lg:px-0 lg:text-left">Beli Xstream Seru!</p>
+                            <p className="text-lg lg:pr-20 mt-8 text-center px-8 lg:px-0 lg:text-left">Ubah TV biasa menjadi Smart TV dengan OTT Box
                                 Xstream Seru. Dengan kapasitas lebih besar 16GB
                                 dan gambar jernih up to 4K.
                             </p>
                             <div className="flex">
-                                <div className="mt-9 flex cursor-pointer" onClick={() => setOpen(!open) }>
+                                <div className="mx-auto lg:mx-0 mt-9 flex cursor-pointer" onClick={() => setOpen(!open) }>
                                     <div style={{ color: '#0285e4' }}>
                                         <p className="self-center font-semibold text-xl">Beli Sekarang </p>
                                     </div>
@@ -46,7 +46,7 @@ export default function MinipackSection() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-1/2">
+                        <div className="w-full lg:w-1/2">
                             <Swiper
                                 navigation={true}
                                 className="mySwiper"

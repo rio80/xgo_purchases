@@ -6,9 +6,9 @@ import Iphone from '../../../public/png/iphone.png'
 import GooglePlay from '../../../public/png/google_play.png'
 import AppleStore from '../../../public/png/apple_store.png'
 import Background from '../../../public/png/background.png'
-import MinipackSection from './MinipackSection';
-import ActivationSection from './ActivationSection';
-import FaqSection from './FaqSection';
+import MinipackSection from '../shared/MinipackSection';
+import ActivationSection from '../shared/ActivationSection';
+import FaqSection from '../shared/FaqSection';
 import Alert from '../../../pages/shared/alert/Alert';
 
 

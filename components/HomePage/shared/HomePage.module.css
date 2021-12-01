@@ -1,0 +1,28 @@
+.activation{
+    transition: height 0.5s, transform 0.5s;
+}
+
+.input{
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.37);
+}
+
+@media only screen and (min-width: 1024px) {
+    .open {
+      height: 900px;
+    }
+
+    .close {
+        height: 500px;
+      }
+}
+
+@media only screen and (max-width: 1023px) {
+    .open {
+        height: 1000px;
+    }
+
+    .close{
+        height: 560px;
+    }
+}

@@ -9,6 +9,9 @@ import Background from '../../../public/png/background.png'
 import Xstream from '../../../public/png/xstream.png'
 import Xgo from '../../../public/png/xgo.png'
 import Alert from '../../../pages/shared/alert/Alert';
+import MinipackSection from '../shared/MinipackSection';
+import ActivationSection from '../shared/ActivationSection';
+import FaqSection from '../shared/FaqSection';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -115,15 +118,20 @@ export default function HomePage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-center px-8">
+
+                        <MinipackSection />
+                        <ActivationSection />
+                        <FaqSection />
+
+                        <div className="flex justify-center px-8" style={{ backgroundColor: '#e1f1fd' }}>
                             <div className="grid grid-cols-1">
                                 <div>
                                     <div className="w-full">
                                         <div className="pt-44">
-                                            <p className="text-4xl text-center md:text-3xl font-medium text-white">Download aplikasi <br />Transvision XGO sekarang </p>
+                                            <p className="text-4xl text-center md:text-3xl font-bold text-black font-nunito">Download aplikasi <br />Transvision XGO sekarang </p>
                                         </div>
-                                        <div className="pt-6 pr-5">
-                                            <p className="text-md text-center md:text-lg font-light text-white">Download aplikasi Transvision XGO di App Store atau Play Store melalui link dibawah ini</p>
+                                        <div className="pt-6 px-10 lg:px-0 lg:pr-5">
+                                            <p className="text-md text-center md:text-lg font-light text-black font-nunito">Download aplikasi Transvision XGO di App Store atau Play Store melalui link dibawah ini</p>
                                         </div>
                                         <div className="flex w-full flex-col gap-x-4 pt-6">
                                             <div className="w-56 mx-auto my-4">

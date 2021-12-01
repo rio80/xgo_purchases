@@ -1,4 +1,3 @@
-import { EyeIcon } from '@heroicons/react/outline'
 import * as React from 'react'
 import css from './HomePage.module.css'
 import Alert from "../../../pages/shared/alert/Alert";
@@ -25,9 +24,9 @@ export default function ActivationSection() {
             {open && <Alert type={1} title={'Coming Soon'} message={''} close={closeModal} />}
 
             <div className="flex justify-center" style={{ backgroundColor: '#0285e4' }}>
-                <div className={classNames(css.activation, "w-full py-20 gap-x-6 px-56")} style={{ height: aktivasi ? '900px' : '500px' }}>
+                <div className={classNames(aktivasi ? css.open : css.close , css.activation, "w-full py-20 gap-x-6 px-14 lg:px-56")}>
                     <div className="flex justify-center">
-                        <p className="font-nunito text-center text-white font-bold text-4xl">Aktivasi Xstream Box Anda</p>
+                        <p className="font-nunito text-center text-white font-bold text-4xl px-4 lg:px-0">Aktivasi Xstream Box Anda</p>
                     </div>
                     <div className="flex mt-16">
                         <div className="flex flex-col w-64 pt-7 mx-auto px-20 gap-y-2 cursor-pointer" onClick={expand}>
@@ -41,7 +40,7 @@ export default function ActivationSection() {
                     </div>
                     {aktivasi ?
                         <div className="flex justify-center mt-14 flex-col">
-                            <div className="w-2/4 relative flex mx-auto mb-8">
+                            <div className="w-full lg:w-2/4 relative flex mx-auto mb-8">
                                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center text-sm leading-5">
                                     <img src={'../../../svg/email.svg'} />
                                 </div>
@@ -53,7 +52,7 @@ export default function ActivationSection() {
                                     className={classNames(css.input, "py-4 pl-20 block w-full mx-auto text-white placeholder-white sm:text-sm border-gray-300 rounded-md")}
                                 />
                             </div>
-                            <div className="w-2/4 relative flex mx-auto mb-8">
+                            <div className="w-full lg:w-2/4 relative flex mx-auto mb-8">
                                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center text-sm leading-5">
                                     <img src={'../../../svg/password.svg'} />
                                 </div>
@@ -65,7 +64,7 @@ export default function ActivationSection() {
                                     className={classNames(css.input, "py-4 pl-20 block w-full mx-auto text-white placeholder-white sm:text-sm border-gray-300 rounded-md")}
                                 />
                             </div>
-                            <div className="w-2/4 relative flex mx-auto">
+                            <div className="w-full lg:w-2/4 relative flex mx-auto">
                                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center text-sm leading-5">
                                     <img src={'../../../svg/voucher.svg'} />
                                 </div>

@@ -4,12 +4,3 @@
     width: 100vw;
     min-height: 500px;
 }
-
-.activation{
-    transition: height 0.5s, transform 0.5s;
-}
-
-.input{
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.37);
-}

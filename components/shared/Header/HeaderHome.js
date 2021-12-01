@@ -92,9 +92,6 @@ export default function HeaderHome({ variant = 'default' }) {
 
     }, [app])
 
-    console.log(variant)
-
-
     return (
         <>
             <Head>
