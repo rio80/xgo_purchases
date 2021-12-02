@@ -14,6 +14,7 @@ import { getMinipack } from "../../../../utils/apiHandlers";
 import { useRouter } from 'next/router';
 import Alert from "../../../../pages/shared/alert/Alert";
 import Cookies from "js-cookie";
+import config from '../../../../utils/config'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -31,7 +32,7 @@ export default function MinipackPage() {
     
 
     const [data, setData] = React.useState({
-        package_id: '381',
+        package_id: ''+config.idPackage,
         receiver_type: 'SELF',
         activation_process: 'IMMEDIATE'
     })

@@ -9,7 +9,6 @@ export default function ProfilePage() {
     const [minipack, setMinipack] = React.useState([])
     const [loading, setLoading] = React.useState(false)
 
-
     React.useEffect(() => {
         (async () => {
             setLoading(true)

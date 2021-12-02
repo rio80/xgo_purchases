@@ -42,7 +42,7 @@ Axios.interceptors.request.use(
   async (config) => {
     const url = config.url
     const splitUrl = config.url.split('/')[1]
-    if (splitUrl === 'transvisionplus') {
+   if (splitUrl === 'transvisionplus') {
       const token = await Cookies.get("token");
       if (token) {
         config.headers = {
