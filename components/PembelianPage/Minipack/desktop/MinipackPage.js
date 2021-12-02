@@ -41,7 +41,7 @@ export default function MinipackPage() {
         app_id: "webxgo",
         payment_type: "internal_app",
         app_url_validation: "https://xgo.co.id/api/validate/id=123321",
-        app_url_callback: "https://my2-dev.transvision.co.id/verify-order"
+        app_url_callback: config.domain
     })
 
     const handleDurasi = (paket, idx) => {
