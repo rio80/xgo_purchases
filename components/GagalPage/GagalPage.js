@@ -28,6 +28,7 @@ export default function GagalPage() {
                                 type="button"
                                 className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 style={{ backgroundColor: '#0285e4' }}
+                                onClick={()=>router.push('/')}
                             >
                                 Kembali ke beranda
                             </button>
