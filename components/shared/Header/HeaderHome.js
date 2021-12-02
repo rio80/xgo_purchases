@@ -243,7 +243,7 @@ export default function HeaderHome({ variant = 'default' }) {
                                 {typeof auth === 'undefined' ? (
                                     <button
                                         type="button"
-                                        className={classNames(navbar ? "px-10 py-3" : "px-11 py-3.5", "w-full self-center items-center border border-transparent text-base leading-6 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500")}
+                                        className={classNames(navbar ? "px-10 py-2" : "px-11 py-3.5", "w-full self-center items-center border border-transparent text-base leading-6 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500")}
                                         style={{ backgroundColor: '#0285e4', boxShadow: '0 4px 31px 0 rgba(0, 0, 0, 0.15)' }}
                                         onClick={() => router.push('/login')}
                                     >

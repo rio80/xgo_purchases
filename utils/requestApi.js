@@ -29,7 +29,7 @@ const getAccessToken = (url) => {
 };
 
 const refreshAccessToken = () => {
-  return Axios.post("/transvisionplus/oauth2/token", body)
+  return axios.post(`${config.apiHost}/transvisionplus/oauth2/token`, body)
     .then(function (response) {
       return response.data.access_token;
     })
@@ -38,49 +38,72 @@ const refreshAccessToken = () => {
     });
 };
 
-Axios.interceptors.request.use(
-  async (config) => {
-    const url = config.url
-    const splitUrl = config.url.split('/')[1]
-   if (splitUrl === 'transvisionplus') {
-      const token = await Cookies.get("token");
-      if (token) {
-        config.headers = {
-          Authorization: `Bearer ${token}`,
-        };
-      }
-    } else {
-      const getToken = await getAccessToken(url)
-      if (getToken) {
-        config.headers = {
-          Authorization: `Bearer ${getToken}`,
-        };
-      }
+Axios.interceptors.request.use(async (req) => {
+  const url = req.url
+  const splitUrl = req.url.split('/')[1]
+  if (splitUrl === 'transvisionplus') {
+    const getTokenTrv = await refreshAccessToken()
+    if (getTokenTrv) {
+      req.headers = {
+        Authorization: `Bearer ${getTokenTrv}`,
+      };
     }
-    return config;
-  },
-  (error) => Promise.reject(error),
-  null,
-  { synchronous: true }
-);
-
-Axios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const config = error.config;
-    // console.log(error);
-    if (error?.response?.status === 401 && !config._retry) {
-      config._retry = true;
-      const refreshToken = await refreshAccessToken();
-      Axios.defaults.headers.common.authorization = `Bearer ${refreshToken}`;
-      Cookies.set("token", refreshToken);
-
-      return Axios(config);
+  } else {
+    const getToken = await getAccessToken(url)
+    if (getToken) {
+      req.headers = {
+        Authorization: `Bearer ${getToken}`,
+      };
     }
 
-    return Promise.reject(error);
   }
-);
+  return req;
+});
+
+// Axios.interceptors.request.use(
+//   async (config) => {
+//     const url = config.url
+//     const splitUrl = config.url.split('/')[1]
+//     if (splitUrl === 'transvisionplus') {
+//       const token = await Cookies.get("token");
+//       // const token = await refreshAccessToken()
+//       if (token) {
+//         config.headers = {
+//           Authorization: `Bearer ${token}`,
+//         };
+//       }
+//     } else {
+//       const getToken = await getAccessToken(url)
+//       if (getToken) {
+//         config.headers = {
+//           Authorization: `Bearer ${getToken}`,
+//         };
+//       }
+//     }
+//     return config;
+//   },
+//   (error) => Promise.reject(error),
+//   null,
+//   { synchronous: true }
+// );
+
+// Axios.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     // console.log('masuk response')
+//     const config = error.config;
+//     if (error?.response?.status === 401 && !config._retry) {
+//       config._retry = true;
+//       const refreshToken = await refreshAccessToken();
+//       Axios.defaults.headers.common.authorization = `Bearer ${refreshToken}`;
+//       // Cookies.set("token", refreshToken);
+
+//       return Axios(config);
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
 
 export const apiGet = (url, params = {}) =>
   new Promise(async (resolve, reject) => {

@@ -10,6 +10,7 @@ const body = {
 };
 
 export function getToken() {
+    console.log(body)
     return apiPost("/transvisionplus/oauth2/token", body);
 }
 
