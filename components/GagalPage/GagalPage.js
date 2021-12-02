@@ -1,10 +1,12 @@
 import css from './GagalPage.module.css'
+import { useRouter } from 'next/router';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function GagalPage() {
+    const router = useRouter()
     return (
         <div className="px-3.5">
             <div className={classNames("px-16 jutify-between w-full mx-auto lg:w-3/5 bg-white mt-72 rounded-md py-8 pt-16", css.customShadow)}>
