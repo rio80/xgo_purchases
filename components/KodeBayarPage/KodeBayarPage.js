@@ -9,16 +9,16 @@ export default function KodeBayarPage() {
     const textAreaRef = React.useRef(null)
     const router = useRouter()
     const cookie_kode_bayar = Cookies.get('kode_bayar')
-    
+
     let kode = ''
     if (typeof cookie_kode_bayar !== 'undefined') {
-        if(kode_bayar !== ''){
-            if(kode_bayar !== cookie_kode_bayar){
+        if (kode_bayar !== '') {
+            if (kode_bayar !== cookie_kode_bayar) {
                 Cookies.set('kode_bayar', kode_bayar)
             }
         }
         kode = Cookies.get('kode_bayar')
-    }else{
+    } else {
         Cookies.set('kode_bayar', kode_bayar)
         kode = Cookies.get('kode_bayar')
     }
@@ -38,7 +38,7 @@ export default function KodeBayarPage() {
             <div className="flex justify-center mt-7">
                 <p className="text-lg font-light">Silahkan simpan kode bayar Anda berikut ini</p>
             </div>
- 
+
             <div className="flex justify-center mt-20 px-8 lg:px-0">
                 <div className="w-full lg:w-2/4 relative flex">
                     <input
@@ -57,21 +57,21 @@ export default function KodeBayarPage() {
                             style={{ backgroundColor: '#0285e4' }}
                             onClick={copy}
                         >
-                         {copied !== '' ? 'Tersalin' : 'Salin' }
+                            {copied !== '' ? 'Tersalin' : 'Salin'}
                         </button>
                     </div>
                 </div>
             </div>
 
             <div className="flex justify-center mb-52">
-                <div className="mt-14 flex cursor-pointer" onClick={() => router.push('/login')}>
+                <div className="mt-14 flex cursor-pointer" onClick={() => router.push('/')}>
                     <div className="flex flex-wrap content-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" style={{ color: '#0285e4' }}>
                             <path fillRule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
                         </svg>
                     </div>
                     <div style={{ color: '#0285e4' }}>
-                        <p className="self-center ml-2 font-normal text-lg" onClick={()=>router.push('/')}>Kembali ke Home</p>
+                        <p className="self-center ml-2 font-normal text-lg" onClick={() => router.push('/')}>Kembali ke Home</p>
                     </div>
                 </div>
             </div>

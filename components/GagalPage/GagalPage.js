@@ -1,10 +1,12 @@
 import css from './GagalPage.module.css'
+import { useRouter } from 'next/router';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function GagalPage() {
+    const router = useRouter()
     return (
         <div className="px-3.5">
             <div className={classNames("px-16 jutify-between w-full mx-auto lg:w-3/5 bg-white mt-72 rounded-md py-8 pt-16", css.customShadow)}>
@@ -28,6 +30,7 @@ export default function GagalPage() {
                                 type="button"
                                 className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 style={{ backgroundColor: '#0285e4' }}
+                                onClick={()=>router.push('/')}
                             >
                                 Kembali ke beranda
                             </button>

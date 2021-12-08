@@ -14,6 +14,7 @@ import { getMinipack } from "../../../../utils/apiHandlers";
 import { useRouter } from 'next/router';
 import Alert from "../../../../pages/shared/alert/Alert";
 import Cookies from "js-cookie";
+import config from '../../../../utils/config'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -29,7 +30,7 @@ export default function MinipackPage() {
     const [error, setError] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const [data, setData] = React.useState({
-        package_id: '381',
+        package_id: ''+config.idPackage,
         receiver_type: 'SELF',
         activation_process: 'IMMEDIATE'
     })
@@ -38,7 +39,7 @@ export default function MinipackPage() {
         app_id: "webxgo",
         payment_type: "internal_app",
         app_url_validation: "https://xgo.co.id/api/validate/id=123321",
-        app_url_callback: "https://my2-dev.transvision.co.id/verify-order"
+        app_url_callback: config.domain
     })
 
     const handleDurasi = (paket, idx) => {

@@ -39,7 +39,7 @@ export default function BerhasilPage({ harga }) {
                             <div className="flex flex-col self-center">
                                 <div>
                                     <p className="text-gray-600 font-semibold text-2xl my-auto">
-                                        Rp {convertToRupiah(harga + 5000)}
+                                        Rp {convertToRupiah(harga)}
                                     </p>
                                 </div>
                             </div>

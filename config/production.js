@@ -7,4 +7,5 @@ module.exports = {
     authenticatedUserid: 'testing',
     secretCookiePassword: 'CuT0c9am8smuanindithatZkrRNSsTM2l9LanungOvOGw',
     idPackage: '461',
+    domain: 'https://xgo.transvision.co.id/verify-order',
 };
