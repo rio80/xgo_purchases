@@ -1,13 +1,22 @@
+import { Disclosure } from '@headlessui/react';
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/outline';
 import Cookies from 'js-cookie';
 import * as React from 'react'
-import Loader from 'react-loader-spinner';
-import { getActiveMinipack, getProfil } from '../../utils/apiHandlers';
-import { format, intervalToDuration, subDays } from 'date-fns'
+import { getActiveMinipack, getProfil, getTransactionHistory } from '../../utils/apiHandlers';
+import PaketPage from './PaketPage/PaketPage';
+import RiwayatTransaksi from './RiwayatPage/RiwayatTransaksi';
+import { format } from 'date-fns'
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
 
 export default function ProfilePage() {
     const [profil, setProfil] = React.useState([])
     const [minipack, setMinipack] = React.useState([])
+    const [history, setHistory] = React.useState([])
     const [loading, setLoading] = React.useState(false)
+    const [email, setEmail] = React.useState('')
 
     React.useEffect(() => {
         (async () => {
@@ -17,10 +26,13 @@ export default function ProfilePage() {
             const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
             const auth = Cookies.get('auth')
             const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
+            setEmail(decrypted)
+            const data = {page: 1, email: decrypted, start_date: '2019-01-01', end_date:  format(new Date(), 'yyyy-MM-dd'), page_size: '10', payment_status: '', keyword: '' }
             try {
-                const [getData, getDataMinipack] = await Promise.all([getProfil(decrypted), getActiveMinipack(decrypted)])
+                const [getData, getDataMinipack, getHistory] = await Promise.all([getProfil(decrypted), getActiveMinipack(decrypted), getTransactionHistory(data)])
                 setProfil(getData)
                 setMinipack(getDataMinipack)
+                setHistory(getHistory.data.result.data)
                 setLoading(false)
             } catch (e) {
                 console.log(e)
@@ -30,20 +42,44 @@ export default function ProfilePage() {
         })();
     }, []);
 
-    const sisa = (end) => {
-
-        const date1 = new Date();
-        const date2 = new Date(end);
-        const Difference_In_Time = date2.getTime() - date1.getTime();
-        const Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
-        return Difference_In_Days
-    }
-
     if (loading) {
         return (
-            <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden flex flex-col items-center justify-center">
-                <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
-            </div>
+            <>
+                <div className="mb-24">
+                    <div className="mt-40 flex justify-center animate-pulse">
+                        <div className="w-2/5 flex">
+                            <div className="flex flex-col">
+                                <div className="bg-gray-200 w-72 h-96 rounded-lg" />
+                            </div>
+                            <div className="flex flex-col text-right ml-auto space-y-12 w-52">
+                                <div>
+                                    <div className="bg-gray-200 h-8 w-full rounded-lg" />
+                                </div>
+                                <div>
+                                    <div className="bg-gray-200 h-8 w-full rounded-lg" />
+                                </div>
+                                <div>
+                                    <div className="bg-gray-200 h-8 w-full rounded-lg" />
+                                </div>
+                                <div>
+                                    <div className="mt-8 w-full border-t border-gray-300" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <div className="ml-auto bg-gray-200 h-8 w-24 rounded-lg" />
+                                    <div className="bg-gray-200 h-8 w-52 mt-8 rounded-lg" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div className="mt-8 flex justify-center">
+                        <div className="w-2/5">
+                            <div className="bg-gray-200 h-8 w-60 rounded-lg" />
+                        </div>
+                    </div>
+                </div>
+            </>
         )
     }
 
@@ -76,51 +112,56 @@ export default function ProfilePage() {
                     </div>
                 </div>
                 <div className="mt-8 flex justify-center">
-                    <div className="w-2/5">
+                    <div className="w-2/5 bg-white">
                         <p className="font-light text-4xl text-left">{profil?.data?.result?.name}</p>
                         <div>
                             <div className="mt-12 w-full border-t border-gray-300" />
                         </div>
-                        {minipack?.data?.result.map((data) => (
-                            <>
-                                <div className="mt-12 w-60">
-                                    <p className="text-xl text-gray-500">Paket {data.title}</p>
-                                </div>
-                                <div className="grid grid-cols-2 mb-24">
-                                    <div className="flex">
-                                        <p className="self-center text-2xl" style={{ color: '#0285e4' }}>{sisa(data?.end_date)}</p>
-                                        <p className="ml-4 self-center text-gray-500 text-2xl">Hari Tersisa</p>
-                                    </div>
-                                    <div>
-                                        <div className="flex gap-x-4">
-                                            <div className="rounded-xl flex flex-col bg-white w-36 h-36" style={{ boxShadow: '-7px 20px 100px 0 rgba(0, 0, 0, 0.1)' }}>
-                                                <p className="my-4 text-center text-gray-500">Mulai</p>
-                                                <div className="self-center text-center">
-                                                    <p className="text-4xl text-gray-500">{format(new Date(data?.start_date), 'dd')}</p>
-                                                </div>
-                                                <div className="mt-2 text-center">
-                                                    <p className="text-gray-500"> {format(new Date(data?.start_date), 'MMM yyy')}</p>
-                                                </div>
-
-                                            </div>
-                                            <div className="rounded-l-xl flex flex-col w-36 h-36" style={{ backgroundColor: '#0285e4' }}>
-                                                <p className="my-4 text-center text-white">Berakhir</p>
-                                                <div className="self-center text-center">
-                                                    <p className="text-4xl text-white"> {format(new Date(data?.end_date), 'dd')}</p>
-                                                </div>
-                                                <div className="mt-2 text-center">
-                                                    <p className="text-white"> {format(new Date(data?.end_date), 'MMM yyy')}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        ))}
+                        <dl class="space-y-0 divide-y divide-gray-200">
+                            <Disclosure as="div" className="pt-20 pb-12">
+                                {({ open }) => (
+                                    <>
+                                        <dt className="text-lg">
+                                            <Disclosure.Button className="text-left w-full flex justify-between items-start text-gray-400">
+                                                <span className="font-semibold text-2xl text-gray-600">Paket Saya</span>
+                                                <span className="ml-6 h-7 flex items-center">
+                                                    <ChevronRightIcon
+                                                        className={classNames(open ? 'transform rotate-90 transition duration-300' : 'transform rotate-0 transition duration-300', 'h-6 w-6 transform')}
+                                                        aria-hidden="true"
+                                                    />
+                                                </span>
+                                            </Disclosure.Button>
+                                        </dt>
+                                        <Disclosure.Panel as="dd">
+                                            <PaketPage minipack={minipack} />
+                                        </Disclosure.Panel>
+                                    </>
+                                )}
+                            </Disclosure>
+                            <Disclosure as="div" className="pt-16">
+                                {({ open }) => (
+                                    <>
+                                        <dt className="text-lg">
+                                            <Disclosure.Button className="text-left w-full flex justify-between items-start text-gray-400">
+                                                <span className="font-semibold text-2xl text-gray-600">Riwayat Transaksi</span>
+                                                <span className="ml-6 h-7 flex items-center">
+                                                    <ChevronRightIcon
+                                                        className={classNames(open ? 'transform rotate-90 transition duration-300' : 'transform rotate-0 transition duration-300', 'h-6 w-6 transform')}
+                                                        aria-hidden="true"
+                                                    />
+                                                </span>
+                                            </Disclosure.Button>
+                                        </dt>
+                                        <Disclosure.Panel as="dd">
+                                            <RiwayatTransaksi history={history} email={email} />
+                                        </Disclosure.Panel>
+                                    </>
+                                )}
+                            </Disclosure>
+                        </dl>
                     </div>
                 </div>
             </div>
         </>
-
     )
 }
