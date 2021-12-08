@@ -10,7 +10,6 @@ const body = {
 };
 
 export function getToken() {
-    console.log(body)
     return apiPost("/transvisionplus/oauth2/token", body);
 }
 
@@ -56,6 +55,18 @@ export function getProfil(data) {
 
 export function getActiveMinipack(data) {
     return apiPost('/transvisionplus/customer/activated-minipack', {email: data});
+}
+
+export function getTransactionHistory(data) {
+    return apiPost('/transvisionplus/order/transaction-history', data);
+}
+
+export function getTransactionHistoryMinipack(data) {
+    return apiPost('/transvisionplus/minipack/transaction-history/detail', data);
+}
+
+export function getTransactionHistoryBox(data) {
+    return apiPost('/transvisionplus/xstream/transaction-history/detail', data);
 }
 
 
