@@ -11,6 +11,7 @@ import Decoder3 from '../../../public/png/decoder/Decoder_3.png'
 import Decoder4 from '../../../public/png/decoder/Decoder_4.png'
 import Alert from "../../../pages/shared/alert/Alert";
 import * as React from 'react'
+import router from "next/router";
 
 export default function MinipackSection() {
     const [open, setOpen] = React.useState(false);
@@ -33,7 +34,7 @@ export default function MinipackSection() {
                                 dan gambar jernih up to 4K.
                             </p>
                             <div className="flex">
-                                <div className="mx-auto lg:mx-0 mt-9 flex cursor-pointer" onClick={() => setOpen(!open) }>
+                                <div className="mx-auto lg:mx-0 mt-9 flex cursor-pointer" onClick={() => router.push('/pembelian-box')}>
                                     <div style={{ color: '#0285e4' }}>
                                         <p className="self-center font-semibold text-xl">Beli Sekarang </p>
                                     </div>
