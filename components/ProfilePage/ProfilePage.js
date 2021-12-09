@@ -30,6 +30,7 @@ export default function ProfilePage() {
             const data = {page: 1, email: decrypted, start_date: '2019-01-01', end_date:  format(new Date(), 'yyyy-MM-dd'), page_size: '10', payment_status: '', keyword: '' }
             try {
                 const [getData, getDataMinipack, getHistory] = await Promise.all([getProfil(decrypted), getActiveMinipack(decrypted), getTransactionHistory(data)])
+                console.log(getHistory)
                 setProfil(getData)
                 setMinipack(getDataMinipack)
                 setHistory(getHistory.data.result.data)
