@@ -1,5 +1,11 @@
 import * as React from 'react'
 import { getTransactionHistoryBox, getTransactionHistoryMinipack } from '../../../utils/apiHandlers';
+import { Popover, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
 
 export default function DetailRiwayatPage({ email = '', transactionId = '', type = '' }) {
     const [data, setData] = React.useState([])
@@ -28,6 +34,10 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
         return rupiah.split('', rupiah.length - 1).reverse().join('');
     }
 
+    const copy = (data) => {
+        navigator.clipboard.writeText(data)
+    }
+
 
     if (loading) {
         return (
@@ -36,26 +46,26 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                     <div className="bg-gray-200 w-72 h-8 rounded-lg" />
                     <div className="flex justify-between">
                         <div>
-                            <div className="mt-6 bg-gray-200 w-44 h-8 rounded-lg" />
+                            <div className="mt-6 bg-gray-200 w-24 lg:w-44 h-8 rounded-lg" />
                         </div>
                         <div>
-                            <div className="mt-6 bg-gray-200 w-60 h-8 rounded-lg" />
-                        </div>
-                    </div>
-                    <div className="flex justify-between">
-                        <div>
-                            <div className="mt-6 bg-gray-200 w-44 h-8 rounded-lg" />
-                        </div>
-                        <div>
-                            <div className="mt-6 bg-gray-200 w-60 h-8 rounded-lg" />
+                            <div className="mt-6 bg-gray-200 w-40 lg:w-60 h-8 rounded-lg" />
                         </div>
                     </div>
                     <div className="flex justify-between">
                         <div>
-                            <div className="mt-6 bg-gray-200 w-44 h-8 rounded-lg" />
+                            <div className="mt-6 bg-gray-200 w-24 lg:w-44 h-8 rounded-lg" />
                         </div>
                         <div>
-                            <div className="mt-6 bg-gray-200 w-60 h-8 rounded-lg" />
+                            <div className="mt-6 bg-gray-200 w-40 lg:w-60 h-8 rounded-lg" />
+                        </div>
+                    </div>
+                    <div className="flex justify-between">
+                        <div>
+                            <div className="mt-6 bg-gray-200 w-24 lg:w-44 h-8 rounded-lg" />
+                        </div>
+                        <div>
+                            <div className="mt-6 bg-gray-200 w-40 lg:w-60 h-8 rounded-lg" />
                         </div>
                     </div>
                 </div>
@@ -72,7 +82,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                         <div className="flex mt-6">
                             <p className="self-center text-base font-medium text-gray-500">Nomor Resi</p>
                         </div>
-                        <div className="w-40 ml-auto mr-4 mt-6">
+                        <div className={classNames(data?.awb_no !== 'null' ? "mr-0" : "mr-4", "w-40 ml-auto mt-6")}>
                             {data?.awb_no !== 'null' ? (
                                 <p className="text-right">Nomor resi belum tersedia</p>
                             ) : (
@@ -89,12 +99,42 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                                             {data?.awb_no}
                                         </span>
                                     </button>
-                                    <div className="absolute inset-y-0 -right-4 px-3 flex items-center text-sm leading-5 rounded-r-full" style={{ backgroundColor: '#0285e4' }}>
-                                        <img src={'../../png/iconcopy.png'}
-                                            className="h-5 w-5 text-gray-400 cursor-pointer"
-                                            aria-hidden="true"
-                                        />
-                                    </div>
+                                    <Popover className="" style={{ backgroundColor: '#0285e4' }} onClick={() => copy(type === 'MINIPACK' ? data?.voucher_code : data?.payment_code)}>
+                                        {() => (
+                                            <>
+                                                <Popover.Button
+                                                    className="absolute inset-y-0 -right-4 px-3 flex items-center text-sm leading-5 rounded-r-full cursor-pointer"
+                                                    style={{ backgroundColor: '#0285e4' }}
+                                                >
+                                                    <img src={'../../png/iconcopy.png'}
+                                                        className="h-5 w-5 text-gray-400 self-center"
+                                                        aria-hidden="true"
+                                                    />
+                                                </Popover.Button>
+                                                <Transition
+                                                    as={Fragment}
+                                                    enter="transition ease-out duration-200"
+                                                    enterFrom="opacity-0 translate-y-1"
+                                                    enterTo="opacity-100 translate-y-0"
+                                                    leave="transition ease-in duration-150"
+                                                    leaveFrom="opacity-100 translate-y-0"
+                                                    leaveTo="opacity-0 translate-y-1"
+                                                >
+                                                    <Popover.Panel className="absolute z-10 w-72 px-4 -mt-12 transform -translate-x-1/2">
+                                                        <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                                                            <div className="relative gap-8 bg-green-400 p-2">
+                                                                <div className="px-4">
+                                                                    <p className="text-xs text-center font-semibold text-gray-600">
+                                                                        Nomor Resi Berhasil tersalin
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Popover.Panel>
+                                                </Transition>
+                                            </>
+                                        )}
+                                    </Popover>
                                 </div>
                             )}
                         </div>
@@ -107,7 +147,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                         <div className="flex mt-6">
                             <p className="self-center text-base font-medium text-gray-500">Alamat</p>
                         </div>
-                        <div className="ml-auto flex mt-6 w-56">
+                        <div className="ml-auto flex mt-6 w-48 lg:w-56">
                             <p className="self-center text-base text-right font-medium text-gray-500">{data?.receiver_address}</p>
                         </div>
                     </>
@@ -137,12 +177,43 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                                         {type === 'MINIPACK' ? data?.voucher_code : data?.payment_code}
                                     </span>
                                 </button>
-                                <div className="absolute inset-y-0 -right-4 px-3 flex items-center text-sm leading-5 rounded-r-full" style={{ backgroundColor: '#0285e4' }}>
-                                    <img src={'../../png/iconcopy.png'}
-                                        className="h-5 w-5 text-gray-400 cursor-pointer"
-                                        aria-hidden="true"
-                                    />
-                                </div>
+
+                                <Popover className="" style={{ backgroundColor: '#0285e4' }} onClick={() => copy(type === 'MINIPACK' ? data?.voucher_code : data?.payment_code)}>
+                                    {() => (
+                                        <>
+                                            <Popover.Button
+                                                className="absolute inset-y-0 -right-4 px-3 flex items-center text-sm leading-5 rounded-r-full cursor-pointer"
+                                                style={{ backgroundColor: '#0285e4' }}
+                                            >
+                                                <img src={'../../png/iconcopy.png'}
+                                                    className="h-5 w-5 text-gray-400 self-center"
+                                                    aria-hidden="true"
+                                                />
+                                            </Popover.Button>
+                                            <Transition
+                                                as={Fragment}
+                                                enter="transition ease-out duration-200"
+                                                enterFrom="opacity-0 translate-y-1"
+                                                enterTo="opacity-100 translate-y-0"
+                                                leave="transition ease-in duration-150"
+                                                leaveFrom="opacity-100 translate-y-0"
+                                                leaveTo="opacity-0 translate-y-1"
+                                            >
+                                                <Popover.Panel className="absolute z-10 w-72 px-4 -mt-12 -right-7 ">
+                                                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                                                        <div className="relative gap-8 bg-green-400 p-2">
+                                                            <div className="px-4">
+                                                                <p className="text-xs text-center font-semibold text-white">
+                                                                    Kode Pembayaran berhasil tersalin
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </Popover.Panel>
+                                            </Transition>
+                                        </>
+                                    )}
+                                </Popover>
                             </div>
                         </div>
                     </>

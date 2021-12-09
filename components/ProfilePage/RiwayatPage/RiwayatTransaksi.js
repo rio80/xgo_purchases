@@ -77,29 +77,29 @@ export default function RiwayatTransaksi({ history, email }) {
                     <div>
                         <div className="flex justify-between">
                             <div>
-                                <p className="text-xl text-gray-500">{data?.transaction_date_fmt}</p>
+                                <p className="text-lg lg:text-xl text-gray-500">{data?.transaction_date_fmt}</p>
                             </div>
                             <div>
-                                <p className="text-2xl font-bold" style={{ color: '#0285e4' }}>Rp{convertToRupiah(data?.product_amount)}</p>
+                                <p className="text-xl lg:text-2xl font-bold" style={{ color: '#0285e4' }}>Rp{convertToRupiah(data?.total_invoice)}</p>
                             </div>
                         </div>
                         <div className="flex flex-row mt-14">
-                            <div style={{ width: '300px', height: '160px' }} className="mr-14">
+                            <div className="mr-14 w-64 lg:w-76 h-40">
                                 <img className="object-cover w-full h-full" src={data?.thumbnail_img === null ? data?.purchase_type === 'BOX' ? '../../png/decoder/Decoder_1.png' : '../../png/decoder/XGO.png' : data?.thumbnail_img} alt="decoder1" />
                             </div>
                             <div className="flex flex-col w-full">
                                 <div>
-                                    <p className="text-base font-bold" style={{ color: '#3abf94' }}>{camelize(data?.payment_status)}</p>
+                                    <p className="text-base font-bold" style={{ color: data?.payment_status === 'UNPAID' ? '#D74654' : data?.payment_status === 'EXPIRED' ? '#9E9E9E' : '#3abf94' }}>{camelize(data?.payment_status)}</p>
                                 </div>
-                                <div className="mt-5">
-                                    <p className="font-nunito text-3xl font-bold">{camelize(data?.product_name)}</p>
+                                <div className="mt-5 mb-8">
+                                    <p className="font-nunito text-xl lg:text-3xl font-bold">{camelize(data?.product_name)}</p>
                                 </div>
-                                <div className="flex h-full">
-                                    <div className="mt-auto">
+                                <div className="flex flex-col lg:flex-row h-full">
+                                    <div>
                                         <div>
                                             <button
                                                 type="button"
-                                                className="flex flex-row w-full items-center px-6 py-3 border border-transparent text-base rounded-full shadow-sm text-gray-600"
+                                                className="flex flex-row w-full items-center justify-center px-6 py-3 border border-transparent text-base rounded-full shadow-sm text-gray-600"
                                                 style={{ backgroundColor: '#ededed' }}
                                                 onClick={() => select(idx)}
                                             >
@@ -116,23 +116,24 @@ export default function RiwayatTransaksi({ history, email }) {
                                         </div>
                                     </div>
                                     {data?.purchase_type === 'BOX' ? (
-                                        <div className="mt-auto">
-                                            <button
-                                                type="button"
-                                                className="flex flex-row w-full items-center px-6 py-3 ml-3 border border-transparent text-base leading-4 font-semibold rounded-full shadow-sm text-gray-600"
-                                                style={{ backgroundColor: '#ededed' }}
-                                            >
-                                                <div>
-                                                    <p className="leading-4 font-semibold">Tracking</p>
-                                                </div>
-                                                <div>
-                                                    <img src={'../../png/icontracking.png'}
-                                                        className="ml-4 h-5 w-5 text-gray-400 cursor-pointer"
-                                                        aria-hidden="true"
-                                                    />
-                                                </div>
-                                            </button>
-                                        </div>
+                                        ''
+                                        // <div className="mt-4 lg:mt-auto">
+                                        //     <button
+                                        //         type="button"
+                                        //         className="flex flex-row w-full items-center justify-center px-6 py-3 ml-0 lg:ml-3 border border-transparent text-base leading-4 font-semibold rounded-full shadow-sm text-gray-600"
+                                        //         style={{ backgroundColor: '#ededed' }}
+                                        //     >
+                                        //         <div>
+                                        //             <p className="leading-4 font-semibold">Tracking</p>
+                                        //         </div>
+                                        //         <div>
+                                        //             <img src={'../../png/icontracking.png'}
+                                        //                 className="ml-4 h-5 w-5 text-gray-400 cursor-pointer"
+                                        //                 aria-hidden="true"
+                                        //             />
+                                        //         </div>
+                                        //     </button>
+                                        // </div>
                                     ) : data?.payment_status === 'PAID' ?
                                         (
                                             ''
