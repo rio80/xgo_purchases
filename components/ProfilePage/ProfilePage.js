@@ -85,7 +85,7 @@ export default function ProfilePage() {
 
     return (
         <>
-            <div className="mb-14">
+            <div className="mb-14 lg:px-1 px-6">
                 <div className="mt-40 flex justify-center">
                     <div className="w-96 lg:w-2/5 flex">
                         <div className="flex flex-col">
