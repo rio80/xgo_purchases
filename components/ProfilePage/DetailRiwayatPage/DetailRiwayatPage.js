@@ -8,11 +8,13 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
     React.useEffect(() => {
         (async () => {
             try {
-                const getData = type === 'MINIPACK' ? await getTransactionHistoryMinipack({ email: email, transaction_id: transactionId }) : await getTransactionHistoryBox({ email: email, transaction_id: transaction_id })
+                const getData = type === 'MINIPACK' ? await getTransactionHistoryMinipack({ email: email, transaction_id: transactionId }) : await getTransactionHistoryBox({ email: email, transaction_id: transactionId })
+                // console.log(getData)
                 setData(getData.data.result)
                 setLoading(false)
             } catch (e) {
-                console.log(e)
+                // console.log(e)
+                setLoading(false)
 
                 // setError(true)
             }
@@ -71,26 +73,30 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                             <p className="self-center text-base font-medium text-gray-500">Nomor Resi</p>
                         </div>
                         <div className="w-40 ml-auto mr-4 mt-6">
-                            <div className="ml-auto mt-3.5 relative flex items-stretch flex-grow ">
-                                <button
-                                    type="button"
-                                    className="bg-gray-100 relative w-full border-none rounded-l-full shadow-sm py-3 px-7 text-left cursor-default focus:outline-none sm:text-sm"
-                                    ariaHaspopup="listbox"
-                                    ariaExpanded="true"
-                                    ariaLabelledby="listbox-label"
-                                    style={{ backgroundColor: 'rgba(2, 133, 228, 0.2)' }}
-                                >
-                                    <span class="block truncate font-semibold">
-                                        {data?.awb_no}
-                                    </span>
-                                </button>
-                                <div className="absolute inset-y-0 -right-4 px-3 flex items-center text-sm leading-5 rounded-r-full" style={{ backgroundColor: '#0285e4' }}>
-                                    <img src={'../../png/iconcopy.png'}
-                                        className="h-5 w-5 text-gray-400 cursor-pointer"
-                                        aria-hidden="true"
-                                    />
+                            {data?.awb_no !== 'null' ? (
+                                <p className="text-right">Nomor resi belum tersedia</p>
+                            ) : (
+                                <div className="ml-auto mt-3.5 relative flex items-stretch flex-grow ">
+                                    <button
+                                        type="button"
+                                        className="bg-gray-100 relative w-full border-none rounded-l-full shadow-sm py-3 px-7 text-left cursor-default focus:outline-none sm:text-sm"
+                                        ariaHaspopup="listbox"
+                                        ariaExpanded="true"
+                                        ariaLabelledby="listbox-label"
+                                        style={{ backgroundColor: 'rgba(2, 133, 228, 0.2)' }}
+                                    >
+                                        <span class="block truncate font-semibold">
+                                            {data?.awb_no}
+                                        </span>
+                                    </button>
+                                    <div className="absolute inset-y-0 -right-4 px-3 flex items-center text-sm leading-5 rounded-r-full" style={{ backgroundColor: '#0285e4' }}>
+                                        <img src={'../../png/iconcopy.png'}
+                                            className="h-5 w-5 text-gray-400 cursor-pointer"
+                                            aria-hidden="true"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                         <div className="flex mt-6">
                             <p className="self-center text-base font-medium text-gray-500">Kurir</p>
@@ -110,7 +116,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                     <p className="self-center text-base font-medium text-gray-500">Cara Pembayaran</p>
                 </div>
                 <div className="ml-auto flex mt-6">
-                    <p className="self-center text-base font-medium text-gray-500">{data?.payment_method}</p>
+                    <p className="self-center text-base font-medium text-gray-500">{type === 'MINIPACK' ? data?.payment_method : data?.payment_name}</p>
                 </div>
                 {data?.payment_method !== 'OVO' && data?.voucher_code !== null && (
                     <>
@@ -128,7 +134,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                                     style={{ backgroundColor: 'rgba(2, 133, 228, 0.2)' }}
                                 >
                                     <span class="block truncate font-semibold">
-                                        {data?.voucher_code}
+                                        {type === 'MINIPACK' ? data?.voucher_code : data?.payment_code}
                                     </span>
                                 </button>
                                 <div className="absolute inset-y-0 -right-4 px-3 flex items-center text-sm leading-5 rounded-r-full" style={{ backgroundColor: '#0285e4' }}>

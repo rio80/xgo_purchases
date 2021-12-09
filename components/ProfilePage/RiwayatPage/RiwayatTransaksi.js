@@ -85,7 +85,7 @@ export default function RiwayatTransaksi({ history, email }) {
                         </div>
                         <div className="flex flex-row mt-14">
                             <div style={{ width: '300px', height: '160px' }} className="mr-14">
-                                <img className="object-cover w-full h-full" src={data?.thumbnail_img} alt="decoder1" />
+                                <img className="object-cover w-full h-full" src={data?.thumbnail_img === null ? data?.purchase_type === 'BOX' ? '../../png/decoder/Decoder_1.png' : '../../png/decoder/XGO.png' : data?.thumbnail_img} alt="decoder1" />
                             </div>
                             <div className="flex flex-col w-full">
                                 <div>
