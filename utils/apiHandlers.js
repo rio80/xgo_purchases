@@ -69,5 +69,15 @@ export function getTransactionHistoryBox(data) {
     return apiPost('/transvisionplus/xstream/transaction-history/detail', data);
 }
 
+export function getProductMinipack(){
+    return apiGet('/transvisionplus/product/detail?id=42')
+}
 
+export function getJne(data){
+    return apiPost('/transvisionplus/courier/rate',data)
+}
+
+export function getProvince(){
+    return apiGet('/transvisionplus/site-jne/province')
+}
 
