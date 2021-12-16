@@ -15,7 +15,8 @@ export default function AddAlamat({ close }) {
     let [categories] = useState(['Rumah', 'Kantor', 'Lainnya'])
 
     const onSubmit = data => console.log(data);
-    const { register, handleSubmit } = useForm();
+    const { control, register, handleSubmit } = useForm();
+
     const [open, setOpen] = useState(true)
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
@@ -28,6 +29,7 @@ export default function AddAlamat({ close }) {
         (async () => {
             try {
                 const getData = await getProvince()
+                // console.log(getData)
                 const transformProvince = getData.data.result.map((data, idx) => ({
                     id: idx,
                     name: data,
@@ -40,9 +42,6 @@ export default function AddAlamat({ close }) {
         })();
     }, []);
 
-    const prov = () => {
-        console.log('tai ah')
-    }
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -120,9 +119,9 @@ export default function AddAlamat({ close }) {
                                         </div>
                                     </div>
                                     <div className="mt-8"></div>
-                                    <ComboBox data={province} variant='white' name="Provinsi" placeholder="Provinsi" {...register("Provinsi")} />
+                                    <ComboBox data={province} variant='white' name="Provinsi" placeholder="Provinsi" control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={city} placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} variant='white' />
+                                    <ComboBox data={city} placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} variant='white'  />
                                     <div className="mt-8"></div>
                                     <ComboBox data={district} placeholder='Kecamatan' variant='white' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} />
                                     <div className="mt-8"></div>

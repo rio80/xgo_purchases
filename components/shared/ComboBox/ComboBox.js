@@ -1,17 +1,30 @@
 import { EyeIcon } from '@heroicons/react/solid'
 import * as React from 'react'
+import { useController } from 'react-hook-form'
 import css from './ComboBox.module.css'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const ComboBox = React.forwardRef(({ search = true, placeholder = 'Silahkan Pilih', data = [], variant = 'default', message = 'data tidak ditemukan', name, onChange, onBlur }, ref) =>  {
-    console.log(onChange)
+const ComboBox = ({ control, search = true, placeholder = 'Silahkan Pilih', data = [], variant = 'default', message = 'data tidak ditemukan', name }) => {
     const [open, setOpen] = React.useState(false)
     const suggest = data
     const [searchTerm, setSearchTerm] = React.useState('');
     const [value, setValue] = React.useState('')
+    
+    if (!control) {
+        return null;
+    }
+
+    const {
+        field: { onChange, onBlur, name: fieldName, value: fieldValue, ref },
+      } = useController({
+        name,
+        control,
+        rules: { required: true },
+        defaultValue: "",
+      });
 
     const handleOpen = () => {
         setSearchTerm('')
@@ -29,6 +42,7 @@ const ComboBox = React.forwardRef(({ search = true, placeholder = 'Silahkan Pili
         );
 
     const handleSelect = (data) => {
+        onChange(data)
         setValue(data)
         setOpen(!open)
     }
@@ -51,8 +65,8 @@ const ComboBox = React.forwardRef(({ search = true, placeholder = 'Silahkan Pili
                                 onChange={onChange} 
                                 onBlur={onBlur} 
                                 onClick={handleOpen} 
-                                name={name} 
-                                value={value}
+                                name={fieldName} 
+                                value={fieldValue}
                                 ref={ref} />
                             <label className={classNames("font-semibold text-gray-900", css.materialLabel)}> {placeholder}</label>
                         </div>
@@ -128,6 +142,6 @@ const ComboBox = React.forwardRef(({ search = true, placeholder = 'Silahkan Pili
             }
         </div >
     )
-})
+}
 
 export default ComboBox
