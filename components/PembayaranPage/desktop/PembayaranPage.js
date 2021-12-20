@@ -406,7 +406,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                         </p>
                         <div className="flex mt-7">
                             <div className="self-center">
-                                <p className="text-xs text-white">{paket?.name ? (
+                                <p className="text-xs text-white w-44">{paket?.name ? (
                                     <>
                                         {paket?.name}
                                     </>
@@ -416,8 +416,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
                                     </>
                                 )}</p>
                             </div>
-                            <div className="text-xs text-white ml-auto">
-                                <p>RP {convertToRupiah(datapayment?.amount)}</p>
+                            <div className="text-xs flex text-white ml-auto w-1/2">
+                                <p className='ml-auto'>RP {convertToRupiah(datapayment?.amount)}</p>
                             </div>
                         </div>
                         {selected.id === '6' ? (
