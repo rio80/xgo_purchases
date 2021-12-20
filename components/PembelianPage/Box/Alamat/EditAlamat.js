@@ -223,7 +223,7 @@ export default function EditAlamat({ id, close }) {
             <div>
                 <form onSubmit={handleSubmit(handlePost)} autoComplete='off'>
                     <CustomInput placeholder="Masukan Nama Anda" label="Nama" {...register("receiver_fullname")} />
-                    <CustomInput placeholder='Masukan Nomor Telepon Anda' label='Nomor Telepon' {...register("receiver_phone_number")} />
+                    <CustomInput placeholder='Masukan Nomor Telepon Anda' type={'number'} label='Nomor Telepon' {...register("receiver_phone_number")} />
                     <CustomInput placeholder='Masukan Alamat Anda' label='Alamat' {...register("customer_address")} />
                     <div className="mt-8"></div>
                     <ComboBox data={province} variant='white' name="customer_province" placeholder="Provinsi" dataValue={'cek'} control={control} />

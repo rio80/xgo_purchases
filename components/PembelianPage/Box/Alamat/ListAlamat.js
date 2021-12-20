@@ -21,12 +21,14 @@ export default function ListAlamat({ edit, close }) {
     const [loadingUtama, setLoadingUtama] = useState(false)
 
     const camelize = (str = '') => {
-        return str.replace(
-            /\w\S*/g,
-            function (txt) {
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            }
-        );
+        if (str !== null) {
+            return str.replace(
+                /\w\S*/g,
+                function (txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                }
+            );
+        }
     }
 
     const results = !searchTerm ? data : data.filter(item =>

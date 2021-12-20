@@ -5,11 +5,11 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const CustomInput = React.forwardRef(({ onChange, onBlur, name, label, placeholder, custom }, ref) =>  {
+const CustomInput = React.forwardRef(({ onChange, onBlur, name, label, placeholder, type='text' }, ref) =>  {
     return (
         <div className={classNames("my-8", css.container)}>
             <div class={classNames("w-full", css.materialTextfield)}>
-                <input className={classNames("focus:outline-none", css.materialInput)} placeholder={placeholder} type="text" name={name} ref={ref} onChange={onChange} onBlur={onBlur} />
+                <input className={classNames("focus:outline-none", css.materialInput)} placeholder={placeholder} type={type} name={name} ref={ref} onChange={onChange} onBlur={onBlur} />
                 <label className={classNames("font-semibold text-gray-900", css.materialLabel)}> {label}</label>
             </div>
         </div>
