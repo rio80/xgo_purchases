@@ -37,7 +37,6 @@ function getEmail() {
 }
 
 export default function BoxPage() {
-    const qty = useSelector((state) => state.CheckoutReducer)
     const dispatch = useDispatch()
     const alamatPengiriman = useSelector((state) => state.AlamatReducer)
     const [minipack, setMinipack] = React.useState([])
@@ -47,7 +46,7 @@ export default function BoxPage() {
     const [price, setPrice] = React.useState('')
     const [counter, setCounter] = React.useState(1)
     const [list, setList] = React.useState(false)
-    const { control, register, handleSubmit, watch, reset } = useForm();
+    const { control, register, watch, reset } = useForm();
     const produk = watch("Produk")
     const kurir = watch("Courier")
 
@@ -56,7 +55,7 @@ export default function BoxPage() {
             try {
                 const [getData, getDetail] = await Promise.all([getProductMinipack(), getProfil(getEmail())])
                 const transformMinipack = getData.data.result.Packages.map((data) => ({
-                    id: data.PackageId+'|'+data.Price,
+                    id: data.PackageId + '|' + data.Price,
                     name: data.PackageName,
                 }))
                 setMinipack(transformMinipack)
@@ -126,14 +125,14 @@ export default function BoxPage() {
         }
     }, [produk, kurir])
 
-    const getDataJne = async (custAddress) => {
+    const getDataJne = async (custAddress, counter = 1) => {
         const dataEmail = getEmail()
         try {
             const data = {
                 email: dataEmail,
                 customer_address_id: custAddress,
                 courier: 'JNE',
-                weight: 1
+                weight: 0.4 * counter
             }
             const getData = await getJne(data)
             setDataJne(getData?.data?.result)
@@ -143,6 +142,25 @@ export default function BoxPage() {
                 price: data.price
             }))
             setCourier(transformCourier)
+
+            reset({
+                Courier: ''
+            })
+
+            dispatch({
+                type: FooterAction.SET_PENGIRIMAN,
+                nama: '-',
+                hari: '-'
+            })
+
+            dispatch({
+                type: CheckoutAction.SET_JNE,
+                CourierPackageCode : '',
+                CourierPackageLabel : '',
+                CourierFee : '',
+                CityCode : '',
+                Email : '',
+            })
         } catch (e) {
             console.log(e)
 
@@ -161,6 +179,12 @@ export default function BoxPage() {
                 type: CheckoutAction.SET_TOTAL,
                 TotalProductPrice: sum > 10 ? 10 : sum * (+price),
             });
+
+            if (alamatPengiriman.customer_address_id !== '') {
+                getDataJne(alamatPengiriman.customer_address_id, sum > 10 ? 10 : sum)
+            } else {
+                getDataJne(alamat.customer_address_id, sum > 10 ? 10 : sum)
+            }
         } else {
             const sub = counter - 1
             setCounter(sub < 1 ? 1 : sub)
@@ -172,7 +196,16 @@ export default function BoxPage() {
                 type: CheckoutAction.SET_TOTAL,
                 TotalProductPrice: sub < 1 ? 1 : sub * (+price),
             });
+
+            if (alamatPengiriman.customer_address_id !== '') {
+                getDataJne(alamatPengiriman.customer_address_id, sub > 10 ? 10 : sub)
+            } else {
+                getDataJne(alamat.customer_address_id, sub > 10 ? 10 : sub)
+            }
         }
+
+
+
     }
 
     const handleId = (data) => {
@@ -201,9 +234,9 @@ export default function BoxPage() {
     }
 
     return (
-        <div className="flex w-full mt-40 gap-x-12">
-            <div className="w-1/2 relative flex justify-end">
-                <div className="w-1/3 ml-auto fixed">
+        <div className="flex flex-col lg:flex-row w-full mt-32 lg:mt-40 gap-x-0 lg:px-0 lg:gap-x-12">
+            <div className="w-full lg:w-1/2 relative flex justify-center px-6 lg:justify-end">
+                <div className="w-full ml-auto block lg:w-1/3 lg:fixed">
                     <Swiper
                         navigation={true}
                         className="mySwiper"
@@ -257,8 +290,8 @@ export default function BoxPage() {
                     </Swiper>
                 </div>
             </div>
-            <div className="w-1/2">
-                <div className="w-96">
+            <div className="w-full lg:w-1/2">
+                <div className="w-full px-6 lg:px-0 lg:w-96">
                     <p className="font-nunito font-extrabold text-lg">Produk</p>
                     <div>
                         <ComboBox name='Produk' placeholder={'Pilih Produk'} data={minipack} id={handleId} control={control} {...register('Produk')} />

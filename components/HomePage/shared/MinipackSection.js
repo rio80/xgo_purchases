@@ -13,9 +13,12 @@ import Alert from "../../../pages/shared/alert/Alert";
 import * as React from 'react'
 import router from "next/router";
 import config from '../../../utils/config'
+import Cookies from "js-cookie";
 
 export default function MinipackSection() {
     const [open, setOpen] = React.useState(false);
+    const auth = Cookies.get('auth')
+    console.log(auth)
 
     const closeModal = (data) => {
         setOpen(data);
@@ -24,7 +27,11 @@ export default function MinipackSection() {
     const handleOpen = () => {
         const status = config.minipackOpen
         if (status) {
-            router.push('/pembelian-box')
+            if (typeof auth !== 'undefined') {
+                router.push('/pembelian-box')
+            }else{
+                router.push('/login')
+            }
         } else {
             setOpen(true)
         }

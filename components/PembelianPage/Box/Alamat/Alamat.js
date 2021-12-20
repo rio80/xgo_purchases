@@ -2,7 +2,7 @@ import * as React from 'react'
 import AddAlamat from './AddAlamat'
 import ShowAlamat from './ShowAlamat'
 
-export default function AlamatPage({ data = '', list = false }) {
+export default function AlamatPage({data = '', list = false }) {
     const [openList, setOpenList] = React.useState(false)
     const [openAdd, setOpenAdd] = React.useState(false)
 

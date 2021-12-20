@@ -155,7 +155,7 @@ export default function ListAlamat({ edit, close }) {
                         <div className='text-left mt-3 ml-8'>
                             <p className='text-sm text-gray-500 font-semibold'>{camelize(data?.customer_address)}, {camelize(data?.customer_city)}, {camelize(data?.customer_province)}, {data?.customer_zipcode}</p>
                         </div>
-                        <div className='text-left mt-4 ml-8 flex flex-row gap-x-4'>
+                        <div className='text-left mt-4 ml-8 flex flex-col lg:flex-row gap-x-4'>
                             <div className="flex flex-col gap-y-4">
                                 <div>
                                     <button className='bg-gray-200 py-3.5  px-7 rounded-full' onClick={() => handleKirim(data?.customer_address_id, data?.receiver_fullname, data?.customer_address)}>
@@ -178,7 +178,7 @@ export default function ListAlamat({ edit, close }) {
                             </div>
 
                             <div>
-                                <button className='bg-gray-200 py-3.5  px-7 rounded-full' onClick={() => edit(data?.customer_address_id)}>
+                                <button className='bg-gray-200 py-3.5 my-3.5 lg:my-0 px-7 rounded-full' onClick={() => edit(data?.customer_address_id)}>
                                     <p className='font-semibold'>Ubah</p>
                                 </button>
                             </div>

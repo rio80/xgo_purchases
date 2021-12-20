@@ -21,7 +21,7 @@ function getEmail() {
     return decrypted
 }
 
-export default function AddAlamat({ close }) {
+export default function AddAlamat({ id, close }) {
     let [categories] = useState(['Rumah', 'Kantor', 'Lainnya'])
     const { watch, control, register, handleSubmit } = useForm();
     const name = watch("receiver_fullname")
@@ -42,7 +42,7 @@ export default function AddAlamat({ close }) {
     const [city, setCity] = useState([])
     const [zipCode, setZipCode] = useState([])
     const [enabled, setEnabled] = useState(false)
-    const [disabled, setDisabled] = useState(false)
+    const [disabled, setDisabled] = useState(true)
     const [category, setCategory] = useState('Rumah')
 
     useEffect(() => {
@@ -139,14 +139,19 @@ export default function AddAlamat({ close }) {
             getDataZipCode(prov, kab, kec, kel)
         }
 
+        let count = 0
         Object.keys(watchAllFields).map((key) => {
             const cek = watchAllFields[key]
             if (cek === '' || typeof cek === 'undefined') {
-                setDisabled(true)
-            } else {
-                setDisabled(false)
+                count++
             }
         });
+
+        if (count > 0) {
+            setDisabled(true)
+        } else {
+            setDisabled(false)
+        }
 
     }, [name, hp, alamat, prov, kec, kab, kel, kodePos])
 
@@ -165,7 +170,7 @@ export default function AddAlamat({ close }) {
                 setLoading(false)
                 setOpen(false)
                 close(false)
-                
+
             } catch (e) {
                 console.log(e)
                 setLoading(false)
@@ -174,6 +179,10 @@ export default function AddAlamat({ close }) {
             }
         }
     };
+
+    const handleId = () => {
+        //nothing
+    }
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -203,7 +212,7 @@ export default function AddAlamat({ close }) {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="inline-block align-bottom bg-white rounded-lg px-12 py-12 text-left overflow-auto shadow-xl transform transition-all w-2/5 rounded-lg sm:my-16 sm:align-middle">
+                        <div className="inline-block align-bottom bg-white rounded-lg px-12 py-12 text-left overflow-auto shadow-xl transform transition-all w-full lg:w-2/5 rounded-lg sm:my-16 sm:align-middle">
                             <p className='text-center font-nunito text-lg font-extrabold'>Tambah Alamat Baru</p>
                             <div className="w-full mt-10">
                                 <Tab.Group onChange={(index) => { handleCategory(index) }}>
@@ -232,15 +241,15 @@ export default function AddAlamat({ close }) {
                                     <CustomInput placeholder='Masukan Nomor Telepon Anda' label='Nomor Telepon' {...register("receiver_phone_number")} />
                                     <CustomInput placeholder='Masukan Alamat Anda' label='Alamat' {...register("customer_address")} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={province} variant='white' name="customer_province" placeholder="Provinsi" control={control} />
+                                    <ComboBox data={province} id={handleId} variant='white' name="customer_province" placeholder="Provinsi" control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={city} variant='white' name='customer_city' placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} control={control} />
+                                    <ComboBox data={city} id={handleId} variant='white' name='customer_city' placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={district} variant='white' name='customer_district' placeholder='Kecamatan' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} control={control} />
+                                    <ComboBox data={district} id={handleId} variant='white' name='customer_district' placeholder='Kecamatan' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={subDistrict} variant='white' name='customer_subdistrict' placeholder='Kelurahan' message={'Silahkan pilih Kecamatan terlebih dahulu'} control={control} />
+                                    <ComboBox data={subDistrict} id={handleId} variant='white' name='customer_subdistrict' placeholder='Kelurahan' message={'Silahkan pilih Kecamatan terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={zipCode} variant='white' name='customer_zipcode' placeholder='Kode Pos' message={'Silahkan pilih Kelurahan terlebih dahulu'} control={control} />
+                                    <ComboBox data={zipCode} id={handleId} variant='white' name='customer_zipcode' placeholder='Kode Pos' message={'Silahkan pilih Kelurahan terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
                                     <div className='grid grid-cols-2'>
                                         <div>
@@ -261,7 +270,7 @@ export default function AddAlamat({ close }) {
                                             </Switch>
                                         </div>
                                     </div>
-                                    
+
                                     <button type="submit" className='w-full py-5 rounded-full mt-10' style={{ backgroundColor: disabled ? '#c9c9c9' : '#0285e4' }}>
                                         {loading ?
                                             <>

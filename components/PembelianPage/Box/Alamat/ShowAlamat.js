@@ -53,7 +53,7 @@ export default function ShowAlamat({ close }) {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom bg-white rounded-lg px-12 py-12 text-left overflow-auto shadow-xl transform transition-all w-2/5 rounded-lg sm:my-16 sm:align-middle">
+                            <div className="inline-block align-bottom bg-white rounded-lg px-12 py-12 text-left overflow-auto shadow-xl transform transition-all w-full lg:w-2/5 rounded-lg sm:my-16 sm:align-middle">
                                 {edit ? <EditAlamat close={closeEdit} id={id} /> : <ListAlamat edit={handleEdit} close={closeModal} />}
                             </div>
                         </Transition.Child>
