@@ -119,6 +119,7 @@ export default function Footer() {
                         type="button"
                         className={classNames(disabled ? 'text-white' : 'text-white', 'w-full self-center items-center px-8 py-4 border border-transparent text-base leading-4 font-base rounded-full shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500')}
                         style={{ backgroundColor: disabled ? '#c9c9c9' : '#0285e4' }}
+                        onClick={handleCheckout}
                     >
                         Beli
                     </button>
