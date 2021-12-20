@@ -7,24 +7,24 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const ComboBox = ({ control, search = true, placeholder = 'Silahkan Pilih', data = [], variant = 'default', message = 'data tidak ditemukan', name }) => {
+const ComboBox = ({ id, control, search = true, placeholder = 'Silahkan Pilih', data = [], variant = 'default', dataValue= '',message = 'data tidak ditemukan', name }) => {
     const [open, setOpen] = React.useState(false)
     const suggest = data
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [value, setValue] = React.useState('')
-    
+    const [value, setValue] = React.useState(dataValue)
+
     if (!control) {
         return null;
     }
 
     const {
         field: { onChange, onBlur, name: fieldName, value: fieldValue, ref },
-      } = useController({
+    } = useController({
         name,
         control,
         rules: { required: true },
         defaultValue: "",
-      });
+    });
 
     const handleOpen = () => {
         setSearchTerm('')
@@ -41,7 +41,8 @@ const ComboBox = ({ control, search = true, placeholder = 'Silahkan Pilih', data
             item.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
         );
 
-    const handleSelect = (data) => {
+    const handleSelect = (dataId,data) => {
+        id(dataId)
         onChange(data)
         setValue(data)
         setOpen(!open)
@@ -58,14 +59,14 @@ const ComboBox = ({ control, search = true, placeholder = 'Silahkan Pilih', data
                 {value ? (
                     <div className={classNames("w-full mt-2", css.container)}>
                         <div class={classNames("w-full", css.materialTextfield)}>
-                            <input 
-                                className={classNames("focus:outline-none", css.materialInput)} 
-                                placeholder={placeholder} 
-                                type="text" 
-                                onChange={onChange} 
-                                onBlur={onBlur} 
-                                onClick={handleOpen} 
-                                name={fieldName} 
+                            <input
+                                className={classNames("focus:outline-none", css.materialInput)}
+                                placeholder={placeholder}
+                                type="text"
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                onClick={handleOpen}
+                                name={fieldName}
                                 value={fieldValue}
                                 ref={ref} />
                             <label className={classNames("font-semibold text-gray-900", css.materialLabel)}> {placeholder}</label>
@@ -98,7 +99,7 @@ const ComboBox = ({ control, search = true, placeholder = 'Silahkan Pilih', data
             {
                 open ? (
                     <>
-                        <div className="absolute h-full w-full inset-0" onClick={close}></div>
+                        <div className="absolute h-full w-full inset-0 z-20" onClick={close}></div>
                         <div class="relative rounded-md mt-2 z-20">
                             <div className="w-full shadow-lg rounded-md absolute z-20" style={{ backgroundColor: '#ebeef2' }}>
                                 {search ?
@@ -125,7 +126,7 @@ const ComboBox = ({ control, search = true, placeholder = 'Silahkan Pilih', data
                                     ) : (
                                         <>
                                             {results.map((data, idx) => (
-                                                <li key={idx} className="text-gray-900 cursor-default select-none relative py-3 px-4 pr-9 hover:bg-gray-100" id="listbox-option-0" role="option" onClick={() => handleSelect(data.name)}>
+                                                <li key={idx} className="text-gray-900 cursor-default select-none relative py-3 px-4 pr-9 hover:bg-gray-100" id="listbox-option-0" role="option" onClick={() => handleSelect(data.id,data.name)}>
                                                     <span className="font-semibold block">
                                                         {data.name}
                                                     </span>

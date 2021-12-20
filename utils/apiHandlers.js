@@ -81,3 +81,30 @@ export function getProvince(){
     return apiGet('/transvisionplus/site-jne/province')
 }
 
+export function getCity(data){
+    return apiGet(`/transvisionplus/site-jne/city?province=${data}`)
+}
+
+export function getDistrict(prov,kec){
+    return apiGet(`/transvisionplus/site-jne/district?province=${prov}&city=${kec}`)
+}
+
+export function getSubDistrict(prov,kec,kab){
+    return apiGet(`/transvisionplus/site-jne/subdistrict?province=${prov}&city=${kec}&district=${kab}`)
+}
+
+export function getZipCode(prov,kec,kab,kel){
+    return apiGet(`/transvisionplus/site-jne/zipcode?province=${prov}&city=${kec}&district=${kab}&subdistrict=${kel}`)
+}
+
+export function saveAddress(data){
+    return apiPost('/transvisionplus/customer/address/save',data)
+}
+
+export function deleteAddress(data){
+    return apiPost('/transvisionplus/customer/address/delete',data)
+}
+
+export function createOrderBox(data) {
+    return apiPost("/transvisionplus/xstream/order", data);
+}

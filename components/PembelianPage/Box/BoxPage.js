@@ -17,12 +17,16 @@ import { getJne, getProductMinipack, getProfil } from "../../../utils/apiHandler
 import css from '../../shared/ComboBox/ComboBox.module.css'
 import Cookies from 'js-cookie';
 import Footer from './Footer/Footer';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { FooterAction } from '../../../store/Footer/FooterAction';
+import { CheckoutAction } from '../../../store/Checkout/CheckoutAction';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-function getEmail(){
+function getEmail() {
     const CryptoJS = require("crypto-js");
     const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
     const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
@@ -33,31 +37,94 @@ function getEmail(){
 }
 
 export default function BoxPage() {
+    const qty = useSelector((state) => state.CheckoutReducer)
+    const dispatch = useDispatch()
+    const alamatPengiriman = useSelector((state) => state.AlamatReducer)
     const [minipack, setMinipack] = React.useState([])
     const [alamat, setAlamat] = React.useState('')
     const [courier, setCourier] = React.useState([])
+    const [dataJne, setDataJne] = React.useState('')
+    const [price, setPrice] = React.useState('')
     const [counter, setCounter] = React.useState(1)
+    const [list, setList] = React.useState(false)
+    const { control, register, handleSubmit, watch, reset } = useForm();
+    const produk = watch("Produk")
+    const kurir = watch("Courier")
 
     React.useEffect(() => {
         (async () => {
             try {
                 const [getData, getDetail] = await Promise.all([getProductMinipack(), getProfil(getEmail())])
                 const transformMinipack = getData.data.result.Packages.map((data) => ({
-                    id: data.PackageId,
+                    id: data.PackageId+'|'+data.Price,
                     name: data.PackageName,
                 }))
-                const dataAlamat = getDetail.data.result.addresses.find(x => x.main_address === '1')
                 setMinipack(transformMinipack)
-                setAlamat(dataAlamat)
-                if (dataAlamat !== '') {
-                    getDataJne(dataAlamat.customer_address_id)
+
+                const dataAlamat = getDetail.data.result.addresses.find(x => x.main_address === '1')
+                if (getDetail.data.result.addresses.length > 0) {
+                    setList(true)
                 }
+
+                if (alamatPengiriman.customer_address_id !== '') {
+                    setAlamat(alamatPengiriman)
+                    getDataJne(alamatPengiriman.customer_address_id)
+                    dispatch({
+                        type: FooterAction.SET_DATA,
+                        nama: alamatPengiriman.receiver_fullname,
+                        alamat: alamatPengiriman.customer_address
+                    })
+                    dispatch({
+                        type: CheckoutAction.SET_ID_ADRRESS,
+                        CustomerAddressId: alamatPengiriman.customer_address_id
+                    })
+                } else {
+                    setAlamat(dataAlamat)
+                    getDataJne(dataAlamat.customer_address_id)
+                    dispatch({
+                        type: FooterAction.SET_DATA,
+                        nama: dataAlamat.receiver_fullname,
+                        alamat: dataAlamat.customer_address
+                    })
+                    dispatch({
+                        type: CheckoutAction.SET_ID_ADRRESS,
+                        CustomerAddressId: dataAlamat.customer_address_id
+                    })
+                }
+                reset({
+                    Courier: ''
+                })
+
+                dispatch({
+                    type: FooterAction.SET_PENGIRIMAN,
+                    nama: '-',
+                    hari: '-'
+                })
+
             } catch (e) {
                 console.log(e)
 
             }
         })();
-    }, []);
+    }, [alamatPengiriman]);
+
+    React.useEffect(() => {
+        if (produk !== '' && typeof produk !== 'undefined') {
+            dispatch({
+                type: FooterAction.SET_PRODUK,
+                nama: 'Xstream Box',
+                paket: produk
+            })
+        }
+
+        if (kurir !== '' && typeof kurir !== 'undefined') {
+            dispatch({
+                type: FooterAction.SET_PENGIRIMAN,
+                nama: 'JNE',
+                hari: kurir
+            })
+        }
+    }, [produk, kurir])
 
     const getDataJne = async (custAddress) => {
         const dataEmail = getEmail()
@@ -69,8 +136,9 @@ export default function BoxPage() {
                 weight: 1
             }
             const getData = await getJne(data)
-            const transformCourier = getData?.data?.result?.rates.map((data) => ({
-                id: data.code,
+            setDataJne(getData?.data?.result)
+            const transformCourier = getData?.data?.result?.rates.map((data, idx) => ({
+                id: idx,
                 name: data.label,
                 price: data.price
             }))
@@ -85,10 +153,51 @@ export default function BoxPage() {
         if (data === '+') {
             const sum = counter + 1
             setCounter(sum > 10 ? 10 : sum)
+            dispatch({
+                type: CheckoutAction.SET_QTY,
+                Qty: sum > 10 ? 10 : sum
+            });
+            dispatch({
+                type: CheckoutAction.SET_TOTAL,
+                TotalProductPrice: sum > 10 ? 10 : sum * (+price),
+            });
         } else {
             const sub = counter - 1
             setCounter(sub < 1 ? 1 : sub)
+            dispatch({
+                type: CheckoutAction.SET_QTY,
+                Qty: sub < 1 ? 1 : sub
+            });
+            dispatch({
+                type: CheckoutAction.SET_TOTAL,
+                TotalProductPrice: sub < 1 ? 1 : sub * (+price),
+            });
         }
+    }
+
+    const handleId = (data) => {
+        const dataProduct = data.split('|')
+        setPrice(dataProduct[1])
+        dispatch({
+            type: CheckoutAction.SET_ID,
+            PackageId: +dataProduct[0],
+        });
+
+        dispatch({
+            type: CheckoutAction.SET_TOTAL,
+            TotalProductPrice: counter * (+dataProduct[1]),
+        });
+    }
+
+    const handleDataCourier = (data) => {
+        dispatch({
+            type: CheckoutAction.SET_JNE,
+            CourierPackageCode: dataJne.rates[data].code,
+            CourierPackageLabel: dataJne.rates[data].label,
+            CourierFee: +dataJne.rates[data].price,
+            CityCode: dataJne.cityCode,
+            Email: getEmail()
+        })
     }
 
     return (
@@ -152,7 +261,7 @@ export default function BoxPage() {
                 <div className="w-96">
                     <p className="font-nunito font-extrabold text-lg">Produk</p>
                     <div>
-                        <ComboBox placeholder={'Pilih Produk'} data={minipack} />
+                        <ComboBox name='Produk' placeholder={'Pilih Produk'} data={minipack} id={handleId} control={control} {...register('Produk')} />
                     </div>
                     <div className="flex justify-between mt-10">
                         <div className="font-semibold">
@@ -165,9 +274,9 @@ export default function BoxPage() {
                         </div>
                     </div>
                     <div>
-                        <AlamatPage data={alamat} />
+                        <AlamatPage data={alamat} list={list} />
                     </div>
-                    <div>
+                    <div className='mb-24'>
                         <div>
                             <p className="font-nunito font-extrabold text-lg mt-12">Pengiriman</p>
                             <div className={classNames("w-full mt-6", css.container)}>
@@ -186,14 +295,16 @@ export default function BoxPage() {
                             </div>
                         </div>
                         <div className="mt-5">
-                            <ComboBox search={false} placeholder={'Pilih Layanan'} data={courier} />
-                        </div>
-                    </div>
-                    <div>
-                        <p className="font-nunito font-extrabold text-lg mt-12">Voucher Minipack</p>
-                        <p className="font-semibold text-sm mt-3.5 text-gray-500">Pilih Voucher (Opsional)</p>
-                        <div className="mt-2 mb-24">
-                            <VoucherBoxPage />
+                            <ComboBox
+                                search={false}
+                                placeholder={'Pilih Layanan'}
+                                data={courier}
+                                name='Courier'
+                                {...register('Courier')}
+                                control={control}
+                                variant='default'
+                                id={handleDataCourier}
+                            />
                         </div>
                     </div>
                 </div>

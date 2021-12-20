@@ -3,33 +3,52 @@ import { Switch, Dialog, Transition } from '@headlessui/react'
 import { Tab } from '@headlessui/react'
 import CustomInput from '../../../shared/CustomInput/CustomInput'
 import { useForm } from 'react-hook-form'
-import css from '../../../shared/CustomInput/CustomInput.module.css'
 import ComboBox from '../../../shared/ComboBox/ComboBox'
-import { getProvince } from '../../../../utils/apiHandlers'
+import { getCity, getDistrict, getProvince, getSubDistrict, getZipCode, saveAddress } from '../../../../utils/apiHandlers'
+import Cookies from 'js-cookie'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
+function getEmail() {
+    const CryptoJS = require("crypto-js");
+    const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
+    const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
+    const auth = Cookies.get('auth')
+    const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
+
+    return decrypted
+}
+
 export default function AddAlamat({ close }) {
     let [categories] = useState(['Rumah', 'Kantor', 'Lainnya'])
+    const { watch, control, register, handleSubmit } = useForm();
+    const name = watch("receiver_fullname")
+    const hp = watch("receiver_phone_number")
+    const alamat = watch("customer_address")
+    const prov = watch("customer_province");
+    const kab = watch("customer_city");
+    const kec = watch("customer_district");
+    const kel = watch("customer_subdistrict");
+    const kodePos = watch("customer_zipcode");
+    const watchAllFields = watch();
 
-    const onSubmit = data => console.log(data);
-    const { control, register, handleSubmit } = useForm();
-
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(true)
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
-    const [subDistrict, setsubDistrict] = useState([])
+    const [subDistrict, setSubDistrict] = useState([])
     const [city, setCity] = useState([])
     const [zipCode, setZipCode] = useState([])
     const [enabled, setEnabled] = useState(false)
+    const [disabled, setDisabled] = useState(false)
+    const [category, setCategory] = useState('Rumah')
 
     useEffect(() => {
         (async () => {
             try {
                 const getData = await getProvince()
-                // console.log(getData)
                 const transformProvince = getData.data.result.map((data, idx) => ({
                     id: idx,
                     name: data,
@@ -42,6 +61,119 @@ export default function AddAlamat({ close }) {
         })();
     }, []);
 
+    const getDataCity = async (data) => {
+        try {
+            const getData = await getCity(data)
+            const transformCity = getData.data.result.map((data, idx) => ({
+                id: idx,
+                name: data,
+            }))
+            setCity(transformCity)
+        } catch (e) {
+            console.log(e)
+
+        }
+    }
+
+    const getDataDistrict = async (prov, kec) => {
+        try {
+            const getData = await getDistrict(prov, kec)
+            const transformDistrict = getData.data.result.map((data, idx) => ({
+                id: idx,
+                name: data,
+            }))
+            setDistrict(transformDistrict)
+        } catch (e) {
+            console.log(e)
+
+        }
+    }
+
+    const getDataSubDistrict = async (prov, kec, kab) => {
+        try {
+            const getData = await getSubDistrict(prov, kec, kab)
+            const transformSubDistrict = getData.data.result.map((data, idx) => ({
+                id: idx,
+                name: data,
+            }))
+            setSubDistrict(transformSubDistrict)
+        } catch (e) {
+            console.log(e)
+
+        }
+    }
+
+    const getDataZipCode = async (prov, kec, kab, kel) => {
+        try {
+            const getData = await getZipCode(prov, kec, kab, kel)
+            const transformZipCode = getData.data.result.map((data, idx) => ({
+                id: idx,
+                name: data,
+            }))
+            setZipCode(transformZipCode)
+        } catch (e) {
+            console.log(e)
+
+        }
+    }
+
+    const handleCategory = (data) => {
+        const dataCategory = categories[data]
+        setCategory(dataCategory)
+    }
+
+    useEffect(() => {
+        if (prov !== '' && typeof prov !== 'undefined') {
+            getDataCity(prov)
+        }
+
+        if (kab !== '' && typeof kab !== 'undefined') {
+            getDataDistrict(prov, kab)
+        }
+
+        if (kec !== '' && typeof kec !== 'undefined') {
+            getDataSubDistrict(prov, kab, kec)
+        }
+
+        if (kel !== '' && typeof kel !== 'undefined') {
+            getDataZipCode(prov, kab, kec, kel)
+        }
+
+        Object.keys(watchAllFields).map((key) => {
+            const cek = watchAllFields[key]
+            if (cek === '' || typeof cek === 'undefined') {
+                setDisabled(true)
+            } else {
+                setDisabled(false)
+            }
+        });
+
+    }, [name, hp, alamat, prov, kec, kab, kel, kodePos])
+
+    const handlePost = async (handleSubmit) => {
+        setLoading(true)
+        if (!disabled) {
+            let data = {
+                ...handleSubmit,
+                customer_address_id: 0,
+                main_address: enabled ? "1" : "0",
+                address_category: category,
+                email: getEmail()
+            }
+            try {
+                const postData = await saveAddress(data)
+                setLoading(false)
+                setOpen(false)
+                close(false)
+                
+            } catch (e) {
+                console.log(e)
+                setLoading(false)
+                setOpen(false)
+                close(false)
+            }
+        }
+    };
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -74,7 +206,7 @@ export default function AddAlamat({ close }) {
                         <div className="inline-block align-bottom bg-white rounded-lg px-12 py-12 text-left overflow-auto shadow-xl transform transition-all w-2/5 rounded-lg sm:my-16 sm:align-middle">
                             <p className='text-center font-nunito text-lg font-extrabold'>Tambah Alamat Baru</p>
                             <div className="w-full mt-10">
-                                <Tab.Group>
+                                <Tab.Group onChange={(index) => { handleCategory(index) }}>
                                     <Tab.List className="flex p-1.5 space-x-1 bg-white rounded-full" style={{ border: 'solid 2px #ebeef2' }}>
                                         {categories.map((category) => (
                                             <Tab
@@ -95,39 +227,20 @@ export default function AddAlamat({ close }) {
                                 </Tab.Group>
                             </div>
                             <div>
-                                <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
-                                    <CustomInput placeholder="Masukan Nama Anda" label="Nama" {...register("Nama")} />
-                                    <CustomInput placeholder='Masukan Nomor Telepon Anda' label='Nomor Telepon'  {...register("Telepon")} />
-                                    <CustomInput placeholder='Masukan Alamat Anda' label='Alamat' {...register("Alamat")} />
-
-                                    <div className='grid grid-cols-2 gap-x-4'>
-                                        <div>
-                                            <div>
-                                                <div class={classNames("w-full", css.materialTextfield)}>
-                                                    <input className={classNames("focus:outline-none", css.materialInput)} placeholder="Masukan RT Anda" type="text" name="RT"  {...register("RT")} />
-                                                    <label className={classNames("font-semibold text-gray-900", css.materialLabel)}> RT </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div>
-                                                <div class={classNames("w-full", css.materialTextfield)}>
-                                                    <input className={classNames("focus:outline-none", css.materialInput)} placeholder="Masukan RW Anda" type="text" name="RT"  {...register("RW")} />
-                                                    <label className={classNames("font-semibold text-gray-900", css.materialLabel)}> RW </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <form onSubmit={handleSubmit(handlePost)} autoComplete='off'>
+                                    <CustomInput placeholder="Masukan Nama Anda" label="Nama" {...register("receiver_fullname")} />
+                                    <CustomInput placeholder='Masukan Nomor Telepon Anda' label='Nomor Telepon' {...register("receiver_phone_number")} />
+                                    <CustomInput placeholder='Masukan Alamat Anda' label='Alamat' {...register("customer_address")} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={province} variant='white' name="Provinsi" placeholder="Provinsi" control={control} />
+                                    <ComboBox data={province} variant='white' name="customer_province" placeholder="Provinsi" control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={city} placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} variant='white'  />
+                                    <ComboBox data={city} variant='white' name='customer_city' placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={district} placeholder='Kecamatan' variant='white' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} />
+                                    <ComboBox data={district} variant='white' name='customer_district' placeholder='Kecamatan' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={subDistrict} placeholder='Kelurahan' variant='white' message={'Silahkan pilih Kecamatan terlebih dahulu'} />
+                                    <ComboBox data={subDistrict} variant='white' name='customer_subdistrict' placeholder='Kelurahan' message={'Silahkan pilih Kecamatan terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
-                                    <ComboBox data={zipCode} placeholder='Kode Pos' variant='white' message={'Silahkan pilih Kelurahan terlebih dahulu'} />
+                                    <ComboBox data={zipCode} variant='white' name='customer_zipcode' placeholder='Kode Pos' message={'Silahkan pilih Kelurahan terlebih dahulu'} control={control} />
                                     <div className="mt-8"></div>
                                     <div className='grid grid-cols-2'>
                                         <div>
@@ -148,8 +261,15 @@ export default function AddAlamat({ close }) {
                                             </Switch>
                                         </div>
                                     </div>
-                                    <button type="submit" className='w-full py-5 rounded-full mt-10' style={{ backgroundColor: '#0285e4' }}>
-                                        <p className='text-white'>Simpan</p>
+                                    
+                                    <button type="submit" className='w-full py-5 rounded-full mt-10' style={{ backgroundColor: disabled ? '#c9c9c9' : '#0285e4' }}>
+                                        {loading ?
+                                            <>
+                                                <p className='text-white'>Processing...</p>
+                                            </>
+                                            :
+                                            <p className='text-white'>Simpan</p>
+                                        }
                                     </button>
                                 </form>
                             </div>

@@ -5,7 +5,8 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export default function Pembayaran() {
+export default function Pembayaran(props) {
+    const { type } = props
     const router = useRouter()
     const auth = Cookies.get('auth')
     const [loadPage, setLoadPage] = useState(false);
@@ -15,8 +16,6 @@ export default function Pembayaran() {
         if (typeof window !== 'undefined') {
             payment = localStorage.getItem('payment');
         }
-
-        // console.log(payment)
 
         if (typeof auth !== 'undefined' && payment !== null) {
             setLoadPage(true);
@@ -34,7 +33,14 @@ export default function Pembayaran() {
     return (
         <>
             <HeaderHome variant={'pastlogin'} />
-            <Pembayaran />
+            <Pembayaran type={type} />
         </>
     )
 }
+
+Pembayaran.getInitialProps = async ctx => {
+    const { query } = ctx;
+    return {
+        type: query ? query.type : '',
+    };
+};
