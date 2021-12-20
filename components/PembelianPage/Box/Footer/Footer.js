@@ -37,6 +37,7 @@ export default function Footer() {
 
     const handleCheckout = () => {
         if (!disabled) {
+            const paket = data?.produk?.paket
             let dataPayment = {
                 ...payment,
                 amount: +dataCheckout.TotalProductPrice + +dataCheckout.CourierFee,
@@ -45,7 +46,7 @@ export default function Footer() {
                         id: +dataCheckout.PackageId,
                         price: (+dataCheckout.TotalProductPrice) + (+dataCheckout.CourierFee),
                         quantity: +dataCheckout.Qty,
-                        name: data?.produk?.paket
+                        name: paket.replace(/\s/gm , '_')
                     }
                 ]
             }

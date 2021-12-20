@@ -59,12 +59,13 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
     const checkPayment = async () => {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
+        const phone = profil?.data?.result?.phone_number
         try {
             let submit = {
                 ...datapayment,
                 order_id: Cookies.get('order_id'),
                 customer_email: profil?.data?.result?.email,
-                customer_mobilephone: profil?.data?.result?.phone_number,
+                customer_mobilephone: phone.replace(/\D/gm, ''),
                 customer_name: profil?.data?.result?.name
             }
 
@@ -100,16 +101,16 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 }
 
                 postData = await createOrderBox(submit);
-            }
+            }            
 
-            const orderId = postData?.data?.result?.order_id
+            const orderId = type === 'minipack' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
                 checkPayment()
             } else {
                 dispatch({
                     type: KodeAction.SET_KODE,
-                    kode: postData?.data?.result?.payment_code,
+                    kode: type === 'minipack' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
                 });
                 router.push('/kode-bayar')
             }

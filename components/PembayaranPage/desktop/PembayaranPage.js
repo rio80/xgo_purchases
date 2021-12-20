@@ -59,12 +59,13 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
     const checkPayment = async () => {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
+        const phone = profil?.data?.result?.phone_number
         try {
             let submit = {
                 ...datapayment,
                 order_id: Cookies.get('order_id'),
                 customer_email: profil?.data?.result?.email,
-                customer_mobilephone: profil?.data?.result?.phone_number,
+                customer_mobilephone: phone.replace(/\D/gm, ''),
                 customer_name: profil?.data?.result?.name
             }
 
