@@ -88,7 +88,7 @@ export default function MinipackPage() {
             Cookies.set('paket', JSON.stringify(dataPaket));
             localStorage.setItem('checkout', JSON.stringify(data));
             localStorage.setItem('payment', JSON.stringify(payment));
-            router.push('/pembayaran')
+            router.push('/pembayaran?type=minipack')
         }
     }
 

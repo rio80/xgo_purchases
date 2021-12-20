@@ -94,7 +94,7 @@ export default function MinipackPage() {
             if (typeof auth === 'undefined') {
                 router.push('/login')
             } else {
-                router.push('/pembayaran')
+                router.push('/pembayaran?type=minipack')
             }
         }
     }

@@ -28,14 +28,8 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function PembayaranPage() {
+export default function PembayaranPage({ type = 'minipack' }) {
     const [profil, setProfil] = useState([])
-    const CryptoJS = require("crypto-js");
-    const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
-    const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
-    const auth = Cookies.get('auth')
-    const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
-
     const datapayment = JSON.parse(localStorage.getItem('payment'))
     const paket = JSON.parse(Cookies.get('paket'))
     const dispatch = useDispatch()
@@ -48,7 +42,11 @@ export default function PembayaranPage() {
     const today = new Date()
     const start = format(today, 'dd MMM yyyy')
     const sum = addMonths(today, paket.durasi);
-
+    const CryptoJS = require("crypto-js");
+    const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
+    const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
+    const auth = Cookies.get('auth')
+    const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
     const [coming, setComing] = useState(false);
 
     const closeComing = (data) => {
@@ -61,14 +59,16 @@ export default function PembayaranPage() {
 
     const checkPayment = async () => {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
+        const phone = profil?.data?.result?.phone_number
         try {
             let submit = {
                 ...datapayment,
                 order_id: Cookies.get('order_id'),
                 customer_email: profil?.data?.result?.email,
-                customer_mobilephone: profil?.data?.result?.phone_number,
+                customer_mobilephone: phone.replace(/\D/gm, ''),
                 customer_name: profil?.data?.result?.name
             }
+
             const reqPayment = await createRequestPayment(submit)
             setLoading(false)
             router.push(reqPayment?.data?.result?.url_doku)
@@ -82,21 +82,35 @@ export default function PembayaranPage() {
         setLoading(true)
         try {
             const createorder = JSON.parse(localStorage.getItem('checkout'))
-            let submit = {
-                ...createorder,
-                payment_method_id: selected.id,
-                email: profil?.data?.result?.email,
-                receiver_email: profil?.data?.result?.email
-            }
-            let postData = await createOrderMinipack(submit);
-            const orderId = postData?.data?.result?.order_id
+            let submit = ''
+            let postData = ''
+
+            if (type === 'minipack') {
+                submit = {
+                    ...createorder,
+                    payment_method_id: selected.id,
+                    email: profil?.data?.result?.email,
+                    receiver_email: profil?.data?.result?.email
+                }
+
+                postData = await createOrderMinipack(submit);
+            } else {
+                submit = {
+                    ...createorder,
+                    PaymentMethodId: selected.id
+                }
+
+                postData = await createOrderBox(submit);
+            }            
+
+            const orderId = type === 'minipack' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
                 checkPayment()
             } else {
                 dispatch({
                     type: KodeAction.SET_KODE,
-                    kode: postData?.data?.result?.payment_code,
+                    kode: type === 'minipack' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
                 });
                 router.push('/kode-bayar')
             }
@@ -145,7 +159,7 @@ export default function PembayaranPage() {
     }, []);
 
     const handleComing = (data) => {
-        if(data === 'Gopay' || data === 'Pulsa'){
+        if (data === 'Gopay' || data === 'Pulsa') {
             setComing(!coming)
         }
     }

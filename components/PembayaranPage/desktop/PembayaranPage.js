@@ -2,7 +2,7 @@ import { useEffect, useState, Fragment } from 'react'
 import { RadioGroup, Listbox, Transition, Popover } from '@headlessui/react'
 import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
-import { createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
+import { createOrderBox, createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -28,7 +28,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function PembayaranPage() {
+export default function PembayaranPage({ type = 'minipack' }) {
     const [profil, setProfil] = useState([])
     const datapayment = JSON.parse(localStorage.getItem('payment'))
     const paket = JSON.parse(Cookies.get('paket'))
@@ -59,14 +59,16 @@ export default function PembayaranPage() {
 
     const checkPayment = async () => {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
+        const phone = profil?.data?.result?.phone_number
         try {
             let submit = {
                 ...datapayment,
                 order_id: Cookies.get('order_id'),
                 customer_email: profil?.data?.result?.email,
-                customer_mobilephone: profil?.data?.result?.phone_number,
+                customer_mobilephone: phone.replace(/\D/gm, ''),
                 customer_name: profil?.data?.result?.name
             }
+
             const reqPayment = await createRequestPayment(submit)
             setLoading(false)
             router.push(reqPayment?.data?.result?.url_doku)
@@ -80,21 +82,35 @@ export default function PembayaranPage() {
         setLoading(true)
         try {
             const createorder = JSON.parse(localStorage.getItem('checkout'))
-            let submit = {
-                ...createorder,
-                payment_method_id: selected.id,
-                email: profil?.data?.result?.email,
-                receiver_email: profil?.data?.result?.email
-            }
-            let postData = await createOrderMinipack(submit);
-            const orderId = postData?.data?.result?.order_id
+            let submit = ''
+            let postData = ''
+
+            if (type === 'minipack') {
+                submit = {
+                    ...createorder,
+                    payment_method_id: selected.id,
+                    email: profil?.data?.result?.email,
+                    receiver_email: profil?.data?.result?.email
+                }
+
+                postData = await createOrderMinipack(submit);
+            } else {
+                submit = {
+                    ...createorder,
+                    PaymentMethodId: selected.id
+                }
+
+                postData = await createOrderBox(submit);
+            }            
+
+            const orderId = type === 'minipack' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
                 checkPayment()
             } else {
                 dispatch({
                     type: KodeAction.SET_KODE,
-                    kode: postData?.data?.result?.payment_code,
+                    kode: type === 'minipack' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
                 });
                 router.push('/kode-bayar')
             }
@@ -144,7 +160,7 @@ export default function PembayaranPage() {
 
     const handleComing = (data) => {
         // console.log('hai')
-        if(data === 'Gopay' || data === 'Pulsa'){
+        if (data === 'Gopay' || data === 'Pulsa') {
             setComing(!coming)
         }
     }
@@ -157,7 +173,7 @@ export default function PembayaranPage() {
                 </div>
             }
 
-            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={'/pembelian-minipack'} close={closeModal} />}
+            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' ? '/pembelian-minipack':'pembelian-box'} close={closeModal} />}
             {coming && <Alert type={1} title={'Coming Soon'} message={''} close={closeComing} />}
 
             <div className="grid grid-col-2 overflow-auto">
@@ -366,7 +382,15 @@ export default function PembayaranPage() {
 
                     <div className="w-80 bg-white shadow mt-8 p-6 rounded-lg" style={{ background: 'linear-gradient(90deg, rgba(0,36,3,1) 0%, rgba(212,13,150,1) 0%, rgba(73,88,218,1) 100%)' }}>
                         <p className="font-normal text-base text-white">
-                            Paket {paket?.durasi} Bulan {paket.paket}
+                            {paket?.name ? (
+                                <>
+                                    Paket {paket?.name}
+                                </>
+                            ) : (
+                                <>
+                                    Paket {paket?.durasi} Bulan {paket.paket}
+                                </>
+                            )}
                         </p>
                         <p className="font-normal text-xs text-white mt-1">
                             {decrypted}
@@ -407,7 +431,13 @@ export default function PembayaranPage() {
                             </div>
                         </div>
                         <p className="font-normal text-xs text-white mt-6">
-                            Mulai {start} - {format(sum, 'dd MMMM yyyy')}
+                            {paket.name === '' ? (
+                                <>
+                                    Mulai {start} - {format(sum, 'dd MMMM yyyy')}
+                                </>
+                            ) : (
+                                ''
+                            )}
                         </p>
                         <p className="font-light text-xs text-white mt-1">
                             <u>Syarat dan ketentuan</u> berlaku
