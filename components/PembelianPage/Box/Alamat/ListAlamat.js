@@ -97,12 +97,14 @@ export default function ListAlamat({ edit, close }) {
         }
     }
 
-    const handleKirim = (id, nama, alamat) => {
+    const handleKirim = (id, nama, alamat, hp) => {
         dispatch({
             type: AlamatAction.SET_ALAMAT,
             receiver_fullname: nama,
             customer_address: alamat,
-            customer_address_id: id
+            customer_address_id: id,
+            customer_name: nama,
+            customer_mobilephone: hp
         });
         close(false)
     }
@@ -160,7 +162,7 @@ export default function ListAlamat({ edit, close }) {
                         <div className='text-left mt-4 ml-8 flex flex-col lg:flex-row gap-x-4'>
                             <div className="flex flex-col gap-y-4">
                                 <div>
-                                    <button className='bg-gray-200 py-3.5  px-7 rounded-full' onClick={() => handleKirim(data?.customer_address_id, data?.receiver_fullname, data?.customer_address)}>
+                                    <button className='bg-gray-200 py-3.5  px-7 rounded-full' onClick={() => handleKirim(data?.customer_address_id, data?.receiver_fullname, data?.customer_address, data?.receiver_phone_number)}>
                                         <p className='font-semibold'>Jadikan Alamat Pengiriman</p>
                                     </button>
                                 </div>

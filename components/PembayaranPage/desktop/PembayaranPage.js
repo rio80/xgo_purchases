@@ -61,12 +61,21 @@ export default function PembayaranPage({ type = 'minipack' }) {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
         const phone = profil?.data?.result?.phone_number
         try {
-            let submit = {
-                ...datapayment,
-                order_id: Cookies.get('order_id'),
-                customer_email: profil?.data?.result?.email,
-                customer_mobilephone: phone.replace(/\D/gm, ''),
-                customer_name: profil?.data?.result?.name
+            let submit = ''
+            if(type === 'minipack'){
+                submit = {
+                    ...datapayment,
+                    order_id: Cookies.get('order_id'),
+                    customer_email: profil?.data?.result?.email,
+                    customer_mobilephone: phone.replace(/\D/gm, ''),
+                    customer_name: profil?.data?.result?.name
+                }
+            }else{
+                submit = {
+                    ...datapayment,
+                    customer_email: profil?.data?.result?.email,
+                    order_id: Cookies.get('order_id')
+                }
             }
 
             const reqPayment = await createRequestPayment(submit)

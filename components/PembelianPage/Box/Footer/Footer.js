@@ -13,6 +13,7 @@ export default function Footer() {
     const [disabled, setDisabled] = React.useState(true)
     const data = useSelector((state) => state.FooterReducer)
     const dataCheckout = useSelector((state) => state.CheckoutReducer)
+    const alamat = useSelector((state) => state.AlamatReducer)
     const [payment, setPayment] = React.useState({
         app_id: "webxgo",
         payment_type: "internal_app",
@@ -40,6 +41,8 @@ export default function Footer() {
             const paket = data?.produk?.paket
             let dataPayment = {
                 ...payment,
+                customer_mobilephone: alamat.customer_mobilephone.replace(/\D/gm, ''),
+                customer_name: alamat.customer_name,
                 amount: +dataCheckout.TotalProductPrice + +dataCheckout.CourierFee,
                 item_details: [
                     {
