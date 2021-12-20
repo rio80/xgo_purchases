@@ -101,7 +101,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 }
 
                 postData = await createOrderBox(submit);
-            }            
+            }
 
             const orderId = type === 'minipack' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
@@ -187,15 +187,33 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
                     <div className="mx-4 flex justify-center mt-8 ">
                         <div className="w-96 bg-white shadow p-6 rounded-lg" style={{ background: 'linear-gradient(90deg, rgba(0,36,3,1) 0%, rgba(212,13,150,1) 0%, rgba(73,88,218,1) 100%)' }}>
+
                             <p className="font-normal text-base text-white">
-                                Paket {paket?.durasi} Bulan {paket.paket}
+                                {paket?.name ? (
+                                    <>
+                                        Paket {paket?.name}
+                                    </>
+                                ) : (
+                                    <>
+                                        Paket {paket?.durasi} Bulan {paket.paket}
+                                    </>
+                                )}
+
                             </p>
                             <p className="font-normal text-xs text-white mt-1">
                                 {decrypted}
                             </p>
                             <div className="flex mt-5">
                                 <div className="self-center">
-                                    <p className="text-xs text-white">Paket {paket?.durasi} Bulan {paket.paket}</p>
+                                    <p className="text-xs text-white">{paket?.name ? (
+                                        <>
+                                            {paket?.name}
+                                        </>
+                                    ) : (
+                                        <>
+                                            Paket {paket?.durasi} Bulan {paket.paket}
+                                        </>
+                                    )}</p>
                                 </div>
                                 <div className="text-xs text-white ml-auto">
                                     <p>RP {convertToRupiah(datapayment.amount)}</p>
@@ -229,7 +247,13 @@ export default function PembayaranPage({ type = 'minipack' }) {
                                 </div>
                             </div>
                             <p className="font-normal text-xs text-white mt-6">
-                                Mulai {start} - {format(sum, 'dd MMMM yyyy')}
+                                {paket.name === '' ? (
+                                    <>
+                                        Mulai {start} - {format(sum, 'dd MMMM yyyy')}
+                                    </>
+                                ) : (
+                                    ''
+                                )}
                             </p>
                             <p className="font-light text-xs text-white mt-1">
                                 <u>Syarat dan ketentuan</u> berlaku

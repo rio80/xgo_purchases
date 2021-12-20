@@ -62,7 +62,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
         const phone = profil?.data?.result?.phone_number
         try {
             let submit = ''
-            if(type === 'minipack'){
+            if (type === 'minipack') {
                 submit = {
                     ...datapayment,
                     order_id: Cookies.get('order_id'),
@@ -70,7 +70,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                     customer_mobilephone: phone.replace(/\D/gm, ''),
                     customer_name: profil?.data?.result?.name
                 }
-            }else{
+            } else {
                 submit = {
                     ...datapayment,
                     customer_email: profil?.data?.result?.email,
@@ -110,7 +110,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 }
 
                 postData = await createOrderBox(submit);
-            }            
+            }
 
             const orderId = type === 'minipack' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
@@ -182,7 +182,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 </div>
             }
 
-            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' ? '/pembelian-minipack':'pembelian-box'} close={closeModal} />}
+            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' ? '/pembelian-minipack' : 'pembelian-box'} close={closeModal} />}
             {coming && <Alert type={1} title={'Coming Soon'} message={''} close={closeComing} />}
 
             <div className="grid grid-col-2 overflow-auto">
@@ -406,7 +406,15 @@ export default function PembayaranPage({ type = 'minipack' }) {
                         </p>
                         <div className="flex mt-7">
                             <div className="self-center">
-                                <p className="text-xs text-white">Paket {paket?.durasi} Bulan {paket.paket}</p>
+                                <p className="text-xs text-white">{paket?.name ? (
+                                    <>
+                                        {paket?.name}
+                                    </>
+                                ) : (
+                                    <>
+                                        Paket {paket?.durasi} Bulan {paket.paket}
+                                    </>
+                                )}</p>
                             </div>
                             <div className="text-xs text-white ml-auto">
                                 <p>RP {convertToRupiah(datapayment?.amount)}</p>
