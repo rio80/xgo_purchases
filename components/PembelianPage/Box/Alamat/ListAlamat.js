@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteAddress, getProfil, saveAddress } from "../../../../utils/apiHandlers";
 import { AlamatAction } from '../../../../store/Alamat/AlamatAction'
 
@@ -15,7 +15,8 @@ function getEmail() {
 }
 
 export default function ListAlamat({ edit, close }) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
+    const alamatRedux = useSelector((state) => state.AlamatReducer.main_address)
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([])
     const [loadingUtama, setLoadingUtama] = useState(false)
@@ -48,6 +49,10 @@ export default function ListAlamat({ edit, close }) {
                     try {
                         const getDetail = await getProfil(getEmail())
                         setData(getDetail?.data?.result?.addresses)
+                        dispatch({
+                            type: AlamatAction.SET_MAIN,
+                            main_address: !alamatRedux
+                        })
                     } catch (e) {
                         console.log(e)
                     }

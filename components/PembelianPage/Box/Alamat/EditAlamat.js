@@ -2,6 +2,8 @@ import { Tab, Switch } from "@headlessui/react";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { AlamatAction } from "../../../../store/Alamat/AlamatAction";
 import { getCity, getDistrict, getProfil, getProvince, getSubDistrict, getZipCode, saveAddress } from "../../../../utils/apiHandlers";
 import ComboBox from "../../../shared/ComboBox/ComboBox";
 import CustomInput from "../../../shared/CustomInput/CustomInput";
@@ -21,6 +23,8 @@ function getEmail() {
 }
 
 export default function EditAlamat({ id, close }) {
+    const alamatRedux = useSelector((state) => state.AlamatReducer.main_address)
+    const dispatch = useDispatch()
     let [categories] = useState(['Rumah', 'Kantor', 'Lainnya'])
     const [category, setCategory] = useState('Rumah')
     const { watch, control, register, handleSubmit, reset } = useForm();
@@ -118,7 +122,10 @@ export default function EditAlamat({ id, close }) {
                 const postData = await saveAddress(data)
                 setLoading(false)
                 close(false)
-                
+                dispatch({
+                    type: AlamatAction.SET_MAIN,
+                    main_address: !alamatRedux
+                })
             } catch (e) {
                 console.log(e)
                 setLoading(false)
@@ -196,6 +203,10 @@ export default function EditAlamat({ id, close }) {
 
     }, [name, hp, alamat, prov, kec, kab, kel, kodePos])
 
+    const handleId = () => {
+        //nothing
+    }
+
     return (
         <>
             <p className='text-center font-nunito text-lg font-extrabold'>Ubah Alamat </p>
@@ -226,15 +237,15 @@ export default function EditAlamat({ id, close }) {
                     <CustomInput placeholder='Masukan Nomor Telepon Anda' type={'number'} label='Nomor Telepon' {...register("receiver_phone_number")} />
                     <CustomInput placeholder='Masukan Alamat Anda' label='Alamat' {...register("customer_address")} />
                     <div className="mt-8"></div>
-                    <ComboBox data={province} variant='white' name="customer_province" placeholder="Provinsi" dataValue={'cek'} control={control} />
+                    <ComboBox data={province} id={handleId} variant='white' name="customer_province" placeholder="Provinsi" dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
-                    <ComboBox data={city} variant='white' name='customer_city' placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} dataValue={'cek'} control={control} />
+                    <ComboBox data={city} id={handleId} variant='white' name='customer_city' placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
-                    <ComboBox data={district} variant='white' name='customer_district' placeholder='Kecamatan' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} dataValue={'cek'} control={control} />
+                    <ComboBox data={district} id={handleId} variant='white' name='customer_district' placeholder='Kecamatan' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
-                    <ComboBox data={subDistrict} variant='white' name='customer_subdistrict' placeholder='Kelurahan' message={'Silahkan pilih Kecamatan terlebih dahulu'} dataValue={'cek'} control={control} />
+                    <ComboBox data={subDistrict} id={handleId} variant='white' name='customer_subdistrict' placeholder='Kelurahan' message={'Silahkan pilih Kecamatan terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
-                    <ComboBox data={zipCode} variant='white' name='customer_zipcode' placeholder='Kode Pos' message={'Silahkan pilih Kelurahan terlebih dahulu'} dataValue={'cek'} control={control} />
+                    <ComboBox data={zipCode} id={handleId} variant='white' name='customer_zipcode' placeholder='Kode Pos' message={'Silahkan pilih Kelurahan terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
                     <div className='grid grid-cols-2'>
                         <div>

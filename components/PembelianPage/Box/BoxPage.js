@@ -63,9 +63,11 @@ export default function BoxPage() {
                 const dataAlamat = getDetail.data.result.addresses.find(x => x.main_address === '1')
                 if (getDetail.data.result.addresses.length > 0) {
                     setList(true)
+                }else{
+                    setList(false)
                 }
 
-                if (alamatPengiriman.customer_address_id !== '') {
+                if (alamatPengiriman?.customer_address_id !== '') {
                     setAlamat(alamatPengiriman)
                     getDataJne(alamatPengiriman.customer_address_id)
                     dispatch({
@@ -78,17 +80,32 @@ export default function BoxPage() {
                         CustomerAddressId: alamatPengiriman.customer_address_id
                     })
                 } else {
-                    setAlamat(dataAlamat)
-                    getDataJne(dataAlamat.customer_address_id)
-                    dispatch({
-                        type: FooterAction.SET_DATA,
-                        nama: dataAlamat.receiver_fullname,
-                        alamat: dataAlamat.customer_address
-                    })
-                    dispatch({
-                        type: CheckoutAction.SET_ID_ADRRESS,
-                        CustomerAddressId: dataAlamat.customer_address_id
-                    })
+                    setAlamat(typeof dataAlamat !== 'undefined' ? dataAlamat : '')
+                    if (typeof dataAlamat !== 'undefined') {
+                        getDataJne(dataAlamat.customer_address_id)
+                        dispatch({
+                            type: FooterAction.SET_DATA,
+                            nama: dataAlamat.receiver_fullname,
+                            alamat: dataAlamat.customer_address
+                        })
+                        dispatch({
+                            type: CheckoutAction.SET_ID_ADRRESS,
+                            CustomerAddressId: dataAlamat.customer_address_id
+                        })
+                    } else {
+                        setCourier([])
+                        dispatch({
+                            type: FooterAction.SET_DATA,
+                            nama: '-',
+                            alamat: '-'
+                        })
+                        dispatch({
+                            type: CheckoutAction.SET_ID_ADRRESS,
+                            CustomerAddressId: ''
+                        })
+
+
+                    }
                 }
                 reset({
                     Courier: ''
@@ -101,11 +118,10 @@ export default function BoxPage() {
                 })
 
             } catch (e) {
-                console.log(e)
-
+                // console.log(e)
             }
         })();
-    }, [alamatPengiriman]);
+    }, [alamatPengiriman, alamatPengiriman.main_address]);
 
     React.useEffect(() => {
         if (produk !== '' && typeof produk !== 'undefined') {
@@ -155,11 +171,11 @@ export default function BoxPage() {
 
             dispatch({
                 type: CheckoutAction.SET_JNE,
-                CourierPackageCode : '',
-                CourierPackageLabel : '',
-                CourierFee : '',
-                CityCode : '',
-                Email : '',
+                CourierPackageCode: '',
+                CourierPackageLabel: '',
+                CourierFee: '',
+                CityCode: '',
+                Email: '',
             })
         } catch (e) {
             console.log(e)
@@ -203,8 +219,6 @@ export default function BoxPage() {
                 getDataJne(alamat.customer_address_id, sub > 10 ? 10 : sub)
             }
         }
-
-
 
     }
 

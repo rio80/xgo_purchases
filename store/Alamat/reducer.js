@@ -5,7 +5,8 @@ const initialState = {
     customer_address: '',
     customer_address_id: '',
     customer_mobilephone: '',
-    customer_name: ''
+    customer_name: '',
+    main_address: false
 };
 
 export default function AlamatReducer(state = initialState, action) {
@@ -19,6 +20,13 @@ export default function AlamatReducer(state = initialState, action) {
             newState.customer_name = action.customer_name;
             return newState;
         }
+
+        case AlamatAction.SET_MAIN:{
+            const newState = { ...state };
+            newState.main_address = action.main_address
+            return newState
+        }
+        
         default:
             return state;
     }

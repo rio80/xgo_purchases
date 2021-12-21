@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 import ComboBox from '../../../shared/ComboBox/ComboBox'
 import { getCity, getDistrict, getProvince, getSubDistrict, getZipCode, saveAddress } from '../../../../utils/apiHandlers'
 import Cookies from 'js-cookie'
+import { useDispatch, useSelector } from 'react-redux'
+import { AlamatAction } from '../../../../store/Alamat/AlamatAction'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -22,6 +24,8 @@ function getEmail() {
 }
 
 export default function AddAlamat({ id, close }) {
+    const dispatch = useDispatch()
+    const alamatRedux = useSelector((state) => state.AlamatReducer.main_address)
     let [categories] = useState(['Rumah', 'Kantor', 'Lainnya'])
     const { watch, control, register, handleSubmit } = useForm();
     const name = watch("receiver_fullname")
@@ -167,9 +171,16 @@ export default function AddAlamat({ id, close }) {
             }
             try {
                 const postData = await saveAddress(data)
+                if(enabled){
+                    dispatch({
+                        type: AlamatAction.SET_MAIN,
+                        main_address: !alamatRedux
+                    })
+                }
                 setLoading(false)
                 setOpen(false)
                 close(false)
+                
 
             } catch (e) {
                 console.log(e)
