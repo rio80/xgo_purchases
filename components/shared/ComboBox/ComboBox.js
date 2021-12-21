@@ -87,7 +87,7 @@ const ComboBox = ({ id, control, search = true, placeholder = 'Silahkan Pilih', 
                             </span>
                         </button>
                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                            <img src={'../../png/right.png'}
+                            <img src={'../png/right.png'}
                                 className="h-5 w-5 text-gray-400 cursor-pointer"
                                 aria-hidden="true"
                             />
@@ -105,7 +105,7 @@ const ComboBox = ({ id, control, search = true, placeholder = 'Silahkan Pilih', 
                                 {search ?
                                     <div className="mt-3.5 py-4 relative flex items-stretch flex-grow ">
                                         <div className="absolute inset-y-0 left-0 pl-8 flex items-center text-sm leading-5">
-                                            <img src={'../../png/search.png'} />
+                                            <img src={'../png/search.png'} />
                                         </div>
                                         <input
                                             type="text"
