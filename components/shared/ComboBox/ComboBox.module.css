@@ -1,0 +1,48 @@
+  .container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .materialTextfield {
+    position: relative;
+  }
+  
+  .materialLabel {
+    position: absolute;
+    font-size: 1rem;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    padding: 0 0.3rem;
+    margin: 0 0.5rem;
+    transition: 0.1s ease-out;
+    transform-origin: left top;
+    pointer-events: none;
+  }
+  
+  .materialInput {
+    width: 100%;
+    font-size: 1rem;
+    outline: none;
+    border: 1.5px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    padding: 0.6rem 0.7rem;
+    transition: 0.1s ease-out;
+  }
+  
+  .materialInput:focus+.materialLabel {
+    top: 0;
+    transform: translateY(-50%) scale(0.9) !important;
+  }
+  
+  .materialInput:not(:placeholder-shown)+.materialLabel {
+    top: 0;
+    transform: translateY(-50%) scale(0.9) !important;
+  }
+  
+  .materialInput:not(:focus)::placeholder {
+    opacity: 0;
+  }  
