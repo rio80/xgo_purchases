@@ -105,7 +105,7 @@ const ComboBox = ({ id, control, search = true, placeholder = 'Silahkan Pilih', 
                                 {search ?
                                     <div className="mt-3.5 py-4 relative flex items-stretch flex-grow ">
                                         <div className="absolute inset-y-0 left-0 pl-8 flex items-center text-sm leading-5">
-                                            <img src={'../png/search.png'} />
+                                            <img src={'../png/arch.png'} />
                                         </div>
                                         <input
                                             type="text"
