@@ -21,6 +21,8 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { FooterAction } from '../../../store/Footer/FooterAction';
 import { CheckoutAction } from '../../../store/Checkout/CheckoutAction';
+import { data } from 'autoprefixer';
+import { AlamatAction } from '../../../store/Alamat/AlamatAction';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -92,6 +94,15 @@ export default function BoxPage() {
                             type: CheckoutAction.SET_ID_ADRRESS,
                             CustomerAddressId: dataAlamat.customer_address_id
                         })
+
+                        dispatch({
+                            type: AlamatAction.SET_ALAMAT,
+                            receiver_fullname: dataAlamat.receiver_fullname,
+                            customer_address: dataAlamat.customer_address,
+                            customer_address_id: dataAlamat.customer_address_id,
+                            customer_name: dataAlamat.receiver_fullname,
+                            customer_mobilephone: dataAlamat.receiver_phone_number
+                        });
                     } else {
                         setCourier([])
                         dispatch({
