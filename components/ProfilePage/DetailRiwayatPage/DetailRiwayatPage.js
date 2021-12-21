@@ -15,7 +15,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
         (async () => {
             try {
                 const getData = type === 'MINIPACK' ? await getTransactionHistoryMinipack({ email: email, transaction_id: transactionId }) : await getTransactionHistoryBox({ email: email, transaction_id: transactionId })
-                // console.log(getData)
+                console.log(getData)
                 setData(getData.data.result)
                 setLoading(false)
             } catch (e) {
@@ -82,14 +82,14 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                         <div className="flex mt-6">
                             <p className="self-center text-base font-medium text-gray-500">Nomor Resi</p>
                         </div>
-                        <div className={classNames(data?.awb_no !== 'null' ? "mr-0" : "mr-4", "w-40 ml-auto mt-6")}>
-                            {data?.awb_no !== 'null' ? (
+                        <div className={classNames(data?.awb_no !== '' ? "mr-0" : "mr-4", "w-auto ml-auto mt-6")}>
+                            {data?.awb_no === '' || data?.awb_no === null ? (
                                 <p className="text-right">Nomor resi belum tersedia</p>
                             ) : (
                                 <div className="ml-auto mt-3.5 relative flex items-stretch flex-grow ">
                                     <button
                                         type="button"
-                                        className="bg-gray-100 relative w-full border-none rounded-l-full shadow-sm py-3 px-7 text-left cursor-default focus:outline-none sm:text-sm"
+                                        className="bg-gray-100 relative w-full border-none rounded-l-full shadow-sm py-3 pl-7 pr-12 text-left cursor-default focus:outline-none sm:text-sm"
                                         ariaHaspopup="listbox"
                                         ariaExpanded="true"
                                         ariaLabelledby="listbox-label"
@@ -163,11 +163,11 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                         <div className="flex mt-6">
                             <p className="self-center text-base font-medium text-gray-500">Kode Pembayaran</p>
                         </div>
-                        <div className="w-40 ml-auto mr-4 mt-6">
+                        <div className="w-auto ml-auto mr-4 mt-6">
                             <div className="ml-auto mt-3.5 relative flex items-stretch flex-grow ">
                                 <button
                                     type="button"
-                                    className="bg-gray-100 relative w-full border-none rounded-l-full shadow-sm py-3 px-7 text-left cursor-default focus:outline-none sm:text-sm"
+                                    className="bg-gray-100 relative w-full border-none rounded-l-full shadow-sm py-3 pl-7 pr-12 text-left cursor-default focus:outline-none sm:text-sm"
                                     ariaHaspopup="listbox"
                                     ariaExpanded="true"
                                     ariaLabelledby="listbox-label"
