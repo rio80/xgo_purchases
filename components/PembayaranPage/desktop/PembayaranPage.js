@@ -62,7 +62,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
         const phone = profil?.data?.result?.phone_number
         try {
             let submit = ''
-            if (type === 'minipack') {
+            if (type === 'minipack' || type === 'stb') {
                 submit = {
                     ...datapayment,
                     order_id: Cookies.get('order_id'),
@@ -94,7 +94,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
             let submit = ''
             let postData = ''
 
-            if (type === 'minipack') {
+            if (type === 'minipack' || type === 'stb') {
                 submit = {
                     ...createorder,
                     payment_method_id: selected.id,
@@ -112,7 +112,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 postData = await createOrderBox(submit);
             }
 
-            const orderId = type === 'minipack' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
+            const orderId = type === 'minipack' || type === 'stb' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
                 checkPayment()
@@ -182,7 +182,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 </div>
             }
 
-            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' ? '/pembelian-minipack' : 'pembelian-box'} close={closeModal} />}
+            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box'} close={closeModal} />}
             {coming && <Alert type={1} title={'Coming Soon'} message={''} close={closeComing} />}
 
             <div className="grid grid-col-2 overflow-auto">
@@ -470,6 +470,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
                         >
                             Lanjut Bayar
                         </button>
+
+                        <p className='mt-10 text-center text-sm font-semibold cursor-pointer' style={{color: '#0285E4'}} onClick={()=>router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box')}>Kembali</p>
                     </div>
                 </div>
             </div>

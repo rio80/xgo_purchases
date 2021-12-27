@@ -81,8 +81,8 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-                <div className="hidden lg:block lg:w-3/5 flex-grow">
-                    <div className="flex flex-row">
+                <div className="hidden lg:flex lg:w-3/5 flex-grow">
+                    <div className="flex flex-row ml-auto">
                         <div className="border-l-2 h-auto w-56 flex">
                             <div className="mx-auto py-3 flex flex-col px-2">
                                 <div>

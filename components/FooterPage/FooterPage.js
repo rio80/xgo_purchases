@@ -5,7 +5,6 @@ function classNames(...classes) {
 export default function FooterPage({variant}) {
     return (
         <footer aria-labelledby="footer-heading" style={{ backgroundColor: '#112d57' }} className={classNames(variant ? "bottom-0 relative w-full" : "")}>
-
             <div className="flex justify-between items-center h-32 px-16">
                 <div className="flex">
                     <div className="flex-shrink-0 flex items-center hidden lg:flex">
@@ -14,8 +13,6 @@ export default function FooterPage({variant}) {
                             src={`../png/transvision-light.png`}
                             alt="XGO"
                             width="204px"
-                            
-
                         />
                     </div>
                 </div>

@@ -61,12 +61,21 @@ export default function PembayaranPage({ type = 'minipack' }) {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
         const phone = profil?.data?.result?.phone_number
         try {
-            let submit = {
-                ...datapayment,
-                order_id: Cookies.get('order_id'),
-                customer_email: profil?.data?.result?.email,
-                customer_mobilephone: phone.replace(/\D/gm, ''),
-                customer_name: profil?.data?.result?.name
+            let submit = ''
+            if (type === 'minipack' || type === 'stb') {
+                submit = {
+                    ...datapayment,
+                    order_id: Cookies.get('order_id'),
+                    customer_email: profil?.data?.result?.email,
+                    customer_mobilephone: phone.replace(/\D/gm, ''),
+                    customer_name: profil?.data?.result?.name
+                }
+            } else {
+                submit = {
+                    ...datapayment,
+                    customer_email: profil?.data?.result?.email,
+                    order_id: Cookies.get('order_id')
+                }
             }
 
             const reqPayment = await createRequestPayment(submit)
@@ -85,7 +94,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
             let submit = ''
             let postData = ''
 
-            if (type === 'minipack') {
+            if (type === 'minipack' || type === 'stb') {
                 submit = {
                     ...createorder,
                     payment_method_id: selected.id,
@@ -103,7 +112,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 postData = await createOrderBox(submit);
             }
 
-            const orderId = type === 'minipack' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
+            const orderId = type === 'minipack' || type === 'stb' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
                 checkPayment()
@@ -126,7 +135,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
         setOpen(data);
     };
 
-    const convertToRupiah = (angka) => {
+    const convertToRupiah = (angka = 0) => {
         var rupiah = '';
         var angkarev = angka.toString().split('').reverse().join('');
         for (var i = 0; i < angkarev.length; i++) if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
@@ -159,6 +168,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
     }, []);
 
     const handleComing = (data) => {
+        // console.log('hai')
         if (data === 'Gopay' || data === 'Pulsa') {
             setComing(!coming)
         }
@@ -173,7 +183,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 </div>
             }
 
-            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={'/pembelian-minipack'} close={closeModal} />}
+            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box'} close={closeModal} />}
             {coming && <Alert type={1} title={'Coming Soon'} message={''} close={closeComing} />}
 
             <div className="absolute top-0 left-0 w-full min-h-screen lg:hidden mt-12" style={{ backgroundColor: '#f6f9ff' }}>
@@ -455,16 +465,26 @@ export default function PembayaranPage({ type = 'minipack' }) {
                         </div>
                     </div>
                     <div className="sticky bottom-0 mt-2 bg-white drop-shadow-3xl h-20 px-4 z-20">
-                        <div className="my-5">
-                            <button
-                                type="button"
-                                className="w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                onClick={handleBayar}
-                            >
-                                Lanjut Bayar
-                            </button>
+                        <div className="my-5 flex flex-row gap-x-4">
+                            <div className='w-1/2'>
+                                <button
+                                    type="button"
+                                    className="w-full border-blue-600 border-2 text-blue-600 self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-semibold rounded-full shadow-sm hover:bg-blue-700"
+                                    onClick={() => router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box')}
+                                >
+                                    Kembali
+                                </button>
+                            </div>
+                            <div className='w-1/2'>
+                                <button
+                                    type="button"
+                                    className="w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onClick={handleBayar}
+                                >
+                                    Lanjut Bayar
+                                </button>
+                            </div>
                         </div>
-
                     </div>
                 </div>
 

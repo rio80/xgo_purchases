@@ -1,8 +1,14 @@
 import Cookies from "js-cookie";
-import { useState, useEffect } from "react";
+import { Menu, Dialog, Transition } from '@headlessui/react'
+import { DotsVerticalIcon } from '@heroicons/react/solid'
+import { Fragment, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAddress, getProfil, saveAddress } from "../../../../utils/apiHandlers";
 import { AlamatAction } from '../../../../store/Alamat/AlamatAction'
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
 
 function getEmail() {
     const CryptoJS = require("crypto-js");
@@ -114,6 +120,62 @@ export default function ListAlamat({ edit, close }) {
         close(false)
     }
 
+    function Action({data}) {
+        return (
+            <Menu as="div" className="relative inline-block text-left">
+                <div>
+                    <Menu.Button className="flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+                        <span className="sr-only">Open options</span>
+                        <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
+                    </Menu.Button>
+                </div>
+    
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="py-1">
+                            <Menu.Item>
+                                {({ active }) => (
+                                    <a
+                                        href="#"
+                                        className={classNames(
+                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            'block px-4 py-2 text-sm'
+                                        )}
+                                        onClick={() => edit(data)}
+                                    >
+                                        Ubah
+                                    </a>
+                                )}
+                            </Menu.Item>
+                            <Menu.Item>
+                                {({ active }) => (
+                                    <a
+                                        href="#"
+                                        className={classNames(
+                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            'block px-4 py-2 text-sm'
+                                        )}
+                                        onClick={() => handleDelete(data)}
+                                    >
+                                        Hapus
+                                    </a>
+                                )}
+                            </Menu.Item>
+                        </div>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
+        )
+    }
+
     useEffect(() => (
         (async () => {
             try {
@@ -160,20 +222,24 @@ export default function ListAlamat({ edit, close }) {
                                     </div>
                                 </div>
                             }
+                            <div className='ml-auto my-auto'>
+                                <Action data={data?.customer_address_id} />
+                            </div>
+
                         </div>
                         <div className='text-left mt-3 ml-8'>
                             <p className='text-sm text-gray-500 font-semibold'>{camelize(data?.customer_address)}, {camelize(data?.customer_city)}, {camelize(data?.customer_province)}, {data?.customer_zipcode}</p>
                         </div>
                         <div className='text-left mt-4 ml-8 flex flex-col lg:flex-row gap-x-4'>
-                            <div className="flex flex-col gap-y-4">
+                            <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-x-4">
                                 <div>
-                                    <button className='bg-gray-200 py-3.5  px-7 rounded-full' onClick={() => handleKirim(data?.customer_address_id, data?.receiver_fullname, data?.customer_address, data?.receiver_phone_number)}>
+                                    <button className='bg-gray-200 py-3.5 px-6 rounded-full' onClick={() => handleKirim(data?.customer_address_id, data?.receiver_fullname, data?.customer_address, data?.receiver_phone_number)}>
                                         <p className='font-semibold'>Jadikan Alamat Pengiriman</p>
                                     </button>
                                 </div>
                                 {data?.main_address === '0' &&
                                     <div>
-                                        <button className='bg-gray-200 py-3.5  px-7 rounded-full' onClick={() => handleDefault(data?.customer_address_id)}>
+                                        <button className='bg-gray-200 py-3.5 px-6 rounded-full' onClick={() => handleDefault(data?.customer_address_id)}>
                                             {loadingUtama ?
                                                 <>
                                                     <p className='font-semibold'>Processing...</p>
@@ -184,17 +250,6 @@ export default function ListAlamat({ edit, close }) {
                                         </button>
                                     </div>
                                 }
-                            </div>
-
-                            <div>
-                                <button className='bg-gray-200 py-3.5 my-3.5 lg:my-0 px-7 rounded-full' onClick={() => edit(data?.customer_address_id)}>
-                                    <p className='font-semibold'>Ubah</p>
-                                </button>
-                            </div>
-                            <div>
-                                <button className='bg-gray-200 py-3.5 px-7 rounded-full' onClick={() => handleDelete(data?.customer_address_id)}>
-                                    <p className='font-semibold'>Hapus</p>
-                                </button>
                             </div>
                         </div>
 
