@@ -1,17 +1,17 @@
 import { format, intervalToDuration, subDays } from 'date-fns'
 
+function Sisa({end = ''}) {
+        
+    const date1 = new Date();
+    const date2 = new Date(end);
+    const Difference_In_Time = date2.getTime() - date1.getTime();
+    const Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+    return Difference_In_Days
+}
 
 export default function PaketPage({ minipack }) {
-    function Sisa({end = ''}) {
-        
-        const date1 = new Date();
-        const date2 = new Date(end);
-        const Difference_In_Time = date2.getTime() - date1.getTime();
-        const Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
-
-        return Difference_In_Days
-    }
-
+    
     return (
         <>
             {minipack?.data?.result.map((data) => (
