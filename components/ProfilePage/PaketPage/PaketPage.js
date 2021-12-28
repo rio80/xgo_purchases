@@ -1,13 +1,14 @@
 import { format, intervalToDuration, subDays } from 'date-fns'
 
 
-export default function PaketPage({minipack}) {
-    const sisa = (end) => {
-
+export default function PaketPage({ minipack }) {
+    function Sisa({end = ''}) {
+        
         const date1 = new Date();
         const date2 = new Date(end);
         const Difference_In_Time = date2.getTime() - date1.getTime();
         const Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
         return Difference_In_Days
     }
 
@@ -20,7 +21,7 @@ export default function PaketPage({minipack}) {
                     </div>
                     <div className="grid grid-cols-2">
                         <div className="flex">
-                            <p className="self-center text-xl lg:text-2xl" style={{ color: '#0285e4' }}>{sisa(data?.end_date)}</p>
+                            <p className="self-center text-xl lg:text-2xl" style={{ color: '#0285e4' }}><Sisa end={data?.end_date} /></p>
                             <p className="ml-4 self-center text-gray-500 text-xl lg:text-2xl">Hari Tersisa</p>
                         </div>
                         <div>
