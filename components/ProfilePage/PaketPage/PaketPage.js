@@ -1,7 +1,6 @@
-import { format, intervalToDuration, subDays } from 'date-fns'
+import { format } from 'date-fns'
 
 function Sisa({ end = '' }) {
-    console.log(end)
     const date1 = new Date();
     const date2 = new Date(end);
     const Difference_In_Time = date2.getTime() - date1.getTime();
@@ -15,9 +14,9 @@ export default function PaketPage({ minipack }) {
 
     return (
         <>
-            {minipack?.data?.result.map((data) => (
+            {minipack?.data?.result.map((data,idx) => (
                 <>
-                    <div className="mt-12 w-60">
+                    <div className="mt-12 w-60" key={idx}>
                         <p className="text-lg lg:text-xl text-gray-500">Paket {data.title}</p>
                     </div>
                     <div className="grid grid-cols-2">

@@ -105,6 +105,10 @@ export function deleteAddress(data){
     return apiPost('/transvisionplus/customer/address/delete',data)
 }
 
+export function createOrderBox(data) {
+    return apiPost("/transvisionplus/xstream/order", data);
+}
+
 export function getDataStb(data) {
     return apiPost("/billing/payment/stb/show/data", {trx_id: data});
 }
