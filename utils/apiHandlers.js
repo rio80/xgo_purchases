@@ -112,3 +112,15 @@ export function createOrderBox(data) {
 export function getDataStb(data) {
     return apiPost("/billing/payment/stb/show/data", {trx_id: data});
 }
+
+export function activationBox(data) {
+    return apiPost("/transvisionplus/xstream/activation", data);
+}
+
+export function activationStatus(data) {
+    return apiGet(`/transvisionplus/xstream/account-info?email=${data}`);
+}
+
+export function reprocessActivation(data){
+    return apiPost('/transvisionplus/xstream/activation/reprocess', data)
+}

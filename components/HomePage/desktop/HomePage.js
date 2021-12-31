@@ -10,19 +10,47 @@ import MinipackSection from '../shared/MinipackSection';
 import ActivationSection from '../shared/ActivationSection';
 import FaqSection from '../shared/FaqSection';
 import Alert from '../../../pages/shared/alert/Alert';
-
+import { activationStatus } from '../../../utils/apiHandlers';
+import Cookies from 'js-cookie';
+import StatusActivationSection from '../shared/StatusActivationSection';
+import { useSelector } from 'react-redux';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function HomePage() {
+    const aktivasi = useSelector((state) => state.AktivasiReducer.aktivasi)
     const router = useRouter();
+    const auth = Cookies.get('auth')
     const [open, setOpen] = React.useState(false);
+    const [data, setData] = React.useState('')
 
     const closeModal = (data) => {
         setOpen(data);
     };
+
+    const getEmail = () => {
+        const CryptoJS = require("crypto-js");
+        const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
+        const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
+        const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
+
+        return decrypted
+    }
+
+    React.useEffect(() => {
+        if (typeof auth !== 'undefined') {
+            (async () => {
+                try {
+                    const getData = await activationStatus(getEmail())
+                    setData(getData?.data?.result)
+                } catch (e) {
+                    console.log(e)
+                }
+            })()
+        }
+    }, [aktivasi])
 
     return (
         <>
@@ -73,7 +101,7 @@ export default function HomePage() {
                         </div>
 
                         <div className="flex justify-center">
-                            <div className="mt-14 px-28" style={{ maxWidth: '1024px' }}>
+                            <div className="mt-14" style={{ maxWidth: '1024px' }}>
                                 <div className="grid gap-8 grid-cols-2">
                                     <div className="bg-white rounded-lg py-12 px-10">
                                         <p className="text-3xl text-center font-nunito font-bold">XGO</p>
@@ -120,7 +148,7 @@ export default function HomePage() {
                         </div>
 
                         <MinipackSection />
-                        <ActivationSection />
+                        {data === '' ? <ActivationSection /> : <StatusActivationSection data={data} />}
                         <FaqSection />
 
                         <div className="flex justify-center" style={{ backgroundColor: '#e1f1fd' }}>
@@ -165,4 +193,3 @@ export default function HomePage() {
         </>
     )
 }
-

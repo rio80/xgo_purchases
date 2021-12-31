@@ -18,7 +18,6 @@ import Cookies from "js-cookie";
 export default function MinipackSection() {
     const [open, setOpen] = React.useState(false);
     const auth = Cookies.get('auth')
-    console.log(auth)
 
     const closeModal = (data) => {
         setOpen(data);

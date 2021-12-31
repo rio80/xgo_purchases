@@ -7,6 +7,10 @@
     border: 1px solid rgba(255, 255, 255, 0.37);
 }
 
+.btn{
+    color: #0285E4
+}
+
 @media only screen and (min-width: 1024px) {
     .open {
       height: 900px;
@@ -15,6 +19,14 @@
     .close {
         height: 500px;
       }
+
+    .openAktivasi {
+        height: 700px;
+    }
+
+    .closeAktivasi {
+        height: 400px;
+    }
 }
 
 @media only screen and (max-width: 1023px) {
@@ -24,5 +36,13 @@
 
     .close{
         height: 560px;
+    }
+
+    .openAktivasi {
+        height: 700px;
+    }
+
+    .closeAktivasi {
+        height: 400px;
     }
 }
