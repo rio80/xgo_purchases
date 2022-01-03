@@ -388,7 +388,7 @@ export default function ActivationSection() {
                         </div>
                     </div>
                     {aktivasi ?
-                        <form onSubmit={handleSubmit(handlePost)}>
+                        <form onSubmit={handleSubmit(handlePost)} autoComplete='off'>
                             <div className="flex justify-center mt-14 flex-col">
                                 <div className="w-full lg:w-2/4 relative flex mx-auto mb-8">
                                     <div className="absolute inset-y-0 left-0 pl-6 flex items-center text-sm leading-5">
