@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { useForm } from 'react-hook-form';
 import { Dialog, Popover, Transition } from '@headlessui/react'
 import { activationBox } from '../../../utils/apiHandlers';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AktivasiAction } from '../../../store/Aktivasi/AktivasiAction';
 
 function classNames(...classes) {
@@ -13,6 +13,7 @@ function classNames(...classes) {
 }
 
 export default function ActivationSection() {
+    const aktivasiReducer = useSelector((state) => state.AktivasiReducer.aktivasi)
     const dispatch = useDispatch()
     const { handleSubmit, register, reset, watch } = useForm();
     const watchAllFields = watch();
@@ -21,6 +22,7 @@ export default function ActivationSection() {
     const [tnc, setTnc] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const [login, setLogin] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
     const [modalTnc, setModalTnc] = React.useState(false)
     const [disabled, setDisabled] = React.useState(false)
     const [aktivasi, setAktivasi] = React.useState(false)
@@ -89,6 +91,7 @@ export default function ActivationSection() {
     }
 
     const handlePost = async (handleSubmit) => {
+        setLoading(true)
         try {
             if (!disabled) {
                 let submit = {
@@ -97,18 +100,19 @@ export default function ActivationSection() {
                     box_pw: Buffer.from(handleSubmit?.box_pw).toString('base64')
                 }
 
-                const postData = await activationBox(handleSubmit)
-                if (postData) { 
+                const postData = await activationBox(submit)
+                if (postData) {
                     dispatch({
                         type: AktivasiAction.SET_AKTIVASI,
-                        aktivasi: true
+                        aktivasi: !aktivasiReducer
                     })
                 }
             }
         } catch (e) {
-            // setOpen(true)
-            // setErr(e?.res?.data?.message?.[0])
+            setOpen(true)
+            setErr(e?.res?.data?.message?.[0])
         }
+        setLoading(false)
     };
 
     React.useEffect(() => {
@@ -279,12 +283,14 @@ export default function ActivationSection() {
                                     />
                                 </div>
                                 <div className="mt-8 flex justify-center">
-                                    {disabled ? <Tooltip /> :
+                                    {disabled ?
+                                        <Tooltip />
+                                        :
                                         <button
                                             type={disabled ? "button" : "submit"}
                                             className={classNames(`${css.btn} bg-gray-50 w-40 w-full self-center items-center px-8 py-5 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm`)}
                                         >
-                                            Aktivasi
+                                            {loading ? 'Processing' : 'Aktivasi'}
                                         </button>
                                     }
                                 </div>

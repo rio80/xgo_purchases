@@ -176,7 +176,7 @@ export default function ProfilePage() {
                         {data !== '' &&
                             <div className='mt-12'>
                                 <div className='flex justify-center'>
-                                    <p className='font-nunito text-3xl font-extrabold'>Xstream Box Saya : {data?.activation_status}</p>
+                                    <p className='font-nunito text-3xl font-extrabold text-center'>Xstream Box Saya : {data?.activation_status}</p>
                                 </div>
                                 <div className='mt-5 flex'>
                                     <button
@@ -194,7 +194,7 @@ export default function ProfilePage() {
                                             }
                                     </button>
                                 </div>
-                                <div className='w-full flex flex-row gap-x-4 '>
+                                <div className='w-full flex flex-row gap-x-4'>
                                     <div className='w-1/2 flex flex-col gap-y-12 py-12'>
                                         <div className='flex flex-row gap-x-5'>
                                             <img src={'../png/status/black/box.png'} className='mx-2 my-auto' />

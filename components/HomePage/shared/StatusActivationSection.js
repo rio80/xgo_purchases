@@ -41,7 +41,7 @@ export default function StatusActivationSection({ data = '' }) {
                 setDataAktivasi(getData?.data?.result)
             }
         } catch (e) {
-            console.log(e)
+            // console.log(e)
         }
         setLoading(false)
     }
@@ -118,10 +118,10 @@ export default function StatusActivationSection({ data = '' }) {
                     </div>
 
                     <div className="mt-14 flex mx-auto" style={{ maxWidth: '1024px' }}>
-                        <div className='grid grid-cols-6 grid-rows-4 gap-y-8 gap-x-8 mt-8 flex mx-auto justify-between'>
-                            <div className='col-span-2 row-span-4 flex my-auto flex-col'>
-                                <p className='text-gray-50 font-nunito font-extrabold text-5xl'>{dataAktivasi?.activation_status}</p>
-                                <div className='flex flex-row mt-4 gap-x-4'>
+                        <div className='flex flex-col lg:grid lg:grid-cols-6 lg:grid-rows-4 lg:gap-y-8 gap-x-8 mt-8 mx-auto justify-between gap-y-8'>
+                            <div className='lg:col-span-2 row-span-4 flex my-auto flex-col'>
+                                <p className='mx-auto text-gray-50 font-nunito font-extrabold text-2xl lg:mx-0 lg:text-5xl'>{dataAktivasi?.activation_status}</p>
+                                <div className='flex flex-row mt-4 gap-x-4 mx-auto lg:mx-0'>
                                     <div className='my-auto'>
                                         <p className='text-gray-50 font-regular text-lg'>Status</p>
                                     </div>
