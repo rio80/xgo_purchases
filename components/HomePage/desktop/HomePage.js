@@ -148,9 +148,7 @@ export default function HomePage() {
                         </div>
 
                         <MinipackSection />
-                        {/* {data === '' ? <ActivationSection /> : <StatusActivationSection data={data} />} */}
-
-                        {data !== '' ? <ActivationSection /> : <StatusActivationSection data={data} />}
+                        {data === '' ? <ActivationSection /> : <StatusActivationSection data={data} />}
                         <FaqSection />
 
                         <div className="flex justify-center" style={{ backgroundColor: '#e1f1fd' }}>
