@@ -41,6 +41,7 @@ const ComboBox = ({ id, control, search = true, placeholder = 'Silahkan Pilih', 
             item.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
         );
 
+
     const handleSelect = (dataId,data) => {
         id(dataId)
         onChange(data)

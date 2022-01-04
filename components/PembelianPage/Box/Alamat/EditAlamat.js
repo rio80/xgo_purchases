@@ -27,7 +27,7 @@ export default function EditAlamat({ id, close }) {
     const dispatch = useDispatch()
     let [categories] = useState(['Rumah', 'Kantor', 'Lainnya'])
     const [category, setCategory] = useState('Rumah')
-    const { watch, control, register, handleSubmit, reset } = useForm();
+    const { watch, control, register, handleSubmit, reset, setValue } = useForm();
     const [data, setData] = useState([])
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
@@ -56,7 +56,7 @@ export default function EditAlamat({ id, close }) {
         try {
             const getData = await getCity(data)
             const transformCity = getData.data.result.map((data, idx) => ({
-                id: idx,
+                id: data,
                 name: data,
             }))
             setCity(transformCity)
@@ -70,7 +70,7 @@ export default function EditAlamat({ id, close }) {
         try {
             const getData = await getDistrict(prov, kec)
             const transformDistrict = getData.data.result.map((data, idx) => ({
-                id: idx,
+                id: data,
                 name: data,
             }))
             setDistrict(transformDistrict)
@@ -84,7 +84,7 @@ export default function EditAlamat({ id, close }) {
         try {
             const getData = await getSubDistrict(prov, kec, kab)
             const transformSubDistrict = getData.data.result.map((data, idx) => ({
-                id: idx,
+                id: data,
                 name: data,
             }))
             setSubDistrict(transformSubDistrict)
@@ -139,7 +139,7 @@ export default function EditAlamat({ id, close }) {
             try {
                 const getData = await getProvince()
                 const transformProvince = getData.data.result.map((data, idx) => ({
-                    id: idx,
+                    id: data,
                     name: data,
                 }))
                 setProvince(transformProvince)
@@ -203,8 +203,42 @@ export default function EditAlamat({ id, close }) {
 
     }, [name, hp, alamat, prov, kec, kab, kel, kodePos])
 
+    const handleProv = (id) => {
+        if (id !== prov) {
+            setValue('customer_province', id, {})
+            setValue('customer_city', '', {})
+            setValue('customer_district', '', {})
+            setValue('customer_subdistrict', '', {})
+            setValue('customer_zipcode', '', {})
+        }
+    }
+
+    const handleKec = (id) => {
+        if (id !== kec) {
+            setValue('customer_city', id, {})
+            setValue('customer_district', '', {})
+            setValue('customer_subdistrict', '', {})
+            setValue('customer_zipcode', '', {})
+        }
+    }
+
+    const handleKab = (id) => {
+        if (id !== kab) {
+            setValue('customer_district', id, {})
+            setValue('customer_subdistrict', '', {})
+            setValue('customer_zipcode', '', {})
+        }
+    }
+
+    const handleKel = (id) => {
+        if (id !== kel) {
+            setValue('customer_subdistrict', id, {})
+            setValue('customer_zipcode', '', {})
+        }
+    }
+
     const handleId = () => {
-        //nothing
+        // console.log(prov)
     }
 
     return (
@@ -237,13 +271,13 @@ export default function EditAlamat({ id, close }) {
                     <CustomInput placeholder='Masukan Nomor Telepon Anda' type={'number'} label='Nomor Telepon' {...register("receiver_phone_number")} />
                     <CustomInput placeholder='Masukan Alamat Anda' label='Alamat' {...register("customer_address")} />
                     <div className="mt-8"></div>
-                    <ComboBox data={province} id={handleId} variant='white' name="customer_province" placeholder="Provinsi" dataValue={'cek'} control={control} />
+                    <ComboBox data={province} id={handleProv} variant='white' name="customer_province" placeholder="Provinsi" dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
-                    <ComboBox data={city} id={handleId} variant='white' name='customer_city' placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} dataValue={'cek'} control={control} />
+                    <ComboBox data={city} id={handleKec} variant='white' name='customer_city' placeholder='Kota/Kabupaten' message={'Silahkan pilih provinsi terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
-                    <ComboBox data={district} id={handleId} variant='white' name='customer_district' placeholder='Kecamatan' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} dataValue={'cek'} control={control} />
+                    <ComboBox data={district} id={handleKab} variant='white' name='customer_district' placeholder='Kecamatan' message={'Silahkan pilih Kota/Kabupaten terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
-                    <ComboBox data={subDistrict} id={handleId} variant='white' name='customer_subdistrict' placeholder='Kelurahan' message={'Silahkan pilih Kecamatan terlebih dahulu'} dataValue={'cek'} control={control} />
+                    <ComboBox data={subDistrict} id={handleKel} variant='white' name='customer_subdistrict' placeholder='Kelurahan' message={'Silahkan pilih Kecamatan terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
                     <ComboBox data={zipCode} id={handleId} variant='white' name='customer_zipcode' placeholder='Kode Pos' message={'Silahkan pilih Kelurahan terlebih dahulu'} dataValue={'cek'} control={control} />
                     <div className="mt-8"></div>
