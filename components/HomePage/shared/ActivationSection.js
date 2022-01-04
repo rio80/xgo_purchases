@@ -7,6 +7,7 @@ import { Dialog, Popover, Transition } from '@headlessui/react'
 import { activationBox } from '../../../utils/apiHandlers';
 import { useDispatch, useSelector } from 'react-redux';
 import { AktivasiAction } from '../../../store/Aktivasi/AktivasiAction';
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -26,6 +27,7 @@ export default function ActivationSection() {
     const [modalTnc, setModalTnc] = React.useState(false)
     const [disabled, setDisabled] = React.useState(false)
     const [aktivasi, setAktivasi] = React.useState(false)
+    const [Password, setPassword] = React.useState(false);
 
     const getEmail = () => {
         const CryptoJS = require("crypto-js");
@@ -410,13 +412,28 @@ export default function ActivationSection() {
                                     </div>
                                     <div className="absolute inset-y-4 pl-16 flex items-center text-sm leading-5 border-r-2 " style={{ borderRight: '1px solid rgba(255, 255, 255, 0.37)' }}></div>
                                     <input
-                                        type="password"
+                                        type={Password ? "text" : "password"}
                                         name="box_pw"
                                         placeholder="Password"
                                         className={classNames(css.input, "py-4 pl-20 block w-full mx-auto text-white placeholder-white sm:text-sm border-gray-300 rounded-md")}
                                         {...register("box_pw", { required: true })}
                                         disabled={!login}
                                     />
+                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                                        {Password ? (
+                                            <EyeIcon
+                                                className="h-5 w-5 text-gray-50 cursor-pointer"
+                                                aria-hidden="true"
+                                                onClick={() => setPassword(false)}
+                                            />
+                                        ) : (
+                                            <EyeOffIcon
+                                                className="h-5 w-5 text-gray-50 cursor-pointer"
+                                                aria-hidden="true"
+                                                onClick={() => setPassword(true)}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="w-full lg:w-2/4 relative flex mx-auto">
                                     <div className="absolute inset-y-0 left-0 pl-6 flex items-center text-sm leading-5">

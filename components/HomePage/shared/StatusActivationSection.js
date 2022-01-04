@@ -125,20 +125,22 @@ export default function StatusActivationSection({ data = '' }) {
                                     <div className='my-auto'>
                                         <p className='text-gray-50 font-regular text-lg'>Status</p>
                                     </div>
-                                    <div className='flex max-w-96'>
-                                        <button
-                                            type="submit"
-                                            className="flex gap-x-2 justify-center flex-row w-full self-center items-center px-6 py-2 border border-transparent text-base font-semibold rounded-lg shadow-sm text-gray-600"
-                                            style={{ backgroundColor: '#0285e4', border: 'solid 2px rgba(255, 255, 255, 0.37)' }}
-                                            onClick={handleData}
-                                        >
-                                            {loading ?
-                                                <div className='text-white'>Processing</div>
-                                                :
-                                                <ButtonStatus data={dataAktivasi?.activation_status} />
-                                            }
-                                        </button>
-                                    </div>
+                                    {dataAktivasi.activation_status !== 'Activated' &&
+                                        <div className='flex max-w-96'>
+                                            <button
+                                                type="submit"
+                                                className="flex gap-x-2 justify-center flex-row w-full self-center items-center px-6 py-2 border border-transparent text-base font-semibold rounded-lg shadow-sm text-gray-600"
+                                                style={{ backgroundColor: '#0285e4', border: 'solid 2px rgba(255, 255, 255, 0.37)' }}
+                                                onClick={handleData}
+                                            >
+                                                {loading ?
+                                                    <div className='text-white'>Processing</div>
+                                                    :
+                                                    <ButtonStatus data={dataAktivasi?.activation_status} />
+                                                }
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <div className='col-span-2 row-span-2 flex gap-x-5'>

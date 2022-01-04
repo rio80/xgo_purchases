@@ -179,6 +179,11 @@ export default function LoginPage() {
                             </div>
                         </div>
                     </form>
+                    <div className="mt-12 mb-28 flex justify-center">
+                        <label htmlFor="comments" className="font-small text-base text-gray-700">
+                            Belum punya akun? <a href={'/register'} className="text-blue-600">Daftar</a>
+                        </label>
+                    </div>
                 </div>
             </div>
         </>
