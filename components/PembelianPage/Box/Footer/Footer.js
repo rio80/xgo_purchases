@@ -43,13 +43,14 @@ export default function Footer() {
                 ...payment,
                 customer_mobilephone: alamat.customer_mobilephone.replace(/\D/gm, ''),
                 customer_name: alamat.customer_name,
-                amount: +dataCheckout.TotalProductPrice + +dataCheckout.CourierFee,
+                amount: +dataCheckout.TotalProductPrice / +dataCheckout.Qty,
                 item_details: [
                     {
                         id: +dataCheckout.PackageId,
-                        price: (+dataCheckout.TotalProductPrice) + (+dataCheckout.CourierFee),
+                        price: (+dataCheckout.TotalProductPrice) / +dataCheckout.Qty,
                         quantity: +dataCheckout.Qty,
-                        name: paket.replace(/\s/gm , '_')
+                        name: paket.replace(/\s/gm , '_'),
+                        courier_fee: (+dataCheckout.CourierFee)
                     }
                 ]
             }

@@ -4,11 +4,13 @@ import AlamatReducer from './Alamat/reducer';
 import FooterReducer from './Footer/reducer';
 import CheckoutReducer from './Checkout/reducer';
 import AktivasiReducer from './Aktivasi/reducer';
+import DeleteAlamatReducer from './DeleteAlamat/reducer';
 
 export default combineReducers({
   KodeReducer,
   AlamatReducer,
   FooterReducer,
   CheckoutReducer,
-  AktivasiReducer
+  AktivasiReducer,
+  DeleteAlamatReducer,
 });

@@ -144,8 +144,10 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
     const sumAmount = () => {
         let totalHarga = 0
-        if (selected.id === '6') {
-            totalHarga = datapayment.amount + 5000
+        if (selected.id === '6' && type === 'box') {
+            totalHarga = (+datapayment.amount * datapayment?.item_details?.[0].quantity) + 5000 + datapayment?.item_details?.[0].courier_fee
+        } else if (type === 'box') {
+            totalHarga = (datapayment.amount * datapayment?.item_details?.[0].quantity) + datapayment?.item_details?.[0].courier_fee
         } else {
             totalHarga = datapayment.amount
         }
@@ -417,9 +419,22 @@ export default function PembayaranPage({ type = 'minipack' }) {
                                 )}</p>
                             </div>
                             <div className="text-xs flex text-white ml-auto w-1/2">
-                                <p className='ml-auto'>RP {convertToRupiah(datapayment?.amount)}</p>
+                                <p className='ml-auto'>RP {convertToRupiah(type === 'box' ? datapayment?.amount * datapayment?.item_details?.[0].quantity : datapayment?.amount)}</p>
                             </div>
                         </div>
+                        {type === 'box' &&
+                            <div className="flex mt-2">
+                                <div className="self-center">
+                                    <div className="flex flex-row">
+                                        <div className="self-center"><p className="text-xs text-white">Biaya Pengiriman </p></div>
+                                    </div>
+                                </div>
+
+                                <div className="text-xs text-white ml-auto mt-1">
+                                    <p>RP {convertToRupiah(datapayment?.item_details?.[0].courier_fee)}</p>
+                                </div>
+                            </div>
+                        }
                         {selected.id === '6' ? (
                             <div className="flex mt-2">
                                 <div className="self-center">
@@ -471,7 +486,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                             Lanjut Bayar
                         </button>
 
-                        <p className='mt-10 text-center text-sm font-semibold cursor-pointer' style={{color: '#0285E4'}} onClick={()=>router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box')}>Kembali</p>
+                        <p className='mt-10 text-center text-sm font-semibold cursor-pointer' style={{ color: '#0285E4' }} onClick={() => router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box')}>Kembali</p>
                     </div>
                 </div>
             </div>

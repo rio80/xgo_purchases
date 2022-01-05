@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon, ChevronRightIcon, EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import Cookies from 'js-cookie';
 import * as React from 'react'
-import { activationStatus, getActiveMinipack, getProfil, getTransactionHistory } from '../../utils/apiHandlers';
+import { activationStatus, getActiveMinipack, getProfil, getTransactionHistory, reprocessActivation } from '../../utils/apiHandlers';
 import PaketPage from './PaketPage/PaketPage';
 import RiwayatTransaksi from './RiwayatPage/RiwayatTransaksi';
 import { format } from 'date-fns'
@@ -20,12 +20,22 @@ export default function ProfilePage() {
     const [email, setEmail] = React.useState('')
     const [data, setData] = React.useState('')
     const [on, setOn] = React.useState(false)
+    const auth = Cookies.get('auth')
+
+    const getEmail = () => {
+        const CryptoJS = require("crypto-js");
+        const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
+        const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
+        const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
+
+        return decrypted
+    }
 
     function Password(data = '') {
         let pass = []
         if (data.data !== '') {
             for (let i = 0; i < 10; i++) {
-                pass.push(<div className='my-auto mx-1 w-2 h-2 rounded-full bg-white'></div>)
+                pass.push(<div className='my-auto mx-1 w-2 h-2 rounded-full bg-gray-800'></div>)
             }
         } else {
             pass.push(<div className='font-bold text-2xl'>-</div>)
@@ -46,17 +56,47 @@ export default function ProfilePage() {
     const handleData = async () => {
         setLoadingAktivasi(true)
         try {
-            const CryptoJS = require("crypto-js");
-            const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
-            const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
-            const auth = Cookies.get('auth')
-            const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
-            const getData = await activationStatus(decrypted)
-            setData(getData?.data?.result)
+            if (data?.activation_status === 'Failed') {
+                const postData = await reprocessActivation({ email: data?.email, activation_id: data?.activation_id })
+                if (postData) {
+                    const getData = await activationStatus(getEmail())
+                    setData(getData?.data?.result)
+                }
+            } else {
+                const getData = await activationStatus(getEmail())
+                setData(getData?.data?.result)
+            }
         } catch (e) {
             console.log(e)
         }
         setLoadingAktivasi(false)
+    }
+
+    function ButtonStatus(data = '') {
+        let view = ''
+        if (data?.data === 'Failed') {
+            view = (
+                <>
+                    <div>
+                        <img src={'../../../png/iconulangi.png'} />
+                    </div>
+                    <div>Ulangi Aktivasi</div>
+                </>
+            )
+        } else if (data?.data === 'In Process') {
+            view = (
+                <>
+                    <div>
+                        <img src={'../../../png/iconrefresh.png'} />
+                    </div>
+                    <div>Refesh</div>
+                </>
+            )
+        } else {
+            ''
+        }
+
+        return view
     }
 
     React.useEffect(() => {
@@ -178,48 +218,51 @@ export default function ProfilePage() {
                                 <div className='flex justify-center'>
                                     <p className='font-nunito text-3xl font-extrabold text-center'>Xstream Box Saya : {data?.activation_status}</p>
                                 </div>
-                                <div className='mt-5 flex'>
-                                    <button
-                                        type="submit"
-                                        className="flex gap-x-2 justify-center flex-row mx-auto bg-gray-100 w-full self-center items-center w-36 px-6 py-3.5 border border-transparent text-base font-semibold rounded-full shadow-sm text-gray-600"
-                                        onClick={handleData}
-                                    >
-                                         {loadingAktivasi ?
+                                {data.activation_status !== 'Activated' &&
+                                    <div className='mt-5 flex'>
+                                        <button
+                                            type="submit"
+                                            className="flex gap-x-2 justify-center flex-row mx-auto bg-gray-100 w-max-42 self-center items-center px-6 py-3.5 border border-transparent text-base font-semibold rounded-full shadow-sm text-gray-600"
+                                            onClick={handleData}
+                                        >
+                                            {loadingAktivasi ?
                                                 <div>Processing</div>
                                                 :
                                                 <>
-                                                    <div> <img src={'../../../png/iconrefresh.png'} /></div>
-                                                    <div>Refesh</div>
+                                                    <ButtonStatus data={data?.activation_status} />
+                                                    {/* <div> <img src={'../../../png/iconrefresh.png'} /></div>
+                                                    <div>Refesh</div> */}
                                                 </>
                                             }
-                                    </button>
-                                </div>
-                                <div className='w-full flex flex-row gap-x-4'>
-                                    <div className='w-1/2 flex flex-col gap-y-12 py-12'>
-                                        <div className='flex flex-row gap-x-5'>
+                                        </button>
+                                    </div>
+                                }
+                                <div className='w-full flex flex-col lg:flex-row gap-x-4'>
+                                    <div className='w-full lg:w-1/2 flex flex-col gap-y-12 py-12'>
+                                        <div className='flex flex-row gap-x-5 px-8 lg:px-0'>
                                             <img src={'../png/status/black/box.png'} className='mx-2 my-auto' />
                                             <div className='flex flex-col my-auto gap-y-2'>
-                                                <p className='font-bold text-2xl'>{data?.box_id || '-'}</p>
+                                                <p className='font-bold text-xl'>{data?.box_id || '-'}</p>
                                                 <p className='font-base'>ID Box Anda</p>
                                             </div>
                                         </div>
-                                        <div className='flex flex-row gap-x-5'>
+                                        <div className='flex flex-row gap-x-5 px-8 lg:px-0'>
                                             <img src={'../png/status/black/email.png'} className='my-auto' />
                                             <div className='flex flex-col my-auto gap-y-2'>
-                                                <p className='font-bold text-2xl break-all'>{data?.email || '-'}</p>
+                                                <p className='font-bold text-xl break-all'>{data?.email || '-'}</p>
                                                 <p className='font-base'>Login Box Anda</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='w-1/2 flex flex-col gap-y-12 py-12'>
-                                        <div className='flex flex-row gap-x-5'>
+                                    <div className='w-full lg:w-1/2 flex flex-col gap-y-12 py-4 lg:py-12'>
+                                        <div className='flex flex-row gap-x-5 px-8 lg:px-0'>
                                             <img src={'../png/status/black/id.png'} className='my-auto' />
                                             <div className='flex flex-col my-auto gap-y-2'>
-                                                <p className='font-bold text-2xl'>{data?.customer_id || '-'}</p>
+                                                <p className='font-bold text-xl'>{data?.customer_id || '-'}</p>
                                                 <p className='font-base'>ID Pelanggan</p>
                                             </div>
                                         </div>
-                                        <div className='flex flex-row gap-x-5'>
+                                        <div className='flex flex-row gap-x-5 px-8 lg:px-0'>
                                             <img src={'../png/status/black/password.png'} className='my-auto' />
                                             <div className='flex flex-col my-auto gap-y-2'>
                                                 {on ?
@@ -232,7 +275,7 @@ export default function ProfilePage() {
                                                     :
                                                     <Password data={data?.box_pw} />
                                                 }
-                                                <p className={classNames(on ? "" : "mt-3", 'font-base')}>Password</p>
+                                                <p className='font-base'>Password</p>
                                             </div>
                                         </div>
                                     </div>

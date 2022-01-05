@@ -157,7 +157,7 @@ export default function LoginPage() {
                                 </button>
                             </div>
 
-                            <div className="relative my-8">
+                            {/* <div className="relative my-8">
                                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
                                     <div className="w-full border-t border-gray-300" />
                                 </div>
@@ -176,10 +176,10 @@ export default function LoginPage() {
                                         <span>Masuk dengan Google</span>
                                     </div>
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </form>
-                    <div className="mt-12 mb-28 flex justify-center">
+                    <div className="mt-12 flex justify-center">
                         <label htmlFor="comments" className="font-small text-base text-gray-700">
                             Belum punya akun? <a href={'/register'} className="text-blue-600">Daftar</a>
                         </label>

@@ -1,8 +1,8 @@
 import { useEffect, useState, Fragment } from 'react'
-import { RadioGroup, Listbox, Transition } from '@headlessui/react'
+import { RadioGroup, Listbox, Transition, Popover } from '@headlessui/react'
 import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
-import { createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
+import { createOrderBox, createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -10,7 +10,7 @@ import Alert from '../../../pages/shared/alert/Alert'
 import Tooltip from '../Tooltip'
 import { useDispatch } from 'react-redux'
 import { KodeAction } from '../../../store/KodeBayar/KodeBayarAction'
-import { addMonths, compareAsc, format } from 'date-fns'
+import { addMonths, format } from 'date-fns'
 
 const plans = [
     { name: 'Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
@@ -144,8 +144,10 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
     const sumAmount = () => {
         let totalHarga = 0
-        if (selected.id === '6') {
-            totalHarga = datapayment.amount + 5000
+        if (selected.id === '6' && type === 'box') {
+            totalHarga = (+datapayment.amount * datapayment?.item_details?.[0].quantity) + 5000 + datapayment?.item_details?.[0].courier_fee
+        } else if (type === 'box') {
+            totalHarga = (datapayment.amount * datapayment?.item_details?.[0].quantity) + datapayment?.item_details?.[0].courier_fee
         } else {
             totalHarga = datapayment.amount
         }
@@ -226,9 +228,22 @@ export default function PembayaranPage({ type = 'minipack' }) {
                                     )}</p>
                                 </div>
                                 <div className="text-xs text-white ml-auto">
-                                    <p>RP {convertToRupiah(datapayment.amount)}</p>
+                                    <p>RP {convertToRupiah(type === 'box' ? datapayment?.amount * datapayment?.item_details?.[0].quantity : datapayment?.amount)}</p>
                                 </div>
                             </div>
+                            {type === 'box' &&
+                                <div className="flex mt-2">
+                                    <div className="self-center">
+                                        <div className="flex flex-row">
+                                            <div className="self-center"><p className="text-xs text-white">Biaya Pengiriman </p></div>
+                                        </div>
+                                    </div>
+
+                                    <div className="text-xs text-white ml-auto mt-1">
+                                        <p>RP {convertToRupiah(datapayment?.item_details?.[0].courier_fee)}</p>
+                                    </div>
+                                </div>
+                            }
                             {selected.id === '6' ? (
                                 <div className="flex mt-2">
                                     <div className="self-center">

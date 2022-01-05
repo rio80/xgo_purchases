@@ -79,9 +79,9 @@ export default function RiwayatTransaksi({ history, email }) {
                             <div>
                                 <p className="text-lg lg:text-xl text-gray-500">{data?.transaction_date_fmt}</p>
                             </div>
-                            <div>
+                            {/* <div>
                                 <p className="text-xl lg:text-2xl font-bold" style={{ color: '#0285e4' }}>Rp{convertToRupiah(data?.total_invoice)}</p>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="flex flex-row mt-14">
                             <div className="mr-14 w-64 lg:w-76 h-40">

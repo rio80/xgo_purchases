@@ -160,7 +160,7 @@ export default function RegisterPage() {
                                 </button>
                             </div>
 
-                            <div className="relative my-8">
+                            {/* <div className="relative my-8">
                                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
                                     <div className="w-full border-t border-gray-300" />
                                 </div>
@@ -179,7 +179,7 @@ export default function RegisterPage() {
                                         <span>Masuk dengan Google</span>
                                     </div>
                                 </button>
-                            </div>
+                            </div> */}
 
                             <div className="mt-4 px-16 text-center">
                                 <label className="font-small text-xs text-gray-500">

@@ -5,6 +5,7 @@ import { Fragment, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAddress, getProfil, saveAddress } from "../../../../utils/apiHandlers";
 import { AlamatAction } from '../../../../store/Alamat/AlamatAction'
+import { DeleteAlamatAction } from "../../../../store/DeleteAlamat/DeleteAlamatAction";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -47,27 +48,32 @@ export default function ListAlamat({ edit, close }) {
     };
 
     const handleDelete = async (data) => {
-        let dataDel = { email: getEmail(), customer_address_id: [data] }
-        try {
-            const delData = await deleteAddress(dataDel)
-            if (delData) {
-                (async () => {
-                    try {
-                        const getDetail = await getProfil(getEmail())
-                        setData(getDetail?.data?.result?.addresses)
-                        dispatch({
-                            type: AlamatAction.SET_MAIN,
-                            main_address: !alamatRedux
-                        })
-                    } catch (e) {
-                        console.log(e)
-                    }
-                })()
-            }
+        dispatch({
+            type: DeleteAlamatAction.SET_ID,
+            customer_address_id: data,
+            del: true
+        })
+        // let dataDel = { email: getEmail(), customer_address_id: [data] }
+        // try {
+        //     const delData = await deleteAddress(dataDel)
+        //     if (delData) {
+        //         (async () => {
+        //             try {
+        //                 const getDetail = await getProfil(getEmail())
+        //                 setData(getDetail?.data?.result?.addresses)
+        //                 dispatch({
+        //                     type: AlamatAction.SET_MAIN,
+        //                     main_address: !alamatRedux
+        //                 })
+        //             } catch (e) {
+        //                 console.log(e)
+        //             }
+        //         })()
+        //     }
 
-        } catch (e) {
-            console.log(e)
-        }
+        // } catch (e) {
+        //     console.log(e)
+        // }
     }
 
     const handleDefault = async (dataId) => {
@@ -120,7 +126,7 @@ export default function ListAlamat({ edit, close }) {
         close(false)
     }
 
-    function Action({data}) {
+    function Action({ data }) {
         return (
             <Menu as="div" className="relative inline-block text-left">
                 <div>
@@ -129,7 +135,7 @@ export default function ListAlamat({ edit, close }) {
                         <DotsVerticalIcon className="h-5 w-5" aria-hidden="true" />
                     </Menu.Button>
                 </div>
-    
+
                 <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -252,8 +258,6 @@ export default function ListAlamat({ edit, close }) {
                                 }
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             ))}

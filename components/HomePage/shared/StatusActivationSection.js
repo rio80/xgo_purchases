@@ -99,6 +99,10 @@ export default function StatusActivationSection({ data = '' }) {
         return view
     }
 
+    const reprocess = () => {
+        
+    }
+
     return (
         <>
             <div className="flex justify-center" style={{ backgroundColor: '#0285e4' }}>
@@ -120,10 +124,10 @@ export default function StatusActivationSection({ data = '' }) {
                     <div className="mt-14 flex mx-auto" style={{ maxWidth: '1024px' }}>
                         <div className='flex flex-col lg:grid lg:grid-cols-6 lg:grid-rows-4 lg:gap-y-8 gap-x-8 mt-8 mx-auto justify-between gap-y-8'>
                             <div className='lg:col-span-2 row-span-4 flex my-auto flex-col'>
-                                <p className='mx-auto text-gray-50 font-nunito font-extrabold text-2xl lg:mx-0 lg:text-5xl'>{dataAktivasi?.activation_status}</p>
+                                <p className='mx-auto text-gray-50 font-nunito font-extrabold text-xl lg:mx-0 lg:text-4xl'>{dataAktivasi?.activation_status}</p>
                                 <div className='flex flex-row mt-4 gap-x-4 mx-auto lg:mx-0'>
                                     <div className='my-auto'>
-                                        <p className='text-gray-50 font-regular text-lg'>Status</p>
+                                        <p className='text-gray-50 font-regular text-base'>Status</p>
                                     </div>
                                     {dataAktivasi.activation_status !== 'Activated' &&
                                         <div className='flex max-w-96'>
@@ -146,21 +150,21 @@ export default function StatusActivationSection({ data = '' }) {
                             <div className='col-span-2 row-span-2 flex gap-x-5'>
                                 <img src={'../../../png/status/box.png'} className='mx-2 my-auto' />
                                 <div className='flex flex-col my-auto gap-y-2'>
-                                    <p className='font-bold text-gray-50 text-2xl'>{dataAktivasi?.box_id || '-'}</p>
+                                    <p className='font-bold text-gray-50 text-xl'>{dataAktivasi?.box_id || '-'}</p>
                                     <p className='font-base text-gray-50'>ID Box Anda</p>
                                 </div>
                             </div>
                             <div className='col-span-2 row-span-2 flex gap-x-5'>
                                 <img src={'../../../png/status/id.png'} className='my-auto' />
                                 <div className='flex flex-col my-auto gap-y-2'>
-                                    <p className='font-bold text-gray-50 text-2xl'>{dataAktivasi?.customer_id || '-'}</p>
+                                    <p className='font-bold text-gray-50 text-xl'>{dataAktivasi?.customer_id || '-'}</p>
                                     <p className='font-base text-gray-50'>ID Pelanggan</p>
                                 </div>
                             </div>
                             <div className='col-span-2 row-span-2 flex gap-x-5'>
                                 <img src={'../../../png/status/email.png'} className='my-auto' />
                                 <div className='flex flex-col my-auto gap-y-2'>
-                                    <p className='font-bold text-gray-50 text-2xl break-all'>{dataAktivasi?.email || '-'}</p>
+                                    <p className='font-bold text-gray-50 text-xl break-all'>{dataAktivasi?.email || '-'}</p>
                                     <p className='font-base text-gray-50'>Login Box Anda</p>
                                 </div>
                             </div>
@@ -170,7 +174,7 @@ export default function StatusActivationSection({ data = '' }) {
                                     {on ?
                                         <>
                                             <div className='flex'>
-                                                <p className='font-bold text-gray-50 text-2xl break-all'>{dataAktivasi?.box_pw} </p>
+                                                <p className='font-bold text-gray-50 text-xl break-all'>{dataAktivasi?.box_pw} </p>
                                                 <EyeIcon className='text-gray-50 h-5 w-5 ml-3 cursor-pointer my-auto' onClick={() => setOn(!on)} />
                                             </div>
                                         </>
