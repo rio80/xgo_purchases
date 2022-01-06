@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }) {
 
   <Head>
     <title>Payment - XGO</title>
-    <link rel="icon" href={'../png/logo.png'} />
+    <link rel="icon" href={'../png/favicon.png'} />
   </Head>
 
   return (

@@ -31,12 +31,11 @@ export default function MinipackPage() {
     const [error, setError] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const [openModal, setOpenModal] = React.useState(false)
-
+    const [type, setType] = React.useState(true)
 
     const [data, setData] = React.useState({
         package_id: '' + config.idPackage,
-        receiver_type: 'SELF',
-        activation_process: 'IMMEDIATE'
+        receiver_type: 'SELF'
     })
 
     const [payment, setPayment] = React.useState({
@@ -85,12 +84,16 @@ export default function MinipackPage() {
 
     const handleCheckout = (status) => {
         if (status) {
+            let dataCheckout = {
+                ...data,
+                activation_process: type ? 'IMMEDIATE' : 'CLAIM'
+            }
             let dataPaket = {
                 paket,
                 durasi: paketdata[idxpaket]?.plans[idxdurasi]?.duration
             }
             Cookies.set('paket', JSON.stringify(dataPaket));
-            localStorage.setItem('checkout', JSON.stringify(data));
+            localStorage.setItem('checkout', JSON.stringify(dataCheckout));
             localStorage.setItem('payment', JSON.stringify(payment));
             const auth = Cookies.get('auth')
             if (typeof auth === 'undefined') {
@@ -485,24 +488,40 @@ export default function MinipackPage() {
 
             {paket ? <Listpaket /> : ''}
 
-            <div className="py-16 flex justify-center">
+            <div className="py-16 flex justify-center flex-row gap-x-4">
                 <div className="flex items-center h-5 mt-6">
                     <input
                         id="comments"
                         aria-describedby="comments-description"
                         name="comments"
                         type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
                         onClick={() => setOpen(!open)}
                     />
                     <div className="ml-3 text-sm">
                         <label htmlFor="comments" className="font-small text-xs text-gray-700">
-                            Saya menyetujui <a href="#" className="text-blue-600" onClick={()=>setOpenModal(true)}>Syarat dan Ketentuan</a>
+                            Saya menyetujui <a href="#" className="text-blue-600" onClick={() => setOpenModal(true)}>Syarat dan Ketentuan</a>
+                        </label>
+                    </div>
+                </div>
+                <div className="flex items-center h-5 mt-6">
+                    <input
+                        id="comments2"
+                        aria-describedby="comments-description"
+                        name="comments2"
+                        type="checkbox"
+                        className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                        checked={type}
+                        onClick={() => setType(!type)}
+                    />
+                    <div className="ml-3 text-sm">
+                        <label htmlFor="comments2" className="font-small text-xs text-gray-700">
+                            Langsung aktifkan paket
                         </label>
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center mb-32">
+            <div className="flex justify-center">
                 <button
                     type="button"
                     className={classNames(open && data?.minipack_id ? 'text-white bg-blue-600 hover:bg-blue-700' : 'text-gray-600 bg-gray-300 hover:bg-gray-200', 'w-96 self-center items-center px-8 py-5 border border-transparent text-base leading-4 font-base rounded-full shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500')}
@@ -511,6 +530,11 @@ export default function MinipackPage() {
                 >
                     Lanjut ke Pembayaran
                 </button>
+            </div>
+            <div className="flex justify-center mt-12 mb-24">
+                <label  className="font-small text-xs text-gray-700">
+                    Punya Kode Voucher? <a className="text-blue-600 cursor-pointer" onClick={() => router.push('/voucher')}>Aktivasi disini</a>
+                </label>
             </div>
         </>
     )

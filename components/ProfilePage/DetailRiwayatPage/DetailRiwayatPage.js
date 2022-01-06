@@ -234,7 +234,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                         </div>
                     </>
                 )}
-                {data?.payment_name === 'OVO' && (
+                {data?.payment_method === 'OVO' || data?.payment_name === 'OVO' ? (
                     <>
                         <div className="flex mt-6">
                             <p className="self-center text-base font-medium text-gray-500">Biaya Admin</p>
@@ -243,7 +243,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                             <p className="self-center text-base font-medium text-gray-500">Rp5.000</p>
                         </div>
                     </>
-                )}
+                ):''}
                 <div className="flex mt-6">
                     <p className="self-center text-base font-medium text-gray-500">Qty</p>
                 </div>
@@ -254,7 +254,7 @@ export default function DetailRiwayatPage({ email = '', transactionId = '', type
                     <p className="self-center text-base font-medium text-gray-500">Total Invoice</p>
                 </div>
                 <div className="ml-auto flex mt-6">
-                    <p className="text-xl lg:text-2xl font-bold" style={{ color: '#0285e4' }}>Rp{convertToRupiah(data?.payment_name === 'OVO' ? +data?.total_invoice + 5000 : data?.total_invoice)}</p>
+                    <p className="text-xl lg:text-2xl font-bold" style={{ color: '#0285e4' }}>Rp{convertToRupiah(data?.payment_method === 'OVO' || data?.payment_name === 'OVO' ? +data?.total_invoice + 5000 : data?.total_invoice)}</p>
                 </div>
             </div>
         </div>

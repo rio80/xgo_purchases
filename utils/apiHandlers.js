@@ -124,3 +124,7 @@ export function activationStatus(data) {
 export function reprocessActivation(data){
     return apiPost('/transvisionplus/xstream/activation/reprocess', data)
 }
+
+export function activationMinipack(data){
+    return apiPost('/transvisionplus/minipack/activation', data)
+}

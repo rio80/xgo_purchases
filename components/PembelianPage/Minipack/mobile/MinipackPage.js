@@ -22,7 +22,7 @@ function classNames(...classes) {
 }
 
 export default function MinipackPage() {
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(true)
     const router = useRouter()
     const [paket, setPaket] = React.useState('')
     const [idxpaket, setIdxPaket] = React.useState('')
@@ -31,10 +31,11 @@ export default function MinipackPage() {
     const [error, setError] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const [openModal, setOpenModal] = React.useState(false)
+    const [type, setType] = React.useState(true)
+
     const [data, setData] = React.useState({
         package_id: '' + config.idPackage,
-        receiver_type: 'SELF',
-        activation_process: 'IMMEDIATE'
+        receiver_type: 'SELF'
     })
 
     const [payment, setPayment] = React.useState({
@@ -83,15 +84,114 @@ export default function MinipackPage() {
 
     const handleCheckout = (status) => {
         if (status) {
+            let dataCheckout = {
+                ...data,
+                activation_process: type ? 'IMMEDIATE' : 'CLAIM'
+            }
             let dataPaket = {
                 paket,
                 durasi: paketdata[idxpaket]?.plans[idxdurasi]?.duration
             }
             Cookies.set('paket', JSON.stringify(dataPaket));
-            localStorage.setItem('checkout', JSON.stringify(data));
+            localStorage.setItem('checkout', JSON.stringify(dataCheckout));
             localStorage.setItem('payment', JSON.stringify(payment));
-            router.push('/pembayaran?type=minipack')
+            const auth = Cookies.get('auth')
+            if (typeof auth === 'undefined') {
+                router.push('/login')
+            } else {
+                router.push('/pembayaran?type=minipack')
+            }
         }
+    }
+
+    const Listpaket = () => {
+        return (
+            <div>
+                <div className="max-w-3xl mx-auto hidden lg:block">
+                    <div className="mt-16">
+                        <p className="text-center font-semibold text-xl">Pilih Durasi</p>
+                    </div>
+                </div>
+                {paketdata[idxpaket].plans.length > 3 ?
+                    <>
+                        <div className="max-w-5xl mx-auto hidden lg:block mt-5">
+                            <Swiper
+                                slidesPerView={3}
+                                spaceBetween={30}
+                                slidesPerGroup={1}
+                                loop={false}
+                                loopFillGroupWithBlank={true}
+                                navigation={true}
+                                className="mySwiper"
+                                style={{ padding: '0 50px', overflow: 'hidden' }}
+                            >
+                                {paketdata[idxpaket].plans.map((data, index) => (
+                                    <SwiperSlide key={index}>
+                                        <div className="w-full flex justify-center">
+                                            <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
+                                                <p className="text-xl font-bold font-nunito">{data.title}</p>
+                                                <div className="flex gap-x-2">
+                                                    <div className="self-center">
+                                                        <p className="mt-12 text-3xl font-bold">{convertToRupiah(data.price)}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>RP</p>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
+                                                    </div>
+
+                                                </div>
+                                                <div className="flex w-full mt-6">
+                                                    <button
+                                                        type="button"
+                                                        className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                        style={{ backgroundColor: idxdurasi === index ? 'white' : '#00b6f0', color: idxdurasi === index ? '#00b6f0' : '' }}
+                                                        onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
+                                                    >
+                                                        {idxdurasi === index ? 'Terpilih' : 'Pilih Durasi'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
+                    </>
+                    :
+                    <div className="max-w-5xl mx-auto hidden lg:block mt-5 px-12">
+                        <div className="w-full flex justify-between gap-x-8">
+                            {paketdata[idxpaket].plans.map((data, index) => (
+                                <div className="w-full flex justify-center" key={index}>
+                                    <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
+                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xl font-bold font-nunito")}>{data.title}</p>
+                                        <div className="flex gap-x-2">
+                                            <div className="self-center">
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-3xl font-bold")}>{convertToRupiah(data.price)}</p>
+                                            </div>
+                                            <div>
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>RP</p>
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
+                                            </div>
+
+                                        </div>
+                                        <div className="flex w-full mt-6">
+                                            <button
+                                                type="button"
+                                                className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                style={{ backgroundColor: idxdurasi === index ? 'white' : '#00b6f0', color: idxdurasi === index ? '#00b6f0' : '' }}
+                                                onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
+                                            >
+                                                {idxdurasi === index ? 'Terpilih' : 'Pilih Durasi'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                }
+            </div>
+        )
     }
 
     React.useEffect(() => {
@@ -102,7 +202,7 @@ export default function MinipackPage() {
                 setPaketdata(getData?.data?.result)
                 setLoading(false)
             } catch (e) {
-                // console.log(e)
+                console.log(e)
                 setLoading(false)
                 setError(true)
             }
@@ -119,6 +219,7 @@ export default function MinipackPage() {
                 <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
             </div>
         )
+
     }
 
     function Tnc() {
@@ -436,7 +537,24 @@ export default function MinipackPage() {
                 </div> : ''
             }
 
-            <div className="sticky bottom-0 mt-20 bg-white drop-shadow-3xl h-28 px-4 py-3.5 z-20">
+            <div className="flex items-center h-5 mt-6 ml-5">
+                <input
+                    id="comments2"
+                    aria-describedby="comments-description"
+                    name="comments2"
+                    type="checkbox"
+                    className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                    checked={type}
+                    onClick={() => setType(!type)}
+                />
+                <div className="ml-3 text-sm">
+                    <label htmlFor="comments2" className="font-small text-xs text-gray-700">
+                        Langsung aktifkan paket
+                    </label>
+                </div>
+            </div>
+
+            <div className="sticky bottom-0 mt-20 bg-white drop-shadow-3xl h-36 px-4 py-3.5 z-20">
                 <div className="flex items-center h-5">
                     <input
                         id="comments"
@@ -462,6 +580,11 @@ export default function MinipackPage() {
                     >
                         Pilih Paket
                     </button>
+                </div>
+                <div className="flex justify-center my-2.5">
+                    <label className="font-small text-xs text-gray-700">
+                        Punya Kode Voucher? <a className="text-blue-600 cursor-pointer" onClick={() => router.push('/voucher')}>Aktivasi disini</a>
+                    </label>
                 </div>
 
             </div>

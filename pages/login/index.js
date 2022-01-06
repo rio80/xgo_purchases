@@ -12,7 +12,7 @@ export default function Login() {
         <>
             <Head>
                 <title>Masuk | My Transvision 2.0</title>
-                <link rel="icon" href={'../png/logo.png'} />
+                <link rel="icon" href={'../png/favicon.png'} />
             </Head>
             <div className="w-full flex">
                 {rdd.isMobile && <Header variant={'login'} />}

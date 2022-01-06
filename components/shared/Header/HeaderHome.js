@@ -96,7 +96,7 @@ export default function HeaderHome({ variant = 'default' }) {
         <>
             <Head>
                 <title>My Transvision 2.0</title>
-                <link rel="icon" href={'../png/logo.png'} />
+                <link rel="icon" href={'../png/favicon.png'} />
             </Head>
             <Disclosure as="nav" className={classNames(navbar ? css.header : "py-8", "bg-white fixed top-0 left-0 right-0 z-20 h-28")} style={{ boxShadow: navbar ? '0 4px 31px 0 rgba(74, 105, 134, 0.1' : '' }}>
                 <div className="mx-8 lg:mx-auto px-0" style={{ maxWidth: '1024px' }}>

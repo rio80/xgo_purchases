@@ -7,7 +7,7 @@ export default function Pembelian() {
         <>
             <Head>
                 <title>Payment - XGO</title>
-                <link rel="icon" href={'../png/logo.png'} />
+                <link rel="icon" href={'../png/favicon.png'} />
             </Head>
 
             <Header />

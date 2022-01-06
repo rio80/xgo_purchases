@@ -7,7 +7,7 @@ export default function ForgetPassword() {
         <>
             <Head>
                 <title>Lupa Password | My Transvision 2.0</title>
-                <link rel="icon" href={'../png/logo.png'} />
+                <link rel="icon" href={'../png/favicon.png'} />
             </Head>
             <div className="w-full flex">
                 <BannerLoginPage />

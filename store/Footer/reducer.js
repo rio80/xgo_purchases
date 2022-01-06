@@ -2,7 +2,7 @@ import { FooterAction } from './FooterAction';
 
 const initialState = {
     data: { nama: '-', alamat: '-' },
-    produk: { nama: '-', paket: '-' },
+    produk: { nama: '-', paket: '-', harga: '-' },
     pengiriman: { nama: '-', hari: '-' }
 };
 
@@ -12,6 +12,7 @@ export default function FooterReducer(state = initialState, action) {
             const newState = { ...state };
             newState.produk.nama = action.nama;
             newState.produk.paket = action.paket;
+            newState.produk.harga = action.harga;
             return newState;
         }
 

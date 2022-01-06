@@ -148,7 +148,9 @@ export default function PembayaranPage({ type = 'minipack' }) {
             totalHarga = (+datapayment.amount * datapayment?.item_details?.[0].quantity) + 5000 + datapayment?.item_details?.[0].courier_fee
         } else if (type === 'box') {
             totalHarga = (datapayment.amount * datapayment?.item_details?.[0].quantity) + datapayment?.item_details?.[0].courier_fee
-        } else {
+        } else if(selected.id === '6') {
+            totalHarga = datapayment.amount + 5000
+        }else{
             totalHarga = datapayment.amount
         }
 

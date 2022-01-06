@@ -139,7 +139,8 @@ export default function BoxPage() {
             dispatch({
                 type: FooterAction.SET_PRODUK,
                 nama: 'Xstream Box',
-                paket: produk
+                paket: produk,
+                harga: convertToRupiah(+price)
             })
         }
 
@@ -256,6 +257,13 @@ export default function BoxPage() {
             CityCode: dataJne.cityCode,
             Email: getEmail()
         })
+    }
+
+    const convertToRupiah = (angka) => {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for (var i = 0; i < angkarev.length; i++) if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+        return rupiah.split('', rupiah.length - 1).reverse().join('');
     }
 
     return (
