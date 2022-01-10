@@ -119,7 +119,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
             } else {
                 dispatch({
                     type: KodeAction.SET_KODE,
-                    kode: type === 'minipack' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
+                    kode: type === 'minipack' || type === 'stb' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
                 });
                 router.push('/kode-bayar')
             }
