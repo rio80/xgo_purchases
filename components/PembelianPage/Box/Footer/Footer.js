@@ -66,6 +66,13 @@ export default function Footer() {
         }
     }
 
+    const convertToRupiah = (angka) => {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for (var i = 0; i < angkarev.length; i++) if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+        return rupiah.split('', rupiah.length - 1).reverse().join('');
+    }
+
     return (
         <>
             <div className="sticky bg-white bottom-0 right-0 left-0 h-auto z-20 flex flex-row" style={{ borderLeft: '6px solid #0285e4', boxShadow: '0 -4px 8px 0 rgba(0, 0, 0, 0.06)' }}>
@@ -116,7 +123,7 @@ export default function Footer() {
                                     <p className="text-xs text-center font-mendium">HARGA</p>
                                 </div>
                                 <div className="my-2">
-                                    <p className="text-lg text-center font-semibold">{data?.produk?.harga}</p>
+                                    <p className="text-lg text-center font-semibold">{data?.produk?.harga !== '-' ? convertToRupiah(data?.produk?.harga.replace(/\./gm,'') * dataCheckout?.Qty) : '-'}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-center font-mendium">{dataCheckout?.Qty} item</p>

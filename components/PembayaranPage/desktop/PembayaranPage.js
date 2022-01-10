@@ -11,6 +11,8 @@ import Tooltip from '../Tooltip'
 import { useDispatch } from 'react-redux'
 import { KodeAction } from '../../../store/KodeBayar/KodeBayarAction'
 import { addMonths, format } from 'date-fns'
+import { FooterAction } from '../../../store/Footer/FooterAction'
+import { CheckoutAction } from '../../../store/Checkout/CheckoutAction'
 
 const plans = [
     { name: 'Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
@@ -176,6 +178,29 @@ export default function PembayaranPage({ type = 'minipack' }) {
         if (data === 'Gopay' || data === 'Pulsa') {
             setComing(!coming)
         }
+    }
+
+    const handleBack = () => {
+        
+        dispatch({
+            type: FooterAction.SET_PRODUK,
+            nama: '-',
+            paket: '-',
+            harga: '-'
+        })
+        dispatch({
+            type: CheckoutAction.SET_TOTAL,
+            TotalProductPrice: '-',
+        });
+        dispatch({
+            type: CheckoutAction.SET_QTY,
+            Qty: 1,
+        });
+        setTimeout(
+            () => router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box'), 
+            400
+          );
+        
     }
 
     return (
@@ -488,7 +513,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                             Lanjut Bayar
                         </button>
 
-                        <p className='mt-10 text-center text-sm font-semibold cursor-pointer' style={{ color: '#0285E4' }} onClick={() => router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box')}>Kembali</p>
+                        <p className='mt-10 text-center text-sm font-semibold cursor-pointer' style={{ color: '#0285E4' }} onClick={handleBack}>Kembali</p>
                     </div>
                 </div>
             </div>
