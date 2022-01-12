@@ -1,9 +1,12 @@
 module.exports = {
-    apiHost: 'https://servicebuss.transvision.co.id/tvs',
-    email: 'itcore.master_st@trv.co.id',
-    password: 'MTIzNDU2Nzg=',
-    deviceId: '1234567890',
-    deviceType: 'A',
-    deviceModel: 'A21',
-    platformId: '4028c68574537fcd0174af6756a94288',
+    apiHost: 'https://servicebuss-dev.transvision.co.id:9443',
+    clientId: '1013140c470ccbdb.servicebuss.transvision.co.id',
+    clientSecret: '5dd510be503f2a9d',
+    clientGrantType: 'client_credentials',
+    provisionKey: 'CuT0xc9am8smutZkrRNSsTM2l9LOvOGw',
+    authenticatedUserid: 'testing',
+    secretCookiePassword: 'CuT0c9am8smuanindithatZkrRNSsTM2l9LanungOvOGw',
+    idPackage: '381',
+    domain: 'https://my2-dev.transvision.co.id/verify-order',
+    minipackOpen: true 
 };
