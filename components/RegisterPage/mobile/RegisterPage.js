@@ -25,7 +25,7 @@ export default function RegisterPage() {
     const [success, setSuccess] = React.useState(false)
     const [message, setMessage] = React.useState('')
     const [phone, setPhone] = React.useState('')
-    const [openModal, setOpenModal] = React.useState(true)
+    const [openModal, setOpenModal] = React.useState(false)
 
     const handleRegister = async (handleSubmit) => {
         setLoad(true)
