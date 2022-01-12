@@ -412,6 +412,33 @@ export default function MinipackPage() {
                                                 <p className='my-2 text-justify'>Untuk memberikan pengalaman yang baik bagi Anda, modifikasi, perubahan dan perbaikan akan dilakukan secara periodik pada bagian-bagian di dalam Platform Layanan maupun Layanan. Paket Berlangganan mungkin akan mengalami perbaikan dan/ atau perubahan sewaktu-waktu yang mengakibatkan Platform Layanan dan Paket Berlangganan tidak dapat diakses untuk sementara waktu, termasuk namun tidak terbatas karena proses maintenance, interupsi telekomunikasi, termasuk kebijakan internal Transvision dan lainnya. Kami juga senantiasa memperbaharui dan meningkatkan Paket Berlangganan dari waktu ke waktu. Untuk itu, Kami mungkin mengurangi, menangguhkan atau bahkan mematikan sebagian konten, tayangan, atau fitur tertentu, dengan dan/ atau tanpa pemberitahuan sebelumnya. Layanan (beserta pemilik, supplier, konsultan, pengiklan, affiliasi, rekanan, pekerja, atau entitas terkait) tidak akan dapat dikenakan tuntutan oleh Anda atau pihak ketiga manapun untuk mengubah atau menghentikan beberapa atau semua konten, informasi, software, produk, fitur dan layanan yang diterbitkan pada Platform Layanan ini, kecuali dalam hal konten, informasi, software, produk, fitur dan layanan sebagaimana dimaksud dapat dibuktikan sebagai Hak Atas Kekayaan Intelektual milik Anda atau pihak ketiga tersebut. </p>
                                                 <li className='font-semibold'>Garansi, Ganti rugi, biaya pergantian perangkat   </li>
                                             </ol>
+                                            <p className="text-sm text-gray-500 font-semibold">C. KETENTUAN GARANSI </p>
+                                            <p className="text-sm text-gray-500 text-justify font-semibold">Ketentuan Garansi dan Pengembalian Perangkat adalah ketentuan yang berlaku untuk pembelian Produk Transvision XSTREAM Box secara langsung melalui saluran penjualan Transvision maupun rekanan resmi yang ditunjuk oleh Transvision.</p>
+                                            <ol className='text-sm text-gray-500 list-decimal pl-6'>
+                                                <li className='my-2 font-semibold'>Ketentuan Umum Garansi Perangkat </li>
+                                                <ol>
+                                                    <li className='my-2 text-justify'>a. Transvision memberikan layanan garansi purna jual untuk setiap perangkat XSTREAM Box yang dibeli melalui sales agent Transvision, toko/akun resmi Transvision secara online, dan rekanan yang ditunjuk resmi oleh Transvision.</li>
+                                                    <li className='my-2 text-justify'>b. Garansi perangkat berlaku selama 12 bulan terhitung dari tanggal pembelian perangkat yang bisa dibuktikan dengan nota pembelian perangkat, atau dari tanggal aktivasi perangkat di platform layanan Xstream.</li>
+                                                    <li className='my-2 text-justify'>c. Transvision berhak menolak garansi dan pengembalian perangkat jika ditemukan hal-hal seperti berikut namun tidak terbatas pada daftar ini:
+                                                        <ol className='list-decimal pl-8'>
+                                                            <li className='my-2 text-justify'> XSTREAM Box yang tidak dibeli dari sales agent Transvision, toko/akun resmi Transvision dan rekanan resmi yang ditunjuk oleh Transvision. </li>
+                                                            <li className='my-2 text-justify'> XSTREAM Box dengan label nomor seri, model manufaktur atau label nomor part, dan/atau label garansi yang hilang, rusak, berubah, atau tidak dapat dibaca.</li>
+                                                            <li className='my-2 text-justify'>XSTREAM Box tanpa seluruh paket asli dan aksesorinya, termasuk boks eceran, adapter daya, unit remote kontrol, booklet manual, kabel HDMI, dan barang-barang lainnya yang secara asli termasuk dalam produk.</li>
+                                                            <li className='my-2 text-justify'>XSTREAM Box yang tampaknya dirusak, disesuaikan, atau diubah dengan cara apapun. </li>
+                                                        </ol>
+                                                        Untuk itu, Kami tidak dapat dikenakan tindakan apapun atau bertanggung jawab atas hal apapun sehubungan dengan hal tersebut.
+                                                    </li>
+                                                </ol>
+                                                <li className='my-2 font-semibold'>Pedoman Pengembalian Perangkat</li>
+                                                <ol>
+                                                    <li className='my-2 text-justify'>a. Tidak ada pengembalian uang untuk pengembalian XSTREAM Box. Namun, anda mempunyai empat belas (14) hari kalender untuk mengembalikan XSTREAM Box yang cacat karena perlakukan pengiriman dan atau pabrikasi, hanya untuk diperbaiki dan/atau diganti.</li>
+                                                    <li className='my-2 text-justify'>b. Anda dapat meminta pengembalian dengan menghubungi Call Center XSTREAM melalui nomor telpon Call Center 1500060; WhatsApp 0823-0823-5810; atau email care@transvision.co.id.</li>
+                                                    <li className='my-2 text-justify'>c. Jika anda mengembalikan barang yang menyimpan informasi pribadi anda, anda harus menghapus seluruh informasi ini sebelum mengirimkan kembali produk ke Kami. Termasuk juga keluar dari akun Google sebelum mengembalikan ke Kami.</li>
+                                                    <li className='my-2 text-justify'>d. Kebijakan periode perbaikan perangkat dan atau penggantian pengembalian yang dilakukan sesuai kebijakan Garansi kami adalah empat belas (14) hari sejak perangkat Xstream Box dari Anda kami terima atau lebih tergantung pada tingkat kerusakan/perbaikan yang dilakukan.</li>
+                                                    <li className='my-2 text-justify'>e. Biaya penggantian adalah gratis untuk penggantian dengan produk yang sama dalam jangka waktu kebijakan penggantian, dengan ketentuan produk tersebut cacat karena kesalahan produksi.</li>
+                                                    <li className='my-2 text-justify'>f. Biaya pengiriman perangkat dari pelanggan ke service center Transvision merupakan tanggung jawab pelanggan sendiri.</li>
+                                                </ol>
+                                            </ol>
 
 
                                         </div>
