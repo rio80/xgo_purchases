@@ -552,7 +552,7 @@ export default function MinipackPage() {
                                                 </div>
                                                 <div>
                                                     <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xs")}>RP</p>
-                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
+                                                    {/* <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p> */}
                                                 </div>
 
                                             </div>
