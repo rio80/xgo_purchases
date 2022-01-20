@@ -453,6 +453,25 @@ export default function MinipackPage() {
         )
     }
 
+    const channel = (data) => {
+        let view = ''
+        if(data === 'DIAMOND'){
+            view = '85+ Channel'
+        }else if(data === 'PLATINUM'){
+            view = '70+ Channel'
+        }else if(data === 'GOLD'){
+            view = '60+ Channel'
+        }else if(data === 'SILVER'){
+            view = '45+ Channel'
+        }else if(data === 'MVP'){
+            view = '3 Channel'
+        }else{
+            view = ''
+        }
+
+        return view
+    }
+
     return (
         <>
             {openModal && <Tnc />}
@@ -485,6 +504,7 @@ export default function MinipackPage() {
                             <div className="flex justify-center">
                                 <div className={classNames(idxpaket === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg h-56 px-6 py-12")}>
                                     <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-center text-2xl font-bold font-nunito")}>{data.minipack}</p>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-lg font-bold font-nunito")}>{channel(data.minipack)}</p>
                                     <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-center text-xs font-normal")}>{data.description}</p>
                                     <div className="w-full mt-7">
                                         <button

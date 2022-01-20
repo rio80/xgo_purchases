@@ -5,7 +5,7 @@ import "swiper/css/pagination"
 import "swiper/css/navigation"
 SwiperCore.use([Pagination, Navigation]);
 import Image from 'next/image'
-import Decoder1 from '../../../public/png/decoder/Decoder_1.png'
+import Decoder1 from '../../../public/png/decoder/Decoder_1new.png'
 import Decoder2 from '../../../public/png/decoder/Decoder_2.png'
 import Decoder3 from '../../../public/png/decoder/Decoder_3.png'
 import Decoder4 from '../../../public/png/decoder/Decoder_4.png'
@@ -44,10 +44,8 @@ export default function MinipackSection() {
                 <div className="w-full mt-24 py-40 gap-x-6 px-8 lg:px-56 bg-white">
                     <div className="flex flex-col-reverse lg:flex-row">
                         <div className="w-full lg:w-1/2 lg:block">
-                            <p className="font-nunito font-bold text-4xl text-center px-8 mt-12 lg:mt-0 lg:px-0 lg:text-left">Beli Xstream Seru!</p>
-                            <p className="text-lg lg:pr-20 mt-8 text-center px-8 lg:px-0 lg:text-left">Ubah TV biasa menjadi Smart TV dengan OTT Box
-                                Xstream Seru. Dengan kapasitas lebih besar 16GB
-                                dan gambar jernih up to 4K.
+                            <p className="font-nunito font-bold text-4xl text-center px-8 mt-12 lg:mt-0 lg:px-0 lg:text-left">Beli Android Box Xstream</p>
+                            <p className="text-lg lg:pr-20 mt-8 text-center px-8 lg:px-0 lg:text-left">Ubah TV biasa menjadi Smart TV dengan Android Box Xstream dan Xstream Seru. Dengan kapasitas up to 16GB dan gambar jernih up to 4K.
                             </p>
                             <div className="flex">
                                 <div className="mx-auto lg:mx-0 mt-9 flex cursor-pointer" onClick={handleOpen}>
@@ -65,7 +63,7 @@ export default function MinipackSection() {
                         </div>
                         <div className="w-full lg:w-1/2">
                             <Swiper
-                                navigation={true}
+                                navigation={false}
                                 className="mySwiper"
                                 pagination={{
                                     "dynamicBullets": true
@@ -84,7 +82,7 @@ export default function MinipackSection() {
                                         </div>
                                     </div>
                                 </SwiperSlide>
-                                <SwiperSlide>
+                                {/* <SwiperSlide>
                                     <div className="w-full flex justify-center">
                                         <div className="bg-white w-full rounded-lg px-12 pb-6 flex justify-center">
                                             <Image
@@ -113,7 +111,7 @@ export default function MinipackSection() {
                                             />
                                         </div>
                                     </div>
-                                </SwiperSlide>
+                                </SwiperSlide> */}
 
                             </Swiper>
                         </div>

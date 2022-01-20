@@ -2,11 +2,11 @@ import * as React from 'react'
 import css from './HomePage.module.css'
 import { useRouter } from 'next/router';
 import Image from 'next/image'
-import Iphone from '../../../public/png/iphone_white.png'
+import Iphone from '../../../public/png/iphone_new.png'
 import GooglePlay from '../../../public/png/google_play.png'
 import AppleStore from '../../../public/png/apple_store.png'
 import Background from '../../../public/png/background.png'
-import Xstream from '../../../public/png/xstream.png'
+import Xstream from '../../../public/png/xstreamnew.png'
 import Xgo from '../../../public/png/xgo.png'
 import Alert from '../../../pages/shared/alert/Alert';
 import MinipackSection from '../shared/MinipackSection';
@@ -122,9 +122,9 @@ export default function HomePage() {
 
                                 <div className="grid gap-8 grid-cols-1 py-3.5">
                                     <div className="bg-white rounded-lg py-12">
-                                        <p className="text-3xl font-semibold text-center">Xstream Seru Minipack</p>
+                                        <p className="text-3xl font-semibold text-center">Paket Berlangganan Xstream</p>
                                         <div className="flex justify-center mt-7 px-10">
-                                            <p className="text-gray-400 text-center">GRATIS! tayangan 42+ Live Channel TV dan 1000+ Video on Demand Premium</p>
+                                            <p className="text-gray-400 text-center">Nikmati tayangan terlengkap hingga 100+ Live TV Channel  dan 1000+ Video On Demand</p>
                                         </div>
                                         <div className="flex justify-center items-center">
                                             <button

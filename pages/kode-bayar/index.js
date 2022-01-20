@@ -7,7 +7,7 @@ export default function voucher() {
         <>
             <HeaderHome />
             <KodeBayarPage />
-            <FooterPage variant={'pastlogin'} />
+            <FooterPage />
         </>
     )
 }

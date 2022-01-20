@@ -18,38 +18,46 @@ export default function FaqSection() {
         },
         {
             title: 'Bagaimana Cara Aktivasi Minipack?'
+        },
+        {
+            title: 'Jika terjadi kendala saya harus kemana?'
         }
     ]
 
     const contentFaq = [
         {
             content: `
-                <li> Untuk mengaktifkan Xstream Box Anda, silakan klik Layanan Aktivasi Xstream Box Anda.</li>
-                <li> Masukkan voucher aktivasi yang didapatkan lewat email atau sms (jika pembelian melalui agent silahkan ditanyakan ke agent nya) dan verifikasi password anda, kemudian Klik Aktivasi.</li>
+                <li> Untuk mengaktifkan Xstream Box Anda, silahkan login dahulu di https://xgo.transvision.co.id/</li>
+                <li> Masukkan password dan voucher aktivasi yang didapatkan lewat email atau sms (jika pembelian melalui agent silahkan ditanyakan ke agentnya) kemudian Klik Aktivasi.</li>
                 <li> Tunggu beberapa saat. Lalu silahkan kembali ke halaman Aktivasi Xstream Box, dan dapatkan pesan Aktivasi Xstream Box.</li>
-                <li> Selamat aktivasi Xstream Box anda sudah selsai.</li>
+                <li> Selamat aktivasi Xstream Box anda sudah selesai.</li>
                 <li> Gunakan email dan password anda untuk Login di Xstream Box anda.</li>
                 <li> Selesai.</li>
             `
         }, {
             content: `
-                <li>Buka Menu Layanan - Beli Minipack</li>
-                <li>Pilih Minipack yang anda inginkan (Bisa lebih dari 1 pilihan Minipack)</li>
-                <li>Klik tombol Beli</li>
-                <li>Masukkan Captcha</li>
-                <li>Klik Beli Sekarang</li>
-                <li>Akan muncul Kode Bayar, silahkan melakukan pembayaran</li>
-                <li>Jika sudah melakukan pembayaran, silahkan Cek Email atau Buka Menu My Voucher List untuk melihat Voucher sudah anda beli</li>
-                <li>Lakukan Aktivasi (Baca: Panduan Aktivasi Minipack)</li>
+                <li>Pastikan Paket Berlangganan Xstream anda Aktif, kemudian silahkan login dahulu di https://xgo.transvision.co.id/</li>
+                <li>Pilih Tab Produk - Paket Berlangganan Xstream </li>
+                <li>Pilih paket yang diinginkan - Pilih periode  durasi dari paket tersebut</li>
+                <li>Klik "Saya menyetujui Syarat dan Ketentuan"</li>
+                <li>Langsung aktifkan paket (Opsional)</li>
+                <li>Lanjut ke Pembayaran</li>
+                <li>Pilih metode bayar</li>
+                <li>Lakukan pembayaran</li>
+                <li>Selesai.</li>
             `
         }, {
             content: `
-            <li>Pastikan anda sudah mengaktifkan XStream Box terlebih dahulu</li>
-            <li>Jika XStream Box sudah aktif, silahkan klik menu Aktivasi Minipack.</li>
-            <li>Masukkan Voucher yang sudah didapatkan melalui Email / SMS atau anda dapat Klik Menu My Voucher List untuk melihat Kode Voucher yang sudah anda beli, lalu klik tombol Klaim</li>
-            <li>Jika muncul alert "silahkan ganti nomor telepon terlebih dahulu", silahkan klik tombol Update Profile lalu klik tombol "Ganti Nomor Hp". Setelah itu lakukan Aktivasi Minipack kembali.</li>
-            <li>Jika muncul alert "aktivasi gagal. Product anda masih aktif", artinya Minipack eksisting anda masih tersedia. Silahkan lihat detail nya pada Menu Akun Info dan lakukan aktivasi setelah Minipack tersebut habis</li>
-            <li>Jika sudah sukses, berarti Aktivasi Voucher Minipack telah berhasil</li>
+            <li>Pastikan Paket Berlangganan Xstream anda Aktif, kemudian silahkan login silahkan login dahulu di https://xgo.transvision.co.id/</li>
+            <li>Pilih Tab Produk - Klik Berlangganan pada bagian Paket Berlangganan Xstream. </li>
+            <li>Pilih dan klik “Aktivasi Disini”</li>
+            <li>Masukkan kode voucher yang anda miliki.</li>
+            <li>Klik Aktivasi.</li>
+            <li>Selesai.</li>
+            `
+        }, {
+            content: `
+            <ol>Untuk informasi dan penanganan kendala bisa menghubungi whatsapp 082308235810 atau email ke care@transvision.co.id</ol>
             `
         }
     ]

@@ -2,7 +2,7 @@ import * as React from 'react'
 import css from './HomePage.module.css'
 import { useRouter } from 'next/router';
 import Image from 'next/image'
-import Iphone from '../../../public/png/iphone.png'
+import Iphone from '../../../public/png/iphone_new.png'
 import GooglePlay from '../../../public/png/google_play.png'
 import AppleStore from '../../../public/png/apple_store.png'
 import Background from '../../../public/png/background.png'
@@ -125,9 +125,9 @@ export default function HomePage() {
 
 
                                     <div className="bg-white rounded-lg py-12">
-                                        <p className="text-3xl text-center font-nunito font-bold">Xstream Seru Minipack</p>
+                                        <p className="text-3xl text-center font-nunito font-bold">Paket Berlangganan Xstream</p>
                                         <div className="flex justify-center mt-7 px-10">
-                                            <p className="text-gray-500 text-center">GRATIS! tayangan 42+ Live Channel TV dan 1000+ Video on Demand Premium</p>
+                                            <p className="text-gray-500 text-center">Nikmati tayangan terlengkap hingga 100+ Live TV Channel  dan 1000+ Video On Demand</p>
                                         </div>
                                         <div className="flex justify-center items-center">
                                             <button
@@ -140,7 +140,7 @@ export default function HomePage() {
                                             </button>
                                         </div>
                                         <div className="flex justify-center">
-                                            <img src={'../png/xstream.png'} width="319px" height="251px" className="mt-7" />
+                                            <img src={'../png/xstreamnew.png'} width="319px" height="251px" className="mt-7" />
                                         </div>
                                     </div>
                                 </div>

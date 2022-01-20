@@ -254,7 +254,7 @@ export default function MinipackPage() {
                             <div className="inline-block align-middle bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
                                 <div className='max-h-96 overflow-auto'>
                                     <div className="mt-3 text-left sm:mt-5">
-                                    <div className="mt-2 pr-1">
+                                        <div className="mt-2 pr-1">
                                             <p className="text-sm text-gray-500 font-semibold">A. KETENTUAN UMUM </p>
                                             <p className="text-sm text-gray-500 text-justify font-semibold">Ketentuan Umum di bawah ini (“Ketentuan Umum”) harus dibaca sebelum pembeli maupun pengguna ("Anda") menggunakan Platform Layanan ini. Penggunaan Platform Layanan ini menunjukkan penerimaan, persetujuan dan kepatuhan Anda terhadap Ketentuan Umum ini beserta ketentuan khusus (“Ketentuan Khusus”) dan setiap dokumen lainnya yang terkait (“Ketentuan”).</p>
                                             <ol className='text-sm text-gray-500 list-decimal pl-6'>
@@ -265,7 +265,7 @@ export default function MinipackPage() {
                                                     <li className='my-2 text-justify'>c. Akses terhadap konten pada XSTREAM Box, Mobile Apps XSTREAM, dan Android TV Apps XSTREAM tersedia secara berbayar. Untuk itu, Anda memerlukan jaringan internet dan kuota paket data yang cukup. Kami tidak bertanggung jawab atas pemotongan pulsa dan/ atau kuota paket data yang Anda miliki sehubungan dengan penggunaan atas jaringan internet dan kuota dalam mengunduh ataupun mengakses Layanan.</li>
                                                     <li className='my-2 text-justify'>d. Dengan mengakses dan menggunakan Platform Layanan, maka Anda menyatakan telah membaca, memahami, menyetujui dan menyatakan patuh terhadap Ketentuan ini. Jika Anda tidak dapat menyetujui Ketentuan ini, baik secara keseluruhan ataupun sebagian, maka Anda tidak diperbolehkan untuk mengakses Platform Layanan ini ataupun menggunakan Layanan yang tersedia. Dengan demikian, Ketentuan ini merupakan perjanjian yang mengikat antara Anda dengan Kami sesuai dengan peraturan perundang-undangan yang berlaku.</li>
                                                     <li className='my-2 text-justify'>e. Anda dengan ini menyatakan dan menjamin bahwa Anda adalah orang yang berhak dan cakap untuk mengadakan perjanjian yang mengikat berdasarkan hukum yang berlaku di wilayah Negara Republik Indonesia sehubungan dengan penggunaan Platform Layanan termasuk namun tidak terbatas pada telah berumur 18 (delapan belas) tahun atau lebih, hal mana tidak perlu dibuktikan lebih lanjut oleh Kami. Jika tidak, maka Kami berhak untuk sewaktu-waktu memblokir Akun Anda maupun menghentikan seluruh Layanan yang Anda gunakan. </li>
-                                                    
+
                                                 </ol>
                                                 <li className='font-semibold'>Perubahan</li>
                                                 <ol>
@@ -453,6 +453,26 @@ export default function MinipackPage() {
         )
     }
 
+    const channel = (data) => {
+        let view = ''
+        if(data === 'DIAMOND'){
+            view = '85+ Channel'
+        }else if(data === 'PLATINUM'){
+            view = '70+ Channel'
+        }else if(data === 'GOLD'){
+            view = '60+ Channel'
+        }else if(data === 'SILVER'){
+            view = '45+ Channel'
+        }else if(data === 'MVP'){
+            view = '3 Channel'
+        }else{
+            view = ''
+        }
+
+        return view
+    }
+
+
     return (
         <>
             {error && <Alert type={0} title={'Terjadi Kesalahan Server'} message={'Silahkan coba beberapa saat lagi'} close={closeModal} />}
@@ -486,6 +506,7 @@ export default function MinipackPage() {
                             <div className="flex justify-center">
                                 <div className={classNames(idxpaket === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg h-56 px-12 py-12")}>
                                     <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-2xl font-bold font-nunito")}>{data.minipack}</p>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-lg font-bold font-nunito")}>{channel(data.minipack)}</p>
                                     <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-xs font-normal")}>{data.description}</p>
                                     <div className="w-full mt-7">
                                         <button
@@ -550,7 +571,7 @@ export default function MinipackPage() {
                 </button>
             </div>
             <div className="flex justify-center mt-12 mb-24">
-                <label  className="font-small text-xs text-gray-700">
+                <label className="font-small text-xs text-gray-700">
                     Punya Kode Voucher? <a className="text-blue-600 cursor-pointer" onClick={() => router.push('/voucher')}>Aktivasi disini</a>
                 </label>
             </div>

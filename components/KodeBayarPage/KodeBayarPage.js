@@ -35,8 +35,33 @@ export default function KodeBayarPage() {
             <div className="mt-40 flex justify-center">
                 <p className="w-1/2 text-4xl font-semibold text-center">Kode Bayar</p>
             </div>
-            <div className="flex justify-center mt-7">
-                <p className="text-lg font-light">Silahkan simpan kode bayar Anda berikut ini</p>
+            <div className="w-full flex flex-col justify-center mt-7">
+                <p className="mx-auto text-center text-lg font-light">Salin Kode Bayar dan klik <a href="https://transvision.co.id/bayar" target="_blank" className='text-blue-600'>disini</a> untuk pilihan mode bayar :</p>
+                <div className='mx-auto grid grid-cols-5 w-full lg:w-1/3 my-5'>
+                    <div className='flex flex-col gap-y-2'>
+                        <img src={'../../png/kode_bayar/atm.png'} className='w-10 h-10 mx-auto' />
+                        <p className='text-xs text-center'>ATM</p>
+                    </div>
+                    <div className='flex flex-col gap-y-2'>
+                        <img src={'../../png/kode_bayar/mobile_banking.png'} className='w-10 h-10 mx-auto' />
+                        <p className='text-xs text-center'>Mobile Banking</p>
+                    </div>
+                    <div className='flex flex-col gap-y-2'>
+                        <img src={'../../png/kode_bayar/internet_banking.png'} className='w-10 h-10 mx-auto' />
+                        <p className='text-xs text-center'>Internet Banking</p>
+                    </div>
+                    <div className='flex flex-col gap-y-2'>
+                        <img src={'../../png/kode_bayar/minimarket.png'} className='w-10 h-10 mx-auto' />
+                        <p className='text-xs text-center'>Mini Market</p>
+                    </div>
+                    <div className='flex flex-col gap-y-2'>
+                        <img src={'../../png/kode_bayar/credit_card.png'} className='w-10 h-10 mx-auto' />
+                        <p className='text-xs text-center'>Credit Card</p>
+                    </div>
+                </div>
+
+                <p className="mx-auto text-lg font-light mb-5"><a href="https://transvision.co.id/carabayar" target="_blank" className='text-blue-600'>Panduan Pembayaran</a></p>
+                <p className="mx-auto text-sm font-light"> Untuk keterangan lebih lanjut bisa cek email anda!</p>
             </div>
 
             <div className="flex justify-center mt-20 px-8 lg:px-0">
@@ -63,7 +88,16 @@ export default function KodeBayarPage() {
                 </div>
             </div>
 
-            <div className="flex justify-center mb-52">
+            <div className='flex justify-center mt-12'>
+                <div className='flex flex-row py-4 px-6 gap-x-4' style={{ backgroundColor: '#f6f8fa' }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="my-auto h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{color: '#9999ae'}}>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className='text-xs font-medium my-auto' style={{color: '#9999ae'}}>Kode Bayar Anda akan dikirim melalui email</p>
+                </div>
+            </div>
+
+            <div className="flex justify-center mb-20">
                 <div className="mt-14 flex cursor-pointer" onClick={() => router.push('/')}>
                     <div className="flex flex-wrap content-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" style={{ color: '#0285e4' }}>
