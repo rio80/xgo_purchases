@@ -11,12 +11,19 @@ const body = {
 
 export default function tokenv2(req, res) {
   const data = req.body.url
-  axios.post(`${config.apiHost}${data}/oauth2/token`, body)
-    .then(function (response) {
-      res.status(200).json(response.data.access_token)
-    })
-    .catch(function (error) {
-      res.status(400).json(error)
-    });
-
+   return new Promise((resolve, reject) => {
+    axios.post(`${config.apiHost}${data}/oauth2/token`, body)
+      .then(response => {
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'max-age=180000');
+        res.end(JSON.stringify(response.data.access_token));
+        resolve();
+      })
+      .catch(error => {
+        res.json(error);
+        res.status(405).end();
+        resolve();
+      });
+  });
 }
