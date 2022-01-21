@@ -19,9 +19,9 @@ const body = {
 
 const getAccessToken = (url) => {
   const splitParam = url.split('?')[0]
-  return axios.post(`${config.apiHost}${splitParam}/oauth2/token`, body)
+  return axios.post(`/api/tokenv2`, {url :splitParam})
     .then(function (response) {
-      return response.data.access_token;
+      return response.data
     })
     .catch(function (error) {
       console.log(error);
@@ -29,9 +29,9 @@ const getAccessToken = (url) => {
 };
 
 const refreshAccessToken = () => {
-  return axios.post(`${config.apiHost}/transvisionplus/oauth2/token`, body)
+  return axios.post(`/api/tokenv1`)
     .then(function (response) {
-      return response.data.access_token;
+      return response.data
     })
     .catch(function (error) {
       console.log(error);
