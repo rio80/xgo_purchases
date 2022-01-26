@@ -744,6 +744,10 @@ export default function PembayaranPage({ type = 'minipack' }) {
                         </div>
                     </div>
 
+                    <div className='w-80 my-4'>
+                        <p className='text-gray-600 text-xs'>Untuk pilihan paket dan durasi berlangganan yang lain, silakan tekan tombol <b>KEMBALI</b> di bawah</p>
+                    </div>
+
                     <div className="w-80">
                         <button
                             type="button"

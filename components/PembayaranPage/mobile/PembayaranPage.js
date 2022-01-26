@@ -458,7 +458,6 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
                     <div className="mx-4 flex justify-center mt-8 ">
                         <div className="w-96 bg-white shadow p-6 rounded-lg" style={{ background: 'linear-gradient(90deg, rgba(0,36,3,1) 0%, rgba(212,13,150,1) 0%, rgba(73,88,218,1) 100%)' }}>
-
                             <p className="font-normal text-base text-white">
                                 {paket?.name ? (
                                     <>
@@ -550,6 +549,10 @@ export default function PembayaranPage({ type = 'minipack' }) {
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div className='w-full mt-4 px-7'>
+                        <p className='text-gray-600 text-xs'>Untuk pilihan paket dan durasi berlangganan yang lain, silakan tekan tombol <b>KEMBALI</b> di bawah</p>
                     </div>
 
                     <div className="w-full bg-white shadow mt-8 px-4 py-7">
