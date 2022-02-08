@@ -1,216 +1,234 @@
-import { useEffect, useState, Fragment } from 'react'
-import { RadioGroup, Dialog, Listbox, Transition, Popover } from '@headlessui/react'
-import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
-import css from './PembayaranPage.module.css'
-import { createOrderBox, createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
-import { useRouter } from 'next/router'
-import Cookies from 'js-cookie'
-import Loader from 'react-loader-spinner'
-import Alert from '../../../pages/shared/alert/Alert'
-import Tooltip from '../Tooltip'
-import { useDispatch } from 'react-redux'
-import { KodeAction } from '../../../store/KodeBayar/KodeBayarAction'
-import { addMonths, format } from 'date-fns'
-import { FooterAction } from '../../../store/Footer/FooterAction'
-import { CheckoutAction } from '../../../store/Checkout/CheckoutAction'
+import Loader from "react-loader-spinner";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, {
+    Pagination, Navigation
+} from 'swiper';
+import "swiper/css";
+import "swiper/css/pagination"
+import "swiper/css/navigation"
+import './MinipackPage.module.css';
+SwiperCore.use([Pagination, Navigation]);
 
-const plans = [
-    { name: 'Transvision Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
-    { name: 'OVO', logo: '../png/ovo.png', width: '51px', height: '21px', id: '6' },
-    { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px', id: '' },
-    { name: 'Pulsa', logo: '../png/telkomsel.png', width: '66px', height: '16px', id: '' },
-]
-
-const people = [
-    { id: 1, name: 'Telkomsel' },
-    { id: 2, name: 'Smartfren' }
-]
+import * as React from 'react'
+import { getMinipack, getMinipackXgo } from "../../../../utils/apiHandlers";
+import { useRouter } from 'next/router';
+import Alert from "../../../../pages/shared/alert/Alert";
+import Cookies from "js-cookie";
+import config from '../../../../utils/config'
+import { Dialog, Popover, Transition } from '@headlessui/react'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function PembayaranPage({ type = 'minipack' }) {
-    const [profil, setProfil] = useState([])
-    const datapayment = JSON.parse(localStorage.getItem('payment'))
-    const paket = JSON.parse(Cookies.get('paket'))
-    const dispatch = useDispatch()
+export default function MinipackXgoPage() {
+    const [loading, setLoading] = React.useState(true)
     const router = useRouter()
-    const [selected, setSelected] = useState(plans[0])
-    const [selected2, setSelected2] = useState(people[0])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
-    const [open, setOpen] = useState(false);
-    const today = new Date()
-    const start = format(today, 'dd MMM yyyy')
-    const sum = addMonths(today, paket.durasi);
-    const CryptoJS = require("crypto-js");
-    const key = CryptoJS.enc.Hex.parse('5472346e73563173316f6e3230323178');
-    const iv = CryptoJS.enc.Hex.parse('2b5261354e7356697331306e32303231');
-    const auth = Cookies.get('auth')
-    const decrypted = CryptoJS.AES.decrypt(auth, key, { iv: iv, padding: CryptoJS.pad.ZeroPadding }).toString(CryptoJS.enc.Utf8);
-    const [coming, setComing] = useState(false);
-    const [openModal, setOpenModal] = useState(false)
+    const [paket, setPaket] = React.useState('')
+    const [idxpaket, setIdxPaket] = React.useState('')
+    const [idxdurasi, setIdxDurasi] = React.useState('')
+    const [paketdata, setPaketdata] = React.useState([])
+    const [error, setError] = React.useState(false)
+    const [open, setOpen] = React.useState(false)
+    const [openModal, setOpenModal] = React.useState(false)
+    const [type, setType] = React.useState(true)
 
-    const closeComing = (data) => {
-        setComing(data);
-    };
+    const [data, setData] = React.useState({
+        package_id: '' + config.idPackageXgo,
+        receiver_type: 'SELF'
+    })
 
-    const handleBayar = async () => {
-        createOrder()
+    const [payment, setPayment] = React.useState({
+        app_id: "webxgo",
+        payment_type: "internal_app",
+        app_url_validation: "https://xgo.co.id/api/validate/id=123321",
+        app_url_callback: config.domain
+    })
+
+    const handleDurasi = (paket, idx) => {
+        setPaket(paket)
+        setIdxPaket(idx)
+        setIdxDurasi('')
     }
 
-    const checkPayment = async () => {
-        const datapayment = JSON.parse(localStorage.getItem('payment'))
-        const phone = profil?.data?.result?.phone_number
-        try {
-            let submit = ''
-            if (type === 'minipack' || type === 'stb' || type === 'xgo') {
-                submit = {
-                    ...datapayment,
-                    order_id: Cookies.get('order_id'),
-                    customer_email: profil?.data?.result?.email,
-                    customer_mobilephone: phone.replace(/\D/gm, ''),
-                    customer_name: profil?.data?.result?.name
-                }
-            } else {
-                submit = {
-                    ...datapayment,
-                    customer_email: profil?.data?.result?.email,
-                    order_id: Cookies.get('order_id')
-                }
-            }
-
-            const reqPayment = await createRequestPayment(submit)
-            setLoading(false)
-            router.push(reqPayment?.data?.result?.url_doku)
-        } catch (e) {
-            setLoading(false)
-            console.log(e)
-        }
-    }
-
-    const createOrder = async () => {
-        setLoading(true)
-        try {
-            const createorder = JSON.parse(localStorage.getItem('checkout'))
-            let submit = ''
-            let postData = ''
-
-            if (type === 'minipack' || type === 'stb' || type === 'xgo') {
-                submit = {
-                    ...createorder,
-                    payment_method_id: selected.id,
-                    email: profil?.data?.result?.email,
-                    receiver_email: profil?.data?.result?.email
-                }
-
-                postData = await createOrderMinipack(submit);
-            } else {
-                submit = {
-                    ...createorder,
-                    PaymentMethodId: selected.id
-                }
-
-                postData = await createOrderBox(submit);
-            }
-
-            const orderId = type === 'minipack' || type === 'stb' || type === 'xgo' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
-            Cookies.set('order_id', orderId)
-            if (selected.id === '6') {
-                checkPayment()
-            } else {
-                dispatch({
-                    type: KodeAction.SET_KODE,
-                    kode: type === 'minipack' || type === 'stb' || type === 'xgo' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
-                });
-                router.push('/kode-bayar')
-            }
-        } catch (e) {
-            setLoading(false)
-            setError(e?.res?.data?.message?.[0])
-            setOpen(true)
-            setLoading(false)
-        }
-    }
-
-    const closeModal = (data) => {
-        setOpen(data);
-    };
-
-    const convertToRupiah = (angka = 0) => {
+    const convertToRupiah = (angka) => {
         var rupiah = '';
         var angkarev = angka.toString().split('').reverse().join('');
         for (var i = 0; i < angkarev.length; i++) if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
         return rupiah.split('', rupiah.length - 1).reverse().join('');
     }
 
-    const sumAmount = () => {
-        let totalHarga = 0
-        if (selected.id === '6' && type === 'box') {
-            totalHarga = (+datapayment.amount * datapayment?.item_details?.[0].quantity) + 5000 + datapayment?.item_details?.[0].courier_fee
-        } else if (type === 'box') {
-            totalHarga = (datapayment.amount * datapayment?.item_details?.[0].quantity) + datapayment?.item_details?.[0].courier_fee
-        } else if (selected.id === '6') {
-            totalHarga = datapayment.amount + 5000
-        } else {
-            totalHarga = datapayment.amount
+    const handleMinipack = (id_minipack, price, minipack, index) => {
+        let submit = {
+            ...data,
+            minipack_id: id_minipack,
+            total_amount: price
         }
 
-        return totalHarga
+        let dataPayment = {
+            ...payment,
+            amount: +price,
+            item_details: [
+                {
+                    id: id_minipack,
+                    price: +price,
+                    quantity: 1,
+                    name: minipack
+                }
+            ]
+        }
+        setData(submit)
+        setPayment(dataPayment)
+        setIdxDurasi(index)
     }
 
-    useEffect(() => {
+    const handleCheckout = (status) => {
+        if (status) {
+            let dataCheckout = {
+                ...data,
+                activation_process: type ? 'IMMEDIATE' : 'CLAIM'
+            }
+            let dataPaket = {
+                paket,
+                durasi: paketdata[idxpaket]?.plans[idxdurasi]?.duration
+            }
+            Cookies.set('paket', JSON.stringify(dataPaket));
+            localStorage.setItem('checkout', JSON.stringify(dataCheckout));
+            localStorage.setItem('payment', JSON.stringify(payment));
+            const auth = Cookies.get('auth')
+            if (typeof auth === 'undefined') {
+                router.push('/login')
+            } else {
+                router.push('/pembayaran?type=xgo')
+            }
+        }
+    }
+
+    const Listpaket = () => {
+        return (
+            <div>
+                <div className="max-w-3xl mx-auto hidden lg:block">
+                    <div className="mt-16">
+                        <p className="text-center font-semibold text-xl">Pilih Durasi</p>
+                    </div>
+                </div>
+                {paketdata[idxpaket].plans.length > 3 ?
+                    <>
+                        <div className="max-w-5xl mx-auto hidden lg:block mt-5">
+                            <Swiper
+                                slidesPerView={3}
+                                spaceBetween={30}
+                                slidesPerGroup={1}
+                                loop={false}
+                                loopFillGroupWithBlank={true}
+                                navigation={true}
+                                className="mySwiper"
+                                style={{ padding: '0 50px', overflow: 'hidden' }}
+                            >
+                                {paketdata[idxpaket].plans.map((data, index) => (
+                                    <SwiperSlide key={index}>
+                                        <div className="w-full flex justify-center">
+                                            <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
+                                                <p className="text-xl font-bold font-nunito">{data.title}</p>
+                                                <div className="flex gap-x-2">
+                                                    <div className="self-center">
+                                                        <p className="mt-12 text-3xl font-bold">{convertToRupiah(data.price)}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>RP</p>
+                                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
+                                                    </div>
+
+                                                </div>
+                                                <div className="flex w-full mt-6">
+                                                    <button
+                                                        type="button"
+                                                        className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                        style={{ backgroundColor: idxdurasi === index ? 'white' : '#00b6f0', color: idxdurasi === index ? '#00b6f0' : '' }}
+                                                        onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
+                                                    >
+                                                        {idxdurasi === index ? 'Terpilih' : 'Pilih Durasi'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
+                    </>
+                    :
+                    <div className="max-w-5xl mx-auto hidden lg:block mt-5 px-12">
+                        <div className="w-full flex justify-between gap-x-8">
+                            {paketdata[idxpaket].plans.map((data, index) => (
+                                <div className="w-full flex justify-center" key={index}>
+                                    <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-12 pt-12 py-6")}>
+                                        <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xl font-bold font-nunito")}>{data.title}</p>
+                                        <div className="flex gap-x-2">
+                                            <div className="self-center">
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-3xl font-bold")}>{convertToRupiah(data.price)}</p>
+                                            </div>
+                                            <div>
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xl")}>RP</p>
+                                                <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p>
+                                            </div>
+
+                                        </div>
+                                        <div className="flex w-full mt-6">
+                                            <button
+                                                type="button"
+                                                className="w-full self-center items-center py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                style={{ backgroundColor: idxdurasi === index ? 'white' : '#00b6f0', color: idxdurasi === index ? '#00b6f0' : '' }}
+                                                onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
+                                            >
+                                                {idxdurasi === index ? 'Terpilih' : 'Pilih Durasi'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                }
+            </div>
+        )
+    }
+
+    React.useEffect(() => {
         (async () => {
             setLoading(true)
             try {
-                const getData = await getProfil(decrypted);
-                setProfil(getData)
+                const getData = await getMinipackXgo();
+                setPaketdata(getData?.data?.result)
                 setLoading(false)
             } catch (e) {
                 console.log(e)
                 setLoading(false)
+                setError(true)
             }
         })();
     }, []);
 
-    const handleComing = (data) => {
-        // console.log('hai')
-        if (data === 'Gopay' || data === 'Pulsa') {
-            setComing(!coming)
-        }
-    }
+    const closeModal = (data) => {
+        setError(data);
+    };
 
-    const handleBack = () => {
-
-        dispatch({
-            type: FooterAction.SET_PRODUK,
-            nama: '-',
-            paket: '-',
-            harga: '-'
-        })
-        dispatch({
-            type: CheckoutAction.SET_TOTAL,
-            TotalProductPrice: '-',
-        });
-        dispatch({
-            type: CheckoutAction.SET_QTY,
-            Qty: 1,
-        });
-        setTimeout(
-            () => router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : type === 'xgo' ? '/pembelian-xgo' : '/pembelian-box'),
-            400
-        );
+    if (loading) {
+        return (
+            <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden flex flex-col items-center justify-center">
+                <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
+            </div>
+        )
 
     }
 
     function Tnc() {
         return (
-            <Transition.Root show={openModal} as={Fragment}>
+            <Transition.Root show={openModal} as={React.Fragment}>
                 <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto" onClose={setOpenModal}>
                     <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                         <Transition.Child
-                            as={Fragment}
+                            as={React.Fragment}
                             enter="ease-out duration-300"
                             enterFrom="opacity-0"
                             enterTo="opacity-100"
@@ -225,7 +243,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                             &#8203;
                         </span>
                         <Transition.Child
-                            as={Fragment}
+                            as={React.Fragment}
                             enter="ease-out duration-300"
                             enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             enterTo="opacity-100 translate-y-0 sm:scale-100"
@@ -236,7 +254,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                             <div className="inline-block align-middle bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
                                 <div className='max-h-96 overflow-auto'>
                                     <div className="mt-3 text-left sm:mt-5">
-                                        <div className="mt-2 pr-1">
+                                    <div className="mt-2 pr-1">
                                             <p className="text-sm text-gray-500 font-semibold">A. KETENTUAN UMUM </p>
                                             <p className="text-sm text-gray-500 text-justify font-semibold">Ketentuan Umum di bawah ini (“Ketentuan Umum”) harus dibaca sebelum pembeli maupun pengguna ("Anda") menggunakan Platform Layanan ini. Penggunaan Platform Layanan ini menunjukkan penerimaan, persetujuan dan kepatuhan Anda terhadap Ketentuan Umum ini beserta ketentuan khusus (“Ketentuan Khusus”) dan setiap dokumen lainnya yang terkait (“Ketentuan”).</p>
                                             <ol className='text-sm text-gray-500 list-decimal pl-6'>
@@ -247,7 +265,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                                                     <li className='my-2 text-justify'>c. Akses terhadap konten pada XSTREAM Box, Mobile Apps XSTREAM, dan Android TV Apps XSTREAM tersedia secara berbayar. Untuk itu, Anda memerlukan jaringan internet dan kuota paket data yang cukup. Kami tidak bertanggung jawab atas pemotongan pulsa dan/ atau kuota paket data yang Anda miliki sehubungan dengan penggunaan atas jaringan internet dan kuota dalam mengunduh ataupun mengakses Layanan.</li>
                                                     <li className='my-2 text-justify'>d. Dengan mengakses dan menggunakan Platform Layanan, maka Anda menyatakan telah membaca, memahami, menyetujui dan menyatakan patuh terhadap Ketentuan ini. Jika Anda tidak dapat menyetujui Ketentuan ini, baik secara keseluruhan ataupun sebagian, maka Anda tidak diperbolehkan untuk mengakses Platform Layanan ini ataupun menggunakan Layanan yang tersedia. Dengan demikian, Ketentuan ini merupakan perjanjian yang mengikat antara Anda dengan Kami sesuai dengan peraturan perundang-undangan yang berlaku.</li>
                                                     <li className='my-2 text-justify'>e. Anda dengan ini menyatakan dan menjamin bahwa Anda adalah orang yang berhak dan cakap untuk mengadakan perjanjian yang mengikat berdasarkan hukum yang berlaku di wilayah Negara Republik Indonesia sehubungan dengan penggunaan Platform Layanan termasuk namun tidak terbatas pada telah berumur 18 (delapan belas) tahun atau lebih, hal mana tidak perlu dibuktikan lebih lanjut oleh Kami. Jika tidak, maka Kami berhak untuk sewaktu-waktu memblokir Akun Anda maupun menghentikan seluruh Layanan yang Anda gunakan. </li>
-
+                                                    
                                                 </ol>
                                                 <li className='font-semibold'>Perubahan</li>
                                                 <ol>
@@ -435,341 +453,176 @@ export default function PembayaranPage({ type = 'minipack' }) {
         )
     }
 
+    const channel = (data) => {
+        let view = ''
+        if(data === 'DIAMOND'){
+            view = '85+ Channel'
+        }else if(data === 'PLATINUM'){
+            view = '70+ Channel'
+        }else if(data === 'GOLD'){
+            view = '60+ Channel'
+        }else if(data === 'SILVER'){
+            view = '45+ Channel'
+        }else if(data === 'MVP'){
+            view = '3 Channel'
+        }else{
+            view = ''
+        }
+
+        return view
+    }
+
     return (
         <>
             {openModal && <Tnc />}
-            {loading &&
-                <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
-                    <Loader type="ThreeDots" color="#00BFFF" className="text-center justify-center flex mt-20" height={80} width={80} />
+            {error && <Alert type={0} title={'Terjadi Kesalahan'} message={'Silahkan coba beberapa saat lagi'} close={closeModal} />}
+            <div className="w-full mx-auto px-5">
+                <div className="overflow-hidden mt-36">
+                    <div className="py-5">
+                        <p className="font-bold text-4xl text-center font-nunito">Pembelian </p> <br />
+                        <p className="font-medium px-4 text-sm text-center text-gray-400">Untuk berlangganan, tersedia berbagai paket yang sesuai dengan kebutuhanmu. </p>
+                    </div>
                 </div>
+                <div className="max-w-5xl mx-auto px-6 mt-16">
+                    <p className="text-left font-bold text-xl font-nunito">Pilih Paket</p>
+                </div>
+            </div>
+
+            <div className="max-w-5xl mx-auto mt-5">
+                <Swiper
+                    slidesPerView={2}
+                    spaceBetween={15}
+                    slidesPerGroup={2}
+                    loop={false}
+                    loopFillGroupWithBlank={true}
+                    className="mySwiper"
+                    style={{ padding: '0 40px 0 20px', overflow: 'hidden' }}
+                >
+
+                    {paketdata.map((data, index) => (
+                        <SwiperSlide key={index}>
+                            <div className="flex justify-center">
+                                <div className={classNames(idxpaket === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg h-56 px-6 py-12")}>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-center text-2xl font-bold font-nunito")}>{data.minipack}</p>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-lg font-bold font-nunito")}>{channel(data.minipack)}</p>
+                                    <p className={classNames(idxpaket === index ? "text-white" : "text-black", "text-center text-xs font-normal")}>{data.description}</p>
+                                    <div className="w-full mt-7">
+                                        <button
+                                            type="button"
+                                            className="w-full self-center items-center py-3 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600"
+                                            style={{ backgroundColor: idxpaket === index ? 'white' : '#00b6f0', color: idxpaket === index ? '#00b6f0' : '' }}
+                                            onClick={() => handleDurasi(data.minipack, index)}
+                                        >
+                                            {idxpaket === index ? 'Terpilih' : 'Pilih Paket'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+
+            {paket ?
+                <div>
+                    <div className="w-full mx-auto px-5">
+                        <div className="max-w-5xl mx-auto px-6 mt-16">
+                            <p className="text-left font-semibold text-xl">Pilih Durasi</p>
+                        </div>
+                    </div>
+
+                    <div className="max-w-5xl mx-auto mt-5">
+                        <Swiper
+                            slidesPerView={2}
+                            spaceBetween={15}
+                            slidesPerGroup={2}
+                            loop={false}
+                            loopFillGroupWithBlank={true}
+                            className="mySwiper"
+                            style={{ padding: '0 40px 0 20px', overflow: 'hidden' }}
+                        >
+                            {paketdata[idxpaket]?.plans.map((data, index) => (
+                                <SwiperSlide key={index}>
+                                    <div className="w-full flex justify-center">
+                                        <div className={classNames(idxdurasi === index ? "bg-blue-600" : "bg-white border-2 border-gray-200", "w-full rounded-lg px-6 pt-12 py-6")}>
+                                            <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-sm font-bold font-nunito")}>{data.title}</p>
+                                            <div className="flex gap-x-2">
+                                                <div className="self-center">
+                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 text-base font-bold")}>{convertToRupiah(data.price)}</p>
+                                                </div>
+                                                <div>
+                                                    <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "mt-12 font-semibold text-xs")}>RP</p>
+                                                    {/* <p className={classNames(idxdurasi === index ? "text-white" : "text-black", "text-xs font-normal")}>/bulan</p> */}
+                                                </div>
+
+                                            </div>
+                                            <div className="flex w-full mt-6">
+                                                <button
+                                                    type="button"
+                                                    className="w-full self-center items-center py-3 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600"
+                                                    style={{ backgroundColor: idxdurasi === index ? 'white' : '#00b6f0', color: idxdurasi === index ? '#00b6f0' : '' }}
+                                                    onClick={() => handleMinipack(data.minipack_id, data.price, data.minipack, index)}
+                                                >
+                                                    {idxdurasi === index ? 'Terpilih' : 'Pilih Durasi'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
+                </div> : ''
             }
 
-            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : type === 'xgo' ? '/pembelian-xgo' : '/pembelian-box'} close={closeModal} />}
-            {coming && <Alert type={1} title={'Coming Soon'} message={''} close={closeComing} />}
+            <div className="flex items-center h-5 mt-6 ml-5">
+                <input
+                    id="comments2"
+                    aria-describedby="comments-description"
+                    name="comments2"
+                    type="checkbox"
+                    className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                    checked={type}
+                    onClick={() => setType(!type)}
+                />
+                <div className="ml-3 text-sm">
+                    <label htmlFor="comments2" className="font-small text-xs text-gray-700">
+                        Langsung aktifkan paket
+                    </label>
+                </div>
+            </div>
 
-            <div className="absolute top-0 left-0 w-full min-h-screen lg:hidden mt-12" style={{ backgroundColor: '#f6f9ff' }}>
-                <div className="flex flex-col min-h-screen relative">
-                    <div className="w-full px-7 mt-24">
-                        <p className="font-medium text-2xl flex justify-center">
-                            Pembayaran
-                        </p>
+            <div className="sticky bottom-0 mt-20 bg-white drop-shadow-3xl h-36 px-4 py-3.5 z-20">
+                <div className="flex items-center h-5">
+                    <input
+                        id="comments"
+                        aria-describedby="comments-description"
+                        name="comments"
+                        type="checkbox"
+                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        onClick={() => setOpen(!open)}
+                    />
+                    <div className="ml-3 text-sm">
+                        <label htmlFor="comments" className="font-small text-xs text-gray-700">
+                            Saya menyetujui <a href="#" className="text-blue-600" onClick={() => setOpenModal(true)}>Syarat dan Ketentuan</a>
+                        </label>
                     </div>
 
-
-                    <div className="mx-4 flex justify-center mt-8 ">
-                        <div className="w-96 bg-white shadow p-6 rounded-lg" style={{ background: 'linear-gradient(90deg, rgba(0,36,3,1) 0%, rgba(212,13,150,1) 0%, rgba(73,88,218,1) 100%)' }}>
-                            <p className="font-normal text-base text-white">
-                                {paket?.name ? (
-                                    <>
-                                        Paket {paket?.name}
-                                    </>
-                                ) : (
-                                    <>
-                                        Paket {paket?.durasi} Bulan {paket.paket}
-                                    </>
-                                )}
-
-                            </p>
-                            <p className="font-normal text-xs text-white mt-1">
-                                {decrypted}
-                            </p>
-                            <div className="flex mt-5">
-                                <div className="self-center">
-                                    <p className="text-xs text-white">{paket?.name ? (
-                                        <>
-                                            {paket?.name}
-                                        </>
-                                    ) : (
-                                        <>
-                                            Paket {paket?.durasi} Bulan {paket.paket}
-                                        </>
-                                    )}</p>
-                                </div>
-                                <div className="text-xs text-white ml-auto">
-                                    <p>RP {convertToRupiah(type === 'box' ? datapayment?.amount * datapayment?.item_details?.[0].quantity : datapayment?.amount)}</p>
-                                </div>
-                            </div>
-                            {type === 'box' &&
-                                <div className="flex mt-2">
-                                    <div className="self-center">
-                                        <div className="flex flex-row">
-                                            <div className="self-center"><p className="text-xs text-white">Biaya Pengiriman </p></div>
-                                        </div>
-                                    </div>
-
-                                    <div className="text-xs text-white ml-auto mt-1">
-                                        <p>RP {convertToRupiah(datapayment?.item_details?.[0].courier_fee)}</p>
-                                    </div>
-                                </div>
-                            }
-                            {selected.id === '6' ? (
-                                <div className="flex mt-2">
-                                    <div className="self-center">
-                                        <div className="flex flex-row">
-                                            <div className="self-center"><p className="text-xs text-white">Biaya Admin OVO </p></div>
-                                            <div className="pt-1"><Tooltip className="self-center" /></div>
-                                        </div>
-                                    </div>
-
-                                    <div className="text-xs text-white ml-auto mt-1">
-                                        <p>RP {convertToRupiah(5000)}</p>
-                                    </div>
-                                </div>
-                            ) : ('')}
-                            <div className="relative mt-2.5">
-                                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div className="w-full border-t border-gray-100" />
-                                </div>
-                            </div>
-                            <div className="flex mt-5">
-                                <div className="self-center">
-                                    <p className="text-xs text-white">Total</p>
-                                </div>
-                                <div className="text-lg font-semibold text-white ml-auto">
-                                    <p>RP {convertToRupiah(sumAmount())}</p>
-                                </div>
-                            </div>
-                            <p className="font-normal text-xs text-white mt-6">
-                                {paket.name === '' ? (
-                                    <>
-                                        Mulai {start} - {format(sum, 'dd MMMM yyyy')}
-                                    </>
-                                ) : (
-                                    ''
-                                )}
-                            </p>
-                            <div className='flex flex-row gap-x-4'>
-                                <div className='flex'>
-                                    <img src={'../../png/iconcheck.png'} className='w-8 my-auto' />
-                                </div>
-                                <div>
-                                    <p className="font-light text-xs text-white mt-1">
-                                        Dengan melanjutkan pembayaran, Saya menyetujui <u className="cursor-pointer" onClick={() => setOpenModal(true)}>syarat dan ketentuan</u> yang berlaku.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='w-full mt-4 px-7'>
-                        <p className='text-gray-600 text-xs'>Untuk pilihan paket dan durasi berlangganan yang lain, silakan tekan tombol <b>KEMBALI</b> di bawah</p>
-                    </div>
-
-                    <div className="w-full bg-white shadow mt-8 px-4 py-7">
-                        <p className="font-medium text-base">
-                            Informasi Kontak
-                        </p>
-                        <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4">
-                            <div className="sm:col-span-3">
-                                <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                                    Email
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        type="text"
-                                        name="first-name"
-                                        id="first-name"
-                                        defaultValue={decrypted}
-                                        autoComplete="given-name"
-                                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                    />
-                                </div>
-                                <p className="mt-1 text-gray-400 font-light text-xs">Email ini adalah alamat email yang terdaftar di akun Anda</p>
-                            </div>
-                            <div className="mt-0.5 mx-1">
-                                <div className="relative flex items-center">
-                                    <div className="flex items-center h-5">
-                                        <input
-                                            id="comments"
-                                            aria-describedby="comments-description"
-                                            name="comments"
-                                            type="checkbox"
-                                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                        />
-                                    </div>
-                                    <div className="ml-3 text-sm">
-                                        <label htmlFor="comments" className="font-small text-xs text-gray-700">
-                                            Tetap kabari saya tentang penawaran eksklusif
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full bg-white shadow mt-2 px-4 py-7 rounded-lg">
-                        <p className="font-medium text-base">
-                            Metode Pembayaran
-                        </p>
-                        <div className="mt-6 gap-y-6 gap-x-4">
-                            <div className="sm:col-span-3">
-                                <RadioGroup value={selected} onChange={setSelected}>
-                                    <RadioGroup.Label className="sr-only">Pricing plans</RadioGroup.Label>
-                                    <div className="relative bg-white rounded-md -space-y-px">
-                                        {plans.map((plan, planIdx) => (
-                                            <div onClick={() => handleComing(plan.name)} key={plan.name}>
-                                                <RadioGroup.Option
-                                                    key={plan.name}
-                                                    value={plan}
-                                                    className={({ checked }) =>
-                                                        classNames(
-                                                            planIdx === 0 ? 'rounded-tl-md rounded-tr-md' : '',
-                                                            planIdx === plans.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
-                                                            checked ? 'bg-indigo-50 border-indigo-200 z-10' : 'border-gray-200',
-                                                            'relative block border p-4 cursor-pointer focus:outline-none sm:flex sm:justify-between'
-                                                        )
-                                                    }
-                                                    disabled={plan.name === 'Gopay' || plan.name === 'Pulsa' ? true : false}
-                                                >
-                                                    {({ active, checked }) => (
-                                                        <>
-                                                            <div className="flex items-center text-sm">
-                                                                <span
-                                                                    className={classNames(
-                                                                        checked ? 'bg-indigo-600 border-transparent' : 'bg-white border-gray-300',
-                                                                        active ? 'ring-2 ring-offset-2 ring-indigo-500' : '',
-                                                                        'h-4 w-4 rounded-full border flex items-center justify-center'
-                                                                    )}
-                                                                    aria-hidden="true"
-                                                                >
-                                                                    <span className="rounded-full bg-white w-1.5 h-1.5" />
-                                                                </span>
-                                                                <RadioGroup.Label
-                                                                    as="span"
-                                                                    className={classNames(checked ? 'text-indigo-900' : 'text-gray-900', 'ml-3 font-medium')}
-                                                                >
-                                                                    {plan.name}
-                                                                </RadioGroup.Label>
-                                                                <RadioGroup.Description
-                                                                    className={classNames(
-                                                                        checked ? 'text-indigo-700' : 'text-gray-500',
-                                                                        'mt-2 flex ml-auto text-sm sm:mt-0 sm:block sm:ml-4 sm:text-right"'
-                                                                    )}
-                                                                >
-
-                                                                    {plan.name === 'Pulsa' ?
-                                                                        <div className="grid grid-cols-2">
-                                                                            <div>
-                                                                                <img src={'../png/telkomsel.png'} width="66px" height="16px" className="self-center" />
-
-                                                                            </div>
-                                                                            <div className="ml-4">
-                                                                                <img src={'../png/smartfren.png'} width="56px" height="9px" className="self-center mt-1" />
-                                                                            </div>
-                                                                        </div>
-                                                                        :
-                                                                        <img src={plan.logo} className="ml-auto" width={plan.width} height={plan.height} />
-                                                                    }
-                                                                </RadioGroup.Description>
-                                                            </div>
-
-                                                        </>
-                                                    )}
-                                                </RadioGroup.Option>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </RadioGroup>
-                            </div>
-
-                            {selected.name === 'Pulsa' &&
-                                <>
-                                    <div className="sm:col-span-3">
-                                        <div className="mt-6">
-                                            <Listbox value={selected2} onChange={setSelected2}>
-                                                <Listbox.Label className="block text-sm font-medium text-gray-700">Pilih Operator</Listbox.Label>
-                                                <div className="mt-1 relative">
-                                                    <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                        <span className="block truncate">{selected2.name}</span>
-                                                        <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                                            <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                                        </span>
-                                                    </Listbox.Button>
-
-                                                    <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-                                                        <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                                                            {people.map((person) => (
-                                                                <Listbox.Option
-                                                                    key={person.id}
-                                                                    className={({ active }) =>
-                                                                        classNames(
-                                                                            active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                                                                            'cursor-default select-none relative py-2 pl-3 pr-9'
-                                                                        )
-                                                                    }
-                                                                    value={person}
-                                                                >
-                                                                    {({ selected2, active }) => (
-                                                                        <>
-                                                                            <span className={classNames(selected2 ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                                                {person.name}
-                                                                            </span>
-
-                                                                            {selected2 ? (
-                                                                                <span
-                                                                                    className={classNames(
-                                                                                        active ? 'text-white' : 'text-indigo-600',
-                                                                                        'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                                    )}
-                                                                                >
-                                                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                                                </span>
-                                                                            ) : null}
-                                                                        </>
-                                                                    )}
-                                                                </Listbox.Option>
-                                                            ))}
-                                                        </Listbox.Options>
-                                                    </Transition>
-                                                </div>
-                                            </Listbox>
-                                        </div>
-                                    </div>
-
-
-                                    <div className="mt-4 col-span-3">
-                                        <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
-                                            Nomor Handphone
-                                        </label>
-                                        <div className="mt-1 flex rounded-md shadow-sm">
-                                            <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                                                +62
-                                            </span>
-                                            <input
-                                                type="text"
-                                                name="company-website"
-                                                id="company-website"
-                                                className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                                                placeholder="87873941697"
-                                            />
-                                        </div>
-                                    </div>
-                                </>
-                            }
-                        </div>
-                    </div>
-                    <div className="sticky bottom-0 mt-2 bg-white drop-shadow-3xl h-20 px-4 z-20">
-                        <div className="my-5 flex flex-row gap-x-4">
-                            <div className='w-1/2'>
-                                <button
-                                    type="button"
-                                    className="w-full border-blue-600 border-2 text-blue-600 self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-semibold rounded-full shadow-sm hover:bg-blue-700"
-                                    onClick={handleBack}
-                                >
-                                    Kembali
-                                </button>
-                            </div>
-                            <div className='w-1/2'>
-                                <button
-                                    type="button"
-                                    className="w-full self-center items-center px-8 py-3 border border-transparent text-xs leading-4 font-light rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                    onClick={handleBayar}
-                                >
-                                    Lanjut Bayar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div className=" mt-4">
+                    <button
+                        type="button"
+                        className={classNames(open && data?.minipack_id ? 'text-white bg-blue-600 hover:bg-blue-700' : 'text-gray-600 bg-gray-300 hover:bg-gray-200', 'w-full self-center items-center px-8 py-4 border border-transparent text-base leading-4 font-base rounded-full shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500')}
+                        style={open && data?.minipack_id ? { backgroundColor: '#0285e4' } : { backgroundColor: '' }}
+                        onClick={open && data?.minipack_id ? () => handleCheckout(1) : () => handleCheckout(0)}
+                    >
+                        Pilih Paket
+                    </button>
+                </div>
+                <div className="flex justify-center my-2.5">
+                    <label className="font-small text-xs text-gray-700">
+                        Punya Kode Voucher? <a className="text-blue-600 cursor-pointer" onClick={() => router.push('/voucher')}>Aktivasi disini</a>
+                    </label>
                 </div>
 
             </div>
