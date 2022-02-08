@@ -7,6 +7,7 @@ module.exports = {
     authenticatedUserid: 'testing',
     secretCookiePassword: 'CuT0c9am8smuanindithatZkrRNSsTM2l9LanungOvOGw',
     idPackage: '381',
+    idPackageXgo: '442',
     domain: 'https://my2-dev.transvision.co.id/verify-order',
     minipackOpen: true 
 };

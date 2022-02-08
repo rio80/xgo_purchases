@@ -17,6 +17,10 @@ export function getMinipack() {
     return apiGet(`/transvisionplus/minipack?package_id=${config.idPackage}`);
 }
 
+export function getMinipackXgo() {
+    return apiGet(`/transvisionplus/minipack?package_id=${config.idPackageXgo}`);
+}
+
 export function createOrderMinipack(data) {
     return apiPost("/transvisionplus/minipack/order", data);
 }
