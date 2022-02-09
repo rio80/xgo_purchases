@@ -13,7 +13,7 @@ export default function KodeBayar(state = initialState, action) {
         }
         case KodeAction.SET_QRCODE: {
             const newState = { ...state };
-            newState.url_qrcode = action.url;
+            newState.data_qr = action.data_qr;
             return newState;
         }
         default:

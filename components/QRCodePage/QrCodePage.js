@@ -1,79 +1,115 @@
 import { useSelector } from 'react-redux';
-import * as React from 'react'
+import React, { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { saveAs } from 'file-saver'
+import { saveAs } from 'file-saver';
+import Spinner from "./Spinner";
 
-const downloadImage = async (file) => {
-
-    saveAs(file, 'qrcode' + '.png')
-}
 
 export default function KodeBayarPage() {
-    const url_qrcode = useSelector((state) => state.KodeReducer.url_qrcode)
-    const router = useRouter()
 
-    const cookie_qrcode = Cookies.get('qrcode')
+  const data_qr = useSelector((state) => state.KodeReducer.data_qr)
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(null);
 
-    let qrcode = ''
-    // if (typeof cookie_qrcode !== 'undefined') {
-    //     if (url_qrcode !== '') {
-    //         if (url_qrcode !== cookie_qrcode) {
-    //             Cookies.set('qrcode', url_qrcode)
-    //         }
-    //     }
-    //     qrcode = Cookies.get('qrcode')
+  const loadingImgStyle = { display: loaded ? "none" : undefined };
 
-    // } else {
+  const displayImgStyle = { display: loaded ? undefined : "none" };
 
-    //     Cookies.set('qrcode', url_qrcode)
-    //     qrcode = Cookies.get('qrcode')
+  const [imgSource, setImgSource] = useState("");
+  const cookie_dataqr = JSON.stringify(Cookies.get('data_qr'));
 
-    // }
+  let qrcode = '';
+  let qrcode_tobase64 = '';
 
-    if (typeof cookie_qrcode !== 'undefined') {
-        if (typeof url_qrcode !== 'undefined') {
-            if (url_qrcode !== cookie_qrcode) {
-                Cookies.set('qrcode', url_qrcode)
-            }
-        }
-    } else {
-        Cookies.set('qrcode', url_qrcode)
+
+  if (typeof cookie_dataqr !== 'undefined') {
+    if (typeof data_qr !== 'undefined') {
+      if (data_qr !== cookie_dataqr) {
+        Cookies.set('data_qr', data_qr)
+      }
     }
+  } else {
+    Cookies.set('data_qr', data_qr)
+  }
 
-    qrcode = Cookies.get('qrcode');
+  const set_cookie_dataqr = JSON.parse(Cookies.get('data_qr'));
+  
+  qrcode = set_cookie_dataqr.url;
+  const set_qrcode = qrcode;
 
-    let set_qrcode = qrcode;
+  const base64_qr = set_cookie_dataqr.base64_qrcode;
 
-    return (
-        <>
-            <div className="mt-40 flex justify-center">
-                <p className="w-1/2 text-4xl font-semibold text-center">QR Code</p>
-            </div>
-            <div className="w-full justify-center mt-7">
-                <p className="text-center text-stone-50">
-                    Silahkan simpan atau scan QR Code dibawah untuk melanjutkan pembayaran
-                </p>
+  useEffect(() => {
+    //here to mimic a slow loading time
+    setTimeout(() => {
+      setImgSource(set_qrcode);
+    }, 1000);
+  }, []);
 
-            </div>
-            <div className="w-full flex flex-col items-center mt-7">
-                <img src={set_qrcode} width={283} height={283} />
-            </div>
-            <div className="flex justify-center mb-10">
-                <button
-                    type="button"
-                    className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    style={{ backgroundColor: '#0285e4' }}
-                    onClick={() => downloadImage(set_qrcode)}
-                >
-                    Simpan QR Code
-                </button>
-            </div>
-            <div className="w-full flex flex-row justify-center mt-1 gap-2 mb-32">
-               <p>Powered by</p>
-               <img src='../png/qris.png' width={117} height={20}/>
-            </div>
+  // ==========================================================================================
 
-        </>
-    )
+  const convertBase64ToFile = (base64String, fileName) => {
+    let arr = base64String.split(',');
+    let mime = arr[0].match(/:(.*?);/)[1];
+    let bstr = atob(arr[1]);
+    let n = bstr.length;
+    let uint8Array = new Uint8Array(n);
+    while (n--) {
+      uint8Array[n] = bstr.charCodeAt(n);
+    }
+    let file = new File([uint8Array], fileName, { type: mime });
+    return file;
+  }
+
+  function downloadBase64Data() {
+    let file = convertBase64ToFile(base64_qr, "qr_code.png");
+    saveAs(file, "qr_code.png");
+  }
+   
+
+  return (
+    <>
+      <div className="mt-40 flex justify-center">
+        <p className="w-1/2 text-4xl font-semibold text-center">QR Code</p>
+      </div>
+      <div className="w-full justify-center mt-7">
+        <p className="text-center text-stone-50">
+          Silahkan simpan atau scan QR Code dibawah untuk melanjutkan pembayaran
+        </p>
+
+      </div>
+      <div className="w-full flex flex-col items-center mt-7">
+        <img src={Spinner}
+          width={210}
+          height={210}
+          style={loadingImgStyle}
+          className='py-10 pt-10' />
+
+        <img src={imgSource}
+          width={283}
+          height={283}
+          style={displayImgStyle}
+          onLoad={() => {
+            setLoaded(true);
+          }
+          }
+          id='image_qrcode'
+          onError={(e) => {
+            setError(e);
+            console.log(e);
+          }} />
+      </div>
+      <div className="flex justify-center mb-10">
+        <button type="button" className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center cursor-pointer" onClick={downloadBase64Data}>
+          Simpan QR Code
+        </button>
+      </div>
+      <div className="w-full flex flex-row justify-center mt-1 gap-2 mb-32">
+        <p>Powered by</p>
+        <img src='../png/qris.png' width={117} height={20} crossOrigin='anonymous' />
+      </div>
+
+    </>
+  )
 }

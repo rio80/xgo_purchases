@@ -18,7 +18,7 @@ const plans = [
     { name: 'Transvision Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
     { name: 'OVO', logo: '../png/ovo.png', width: '51px', height: '21px', id: '6' },
     { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px', id: '' },
-    { name: 'QRIS', logo: '../png/qris_logo.png', width: '45px', height: '16px', id: '7' },
+    { name: 'QRIS', logo: '../png/qris_logo.png', width: '45px', height: '16px', id: '9' },
     { name: 'Pulsa', logo: '../png/telkomsel.png', width: '66px', height: '16px', id: '' },
 ]
 
@@ -89,13 +89,22 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
             }
 
-            if (method_id === '7') {
+            if (method_id === '9') {
+                submit = {
+                    ...submit,
+                    payment_channel: "qris"
+                }
                 const reqPayment = await createRequestPaymentGopay(submit)
                 setLoading(false)
                 // router.push(reqPayment?.data?.result?.data?.actions[0]?.url)
+                const data_qr = {
+                    url : reqPayment?.data?.result?.data?.actions[0]?.url,
+                    base64_qrcode : reqPayment?.data?.result?.qris_base64
+                }
+
                 dispatch({
                     type: KodeAction.SET_QRCODE,
-                    url : reqPayment?.data?.result?.data?.actions[0]?.url
+                    data_qr : JSON.stringify(data_qr)
                 });
                 router.push('/qrcode')
             }
@@ -136,7 +145,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
                 checkPayment(selected.id)
-            } else if (selected.id === '7') {
+            } else if (selected.id === '9') {
                 checkPayment(selected.id)
             } else {
                 dispatch({
