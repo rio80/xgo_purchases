@@ -21,7 +21,7 @@ export default function KodeBayarPage() {
 
   let qrcode = '';
   let qrcode_tobase64 = '';
-
+  let set_cookie_dataqr = '';
 
   if (typeof cookie_dataqr !== 'undefined') {
     if (typeof data_qr !== 'undefined') {
@@ -33,18 +33,23 @@ export default function KodeBayarPage() {
     Cookies.set('data_qr', data_qr)
   }
 
+
+  let set_qrcode = '';
+  let base64_qr = '';
+ setTimeout(() => {
   const set_cookie_dataqr = JSON.parse(Cookies.get('data_qr'));
   
   qrcode = set_cookie_dataqr.url;
-  const set_qrcode = qrcode;
+  set_qrcode = qrcode;
 
-  const base64_qr = set_cookie_dataqr.base64_qrcode;
+  base64_qr = set_cookie_dataqr.base64_qrcode;
+ }, 500);
 
   useEffect(() => {
     //here to mimic a slow loading time
     setTimeout(() => {
       setImgSource(set_qrcode);
-    }, 1000);
+    }, 500);
   }, []);
 
   // ==========================================================================================
