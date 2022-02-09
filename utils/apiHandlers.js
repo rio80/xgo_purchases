@@ -132,3 +132,7 @@ export function reprocessActivation(data){
 export function activationMinipack(data){
     return apiPost('/transvisionplus/minipack/activation', data)
 }
+
+export function getDataXgo(data) {
+    return apiPost("/billing/payment/web/show/data", {trx_id: data});
+}
