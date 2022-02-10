@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
 import { saveAs } from 'file-saver';
 import Spinner from "./Spinner";
 
 
 export default function KodeBayarPage() {
 
-  const data_qr = useSelector((state) => state.KodeReducer.data_qr)
+  const state_url = useSelector((state) => state.KodeReducer.url)
+  const state_base64 = useSelector((state) => state.KodeReducer.base64)
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
 
@@ -17,33 +17,38 @@ export default function KodeBayarPage() {
   const displayImgStyle = { display: loaded ? undefined : "none" };
 
   const [imgSource, setImgSource] = useState("");
-  const cookie_dataqr = JSON.stringify(Cookies.get('data_qr'));
 
-  let qrcode = '';
-  let qrcode_tobase64 = '';
-  let set_cookie_dataqr = '';
+  const cookies_qrcode =  Cookies.get('qrcode');
+  const cookies_base64_qr = Cookies.get('base64_qr');
+  
 
-  if (typeof cookie_dataqr !== 'undefined') {
-    if (typeof data_qr !== 'undefined') {
-      if (data_qr !== cookie_dataqr) {
-        Cookies.set('data_qr', data_qr)
+  if (typeof cookies_qrcode !== 'undefined') {
+    if (typeof state_url !== 'undefined') {
+      if (state_url !== cookies_qrcode) {
+        Cookies.set('qrcode', state_url)
       }
     }
   } else {
-    Cookies.set('data_qr', data_qr)
+    Cookies.set('qrcode', state_url)
+  }
+
+  if (typeof cookies_base64_qr !== 'undefined') {
+    if (typeof state_base64 !== 'undefined') {
+      if (state_base64 !== cookies_base64_qr) {
+        Cookies.set('base64_qr', state_base64)
+      }
+    }
+  } else {
+    Cookies.set('base64_qr', state_base64)
   }
 
 
   let set_qrcode = '';
-  let base64_qr = '';
- setTimeout(() => {
-  const set_cookie_dataqr = JSON.parse(Cookies.get('data_qr'));
-  
-  qrcode = set_cookie_dataqr.url;
-  set_qrcode = qrcode;
+  let set_base64_qr = '';
 
-  base64_qr = set_cookie_dataqr.base64_qrcode;
- }, 500);
+  set_qrcode = Cookies.get('qrcode');
+  set_base64_qr = Cookies.get('base64_qr');
+
 
   useEffect(() => {
     //here to mimic a slow loading time
@@ -68,10 +73,10 @@ export default function KodeBayarPage() {
   }
 
   function downloadBase64Data() {
-    let file = convertBase64ToFile(base64_qr, "qr_code.png");
+    let file = convertBase64ToFile(set_base64_qr, "qr_code.png");
     saveAs(file, "qr_code.png");
   }
-   
+
 
   return (
     <>
@@ -102,7 +107,6 @@ export default function KodeBayarPage() {
           id='image_qrcode'
           onError={(e) => {
             setError(e);
-            console.log(e);
           }} />
       </div>
       <div className="flex justify-center mb-10">

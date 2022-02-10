@@ -67,11 +67,11 @@ export default function MinipackPage() {
 
         let dataPayment = {
             ...payment,
-            amount: +price,
+            amount: price,
             item_details: [
                 {
                     id: id_minipack,
-                    price: +price,
+                    price: price,
                     quantity: 1,
                     name: minipack
                 }

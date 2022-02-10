@@ -96,15 +96,11 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 }
                 const reqPayment = await createRequestPaymentGopay(submit)
                 setLoading(false)
-                // router.push(reqPayment?.data?.result?.data?.actions[0]?.url)
-                const data_qr = {
-                    url : reqPayment?.data?.result?.data?.actions[0]?.url,
-                    base64_qrcode : reqPayment?.data?.result?.qris_base64
-                }
 
                 dispatch({
                     type: KodeAction.SET_QRCODE,
-                    data_qr : JSON.stringify(data_qr)
+                    url : reqPayment?.data?.result?.data?.actions[0]?.url,
+                    base64 : reqPayment?.data?.result?.qris_base64
                 });
                 router.push('/qrcode')
             }
