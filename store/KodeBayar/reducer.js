@@ -11,11 +11,6 @@ export default function KodeBayar(state = initialState, action) {
             newState.kode = action.kode;
             return newState;
         }
-        case KodeAction.SET_QRCODE: {
-            const newState = { ...state };
-            newState.data_qr = action.data_qr;
-            return newState;
-        }
         default:
             return state;
     }
