@@ -113,7 +113,7 @@ export default function HomePage() {
                                                 type="button"
                                                 className="mt-10 w-48 self-center items-center px-9 py-3 border border-transparent text-sm leading-4 font-normal rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                 style={{ backgroundColor: '#00b6f0', boxShadow: '0 4px 31px 0 rgba(0, 0, 0, 0.15)' }}
-                                                onClick={() => setOpen(!open)}
+                                                onClick={() => router.push('/pembelian-xgo')}
                                             >
                                                 Berlangganan
                                             </button>

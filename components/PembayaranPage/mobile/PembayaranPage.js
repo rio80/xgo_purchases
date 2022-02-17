@@ -66,7 +66,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
         const phone = profil?.data?.result?.phone_number
         try {
             let submit = ''
-            if (type === 'minipack' || type === 'stb') {
+            if (type === 'minipack' || type === 'stb' || type === 'xgo') {
                 submit = {
                     ...datapayment,
                     order_id: Cookies.get('order_id'),
@@ -117,7 +117,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
             let submit = ''
             let postData = ''
 
-            if (type === 'minipack' || type === 'stb') {
+            if (type === 'minipack' || type === 'stb' || type === 'xgo') {
                 submit = {
                     ...createorder,
                     payment_method_id: selected.id,
@@ -135,14 +135,14 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 postData = await createOrderBox(submit);
             }
 
-            const orderId = type === 'minipack' || type === 'stb' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
+            const orderId = type === 'minipack' || type === 'stb' || type === 'xgo' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
                 checkPayment()
             } else {
                 dispatch({
                     type: KodeAction.SET_KODE,
-                    kode: type === 'minipack' || type === 'stb' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
+                    kode: type === 'minipack' || type === 'stb' || type === 'xgo' ? postData?.data?.result?.payment_code : postData?.data?.result?.PaymentCode,
                 });
                 router.push('/kode-bayar')
             }
@@ -218,7 +218,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
             Qty: 1,
         });
         setTimeout(
-            () => router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box'),
+            () => router.push(type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : type === 'xgo' ? '/pembelian-xgo' : '/pembelian-box'),
             400
         );
 
@@ -464,7 +464,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 </div>
             }
 
-            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : '/pembelian-box'} close={closeModal} />}
+            {open && <Alert type={0} title={'Pembayaran Gagal'} message={error} link={type === 'minipack' || type === 'stb' ? '/pembelian-minipack' : type === 'xgo' ? '/pembelian-xgo' : '/pembelian-box'} close={closeModal} />}
             {coming && <Alert type={1} title={'Coming Soon'} message={''} close={closeComing} />}
 
             <div className="absolute top-0 left-0 w-full min-h-screen lg:hidden mt-12" style={{ backgroundColor: '#f6f9ff' }}>
