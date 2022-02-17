@@ -25,6 +25,10 @@ export function createRequestPayment(data) {
     return apiPost("/billing/payment/doku/web/pay/ovo", data);
 }
 
+export function createRequestPaymentMidtrans(data) {
+    return apiPost("/billing/payment/midtrans/web/pay", data);
+}
+
 export function getStatusOrder(data) {
     return apiPost("/billing/payment/doku/check", { order_id: data });
 }

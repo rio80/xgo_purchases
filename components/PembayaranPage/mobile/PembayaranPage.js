@@ -18,6 +18,7 @@ const plans = [
     { name: 'Transvision Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
     { name: 'OVO', logo: '../png/ovo.png', width: '51px', height: '21px', id: '6' },
     { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px', id: '' },
+    { name: 'QRIS', logo: '../png/qris_logo.jpg', width: '45px', height: '15px', id: '9' },
     { name: 'Pulsa', logo: '../png/telkomsel.png', width: '66px', height: '16px', id: '' },
 ]
 
