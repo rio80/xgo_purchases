@@ -2,7 +2,7 @@ import { useEffect, useState, Fragment } from 'react'
 import { RadioGroup, Dialog, Listbox, Transition, Popover } from '@headlessui/react'
 import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
-import { createOrderBox, createOrderMinipack, createRequestPayment, getProfil, createRequestPaymentGopay } from '../../../utils/apiHandlers'
+import { createOrderBox, createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -18,7 +18,6 @@ const plans = [
     { name: 'Transvision Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
     { name: 'OVO', logo: '../png/ovo.png', width: '51px', height: '21px', id: '6' },
     { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px', id: '' },
-    { name: 'QRIS', logo: '../png/qris_logo.png', width: '45px', height: '16px', id: '9' },
     { name: 'Pulsa', logo: '../png/telkomsel.png', width: '66px', height: '16px', id: '' },
 ]
 
@@ -61,7 +60,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
         createOrder()
     }
 
-    const checkPayment = async (method_id) => {
+    const checkPayment = async () => {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
         const phone = profil?.data?.result?.phone_number
         try {
@@ -138,9 +137,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
             const orderId = type === 'minipack' || type === 'stb' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
             if (selected.id === '6') {
-                checkPayment(selected.id)
-            }else if (selected.id === '9') {
-                checkPayment(selected.id)
+                checkPayment()
             } else {
                 dispatch({
                     type: KodeAction.SET_KODE,
