@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import Spinner from "./Spinner";
 
 
-export default function KodeBayarPage() {
+export default function QRCodePage() {
 
   const env = process.env.NODE_ENV;
 
