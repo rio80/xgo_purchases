@@ -7,6 +7,8 @@ import Spinner from "./Spinner";
 
 export default function KodeBayarPage() {
 
+  const env = process.env.NODE_ENV;
+
   const state_url = useSelector((state) => state.KodeReducer.url)
   const state_base64 = useSelector((state) => state.KodeReducer.base64)
   const [loaded, setLoaded] = useState(false);
@@ -77,7 +79,7 @@ export default function KodeBayarPage() {
     saveAs(file, "qr_code.png");
   }
 
-
+  const setLinkQrCode = <p className='mx-auto'>{imgSource}</p>;
   return (
     <>
       <div className="mt-40 flex justify-center">
@@ -110,7 +112,7 @@ export default function KodeBayarPage() {
           }} />
       </div>
       <div className="flex flex-col justify-center mb-10">
-        <p className='mx-auto'>{imgSource}</p>
+        {(env === 'development') ? setLinkQrCode : ""}
         <button type="button" className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center cursor-pointer" onClick={downloadBase64Data}>
           Simpan QR Code
         </button>
