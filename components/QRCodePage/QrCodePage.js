@@ -109,7 +109,8 @@ export default function KodeBayarPage() {
             setError(e);
           }} />
       </div>
-      <div className="flex justify-center mb-10">
+      <div className="flex flex-col justify-center mb-10">
+        <p className='mx-auto'>{imgSource}</p>
         <button type="button" className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center cursor-pointer" onClick={downloadBase64Data}>
           Simpan QR Code
         </button>
