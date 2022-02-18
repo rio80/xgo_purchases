@@ -61,7 +61,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
         createOrder()
     }
 
-    const checkPayment = async () => {
+    const checkPayment = async (method_id) => {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
         const phone = profil?.data?.result?.phone_number
         try {
