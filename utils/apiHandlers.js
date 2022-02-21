@@ -29,8 +29,7 @@ export function createRequestPayment(data) {
     return apiPost("/billing/payment/doku/web/pay/ovo", data);
 }
 
-
-export function createRequestPaymentGopay(data) {
+export function createRequestPaymentMidtrans(data) {
     return apiPost("/billing/payment/midtrans/web/pay", data);
 }
 

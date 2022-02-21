@@ -1,14 +1,16 @@
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
 import { saveAs } from 'file-saver';
 import Spinner from "./Spinner";
 
 
-export default function KodeBayarPage() {
+export default function QrCodePage() {
 
-  const data_qr = useSelector((state) => state.KodeReducer.data_qr)
+  const env = process.env.NODE_ENV;
+
+  const state_url = useSelector((state) => state.KodeReducer.url)
+  const state_base64 = useSelector((state) => state.KodeReducer.base64)
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
 
@@ -17,33 +19,38 @@ export default function KodeBayarPage() {
   const displayImgStyle = { display: loaded ? undefined : "none" };
 
   const [imgSource, setImgSource] = useState("");
-  const cookie_dataqr = JSON.stringify(Cookies.get('data_qr'));
 
-  let qrcode = '';
-  let qrcode_tobase64 = '';
-  let set_cookie_dataqr = '';
+  const cookies_qrcode =  Cookies.get('qrcode');
+  const cookies_base64_qr = Cookies.get('base64_qr');
+  
 
-  if (typeof cookie_dataqr !== 'undefined') {
-    if (typeof data_qr !== 'undefined') {
-      if (data_qr !== cookie_dataqr) {
-        Cookies.set('data_qr', data_qr)
+  if (typeof cookies_qrcode !== 'undefined') {
+    if (typeof state_url !== 'undefined') {
+      if (state_url !== cookies_qrcode) {
+        Cookies.set('qrcode', state_url)
       }
     }
   } else {
-    Cookies.set('data_qr', data_qr)
+    Cookies.set('qrcode', state_url)
+  }
+
+  if (typeof cookies_base64_qr !== 'undefined') {
+    if (typeof state_base64 !== 'undefined') {
+      if (state_base64 !== cookies_base64_qr) {
+        Cookies.set('base64_qr', state_base64)
+      }
+    }
+  } else {
+    Cookies.set('base64_qr', state_base64)
   }
 
 
   let set_qrcode = '';
-  let base64_qr = '';
- setTimeout(() => {
-  const set_cookie_dataqr = JSON.parse(Cookies.get('data_qr'));
-  
-  qrcode = set_cookie_dataqr.url;
-  set_qrcode = qrcode;
+  let set_base64_qr = '';
 
-  base64_qr = set_cookie_dataqr.base64_qrcode;
- }, 500);
+  set_qrcode = Cookies.get('qrcode');
+  set_base64_qr = Cookies.get('base64_qr');
+
 
   useEffect(() => {
     //here to mimic a slow loading time
@@ -68,11 +75,11 @@ export default function KodeBayarPage() {
   }
 
   function downloadBase64Data() {
-    let file = convertBase64ToFile(base64_qr, "qr_code.png");
+    let file = convertBase64ToFile(set_base64_qr, "qr_code.png");
     saveAs(file, "qr_code.png");
   }
-   
 
+  const setLinkQrCode = <p className='mx-auto'>{imgSource}</p>;
   return (
     <>
       <div className="mt-40 flex justify-center">
@@ -102,10 +109,10 @@ export default function KodeBayarPage() {
           id='image_qrcode'
           onError={(e) => {
             setError(e);
-            console.log(e);
           }} />
       </div>
-      <div className="flex justify-center mb-10">
+      <div className="flex flex-col justify-center mb-10">
+        {(env === 'development') ? setLinkQrCode : ""}
         <button type="button" className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center cursor-pointer" onClick={downloadBase64Data}>
           Simpan QR Code
         </button>
