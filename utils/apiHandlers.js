@@ -140,3 +140,7 @@ export function activationMinipack(data){
 export function getDataXgo(data) {
     return apiPost("/billing/payment/web/show/data", {trx_id: data});
 }
+
+export function getCheckStatusMidtrans(data) {
+    return apiPost('/billing/payment/midtrans/check', {order_id : data});
+}

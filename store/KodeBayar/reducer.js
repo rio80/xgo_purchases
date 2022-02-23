@@ -15,6 +15,7 @@ export default function KodeBayar(state = initialState, action) {
             const newState = { ...state };
             newState.url = action.url;
             newState.base64 = action.base64;
+            newState.midtrans_id = action.midtrans_id;
             return newState;
         }
         default:

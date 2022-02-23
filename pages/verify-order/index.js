@@ -3,20 +3,34 @@ import * as React from 'react'
 import Loader from 'react-loader-spinner';
 import BerhasilPage from '../../components/BerhasilPage/BerhasilPage';
 import GagalPage from '../../components/GagalPage/GagalPage';
+import PendingPage from '../../components/PendingPage/PendingPage';
 import HeaderHome from '../../components/shared/Header/HeaderHome';
-import { getStatusOrder } from '../../utils/apiHandlers';
+import { getStatusOrder, getCheckStatusMidtrans } from '../../utils/apiHandlers';
 
 export default function VerifyOrder(props) {
-    const { order_id } = props
+    const { order_id, payment_type } = props
     const [status, setStatus] = React.useState(false)
     const [price, setPrice] = React.useState('')
+    const [type, setType] = React.useState('')
     const [loading, setLoading] = React.useState(true)
     React.useEffect(() => {
         (async () => {
             try {
-                const getData = await getStatusOrder(order_id);
-                setStatus(getData?.data?.result?.transaction_status)
-                setPrice(getData?.data?.result?.gross_amount)
+                let getData;
+                if (payment_type === 'qris' || payment_type === 'gopay') {
+                    getData = await getCheckStatusMidtrans(order_id);
+                    console.log(getData);
+                    setType(getData?.data?.payment_type)
+                    setStatus(getData?.data?.transaction_status)
+                    setPrice(getData?.data?.gross_amount)
+
+                } else {
+                    getData = await getStatusOrder(order_id);
+                    setStatus(getData?.data?.result?.transaction_status)
+                    setPrice(getData?.data?.result?.gross_amount)
+
+                }
+
                 Cookies.remove('order_id')
                 localStorage.removeItem('payment')
                 localStorage.removeItem('checkout')
@@ -39,7 +53,19 @@ export default function VerifyOrder(props) {
     return (
         <>
             <HeaderHome />
-            {status ? status === 'PAID' ? <BerhasilPage harga={price} /> : <GagalPage /> : ''}
+            {type === 'qris' ? (
+                status ? status === 'settlement'
+                    ? <BerhasilPage harga={price} image={'../png/qris_logo.jpg'} />
+                    : status === 'pending' ?
+                        <PendingPage harga={price} type={type} onclick='/qrcode' title='Masih menunggu pembayaran' title_back="Kembali ke QRIS" />
+                        : status === 'expire' ?
+                            <GagalPage image={'../png/qris_logo.jpg'} onclick='/' title='Pembayaran sudah kadaluarsa' title_back="Kembali ke beranda"/>
+                            : '' : ''
+            ) : (
+                status ? status === 'PAID'
+                    ? <BerhasilPage harga={price} image={'../png/dokuovo.png'} />
+                    : <GagalPage image={'../png/dokuovo.png'} /> : ''
+            )}
         </>
     )
 }
@@ -48,5 +74,6 @@ VerifyOrder.getInitialProps = async ctx => {
     const { query } = ctx;
     return {
         order_id: query ? query.order_id : '',
+        payment_type: query ? query.payment_type : '',
     };
 };
