@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import { saveAs } from 'file-saver';
 import Spinner from "./Spinner";
+import { getCheckStatusMidtrans } from "../../utils/apiHandlers";
+import router from 'next/router';
 
 
 export default function QrCodePage() {
@@ -11,6 +13,7 @@ export default function QrCodePage() {
 
   const state_url = useSelector((state) => state.KodeReducer.url)
   const state_base64 = useSelector((state) => state.KodeReducer.base64)
+  const midtrans_id = useSelector((state) => state.KodeReducer.midtrans_id)
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
 
@@ -20,9 +23,10 @@ export default function QrCodePage() {
 
   const [imgSource, setImgSource] = useState("");
 
-  const cookies_qrcode =  Cookies.get('qrcode');
+  const cookies_qrcode = Cookies.get('qrcode');
   const cookies_base64_qr = Cookies.get('base64_qr');
-  
+  const cookies_midtrans_id = Cookies.get('midtrans_id');
+
 
   if (typeof cookies_qrcode !== 'undefined') {
     if (typeof state_url !== 'undefined') {
@@ -33,6 +37,7 @@ export default function QrCodePage() {
   } else {
     Cookies.set('qrcode', state_url)
   }
+
 
   if (typeof cookies_base64_qr !== 'undefined') {
     if (typeof state_base64 !== 'undefined') {
@@ -45,11 +50,24 @@ export default function QrCodePage() {
   }
 
 
+  if (typeof cookies_midtrans_id !== 'undefined') {
+    if (typeof midtrans_id !== 'undefined') {
+      if (midtrans_id !== cookies_midtrans_id) {
+        Cookies.set('midtrans_id', midtrans_id)
+      }
+    }
+  } else {
+    Cookies.set('midtrans_id', midtrans_id)
+  }
+
+
   let set_qrcode = '';
   let set_base64_qr = '';
+  let set_midtrans_id = '';
 
   set_qrcode = Cookies.get('qrcode');
   set_base64_qr = Cookies.get('base64_qr');
+  set_midtrans_id = Cookies.get('midtrans_id');
 
 
   useEffect(() => {
@@ -77,6 +95,13 @@ export default function QrCodePage() {
   function downloadBase64Data() {
     let file = convertBase64ToFile(set_base64_qr, "qr_code.png");
     saveAs(file, "qr_code.png");
+  }
+
+  const checkStatusPayment = async () => {
+    const checkStatus = await getCheckStatusMidtrans(set_midtrans_id);
+    // console.log(checkStatus?.data?.transaction_status);
+    const type = checkStatus?.data?.payment_type;
+    router.push(`/verify-order?payment_type=${type}&order_id=${set_midtrans_id}`)
   }
 
   const setLinkQrCode = <p className='mx-auto'>{imgSource}</p>;
@@ -111,11 +136,17 @@ export default function QrCodePage() {
             setError(e);
           }} />
       </div>
-      <div className="flex flex-col justify-center mb-10">
+      <div className="flex flex-col mb-10 ">
         {(env === 'development') ? setLinkQrCode : ""}
-        <button type="button" className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center cursor-pointer" onClick={downloadBase64Data}>
-          Simpan QR Code
-        </button>
+        <div className='flex justify-center'>
+          <button type="button" className="lg:ml-auto mr-5 w-48 mt-6 px-4 py-3 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center cursor-pointer" onClick={downloadBase64Data}>
+            Simpan QR Code
+          </button>
+
+          <button type="button" className="lg:mr-auto ml-5 w-60 mt-6 px-4 py-3 border border-blue-600 text-base leading-4 font-medium rounded-full shadow-sm text-blue-600 hover:text-white hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center cursor-pointer" onClick={checkStatusPayment}>
+            Lihat Status Pembayaran
+          </button>
+        </div>
       </div>
       <div className="w-full flex flex-row justify-center mt-1 gap-2 mb-32">
         <p>Powered by</p>
