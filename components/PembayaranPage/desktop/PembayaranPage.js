@@ -100,7 +100,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 dispatch({
                     type: KodeAction.SET_QRCODE,
                     url : reqPayment?.data?.result?.data?.actions[0]?.url,
-                    base64 : reqPayment?.data?.result?.qris_base64
+                    base64 : reqPayment?.data?.result?.qris_base64,
+                    midtrans_id : reqPayment?.data?.result?.id
                 });
                 router.push('/qrcode')
             }

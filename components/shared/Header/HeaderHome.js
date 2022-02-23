@@ -22,7 +22,7 @@ export default function HeaderHome({ variant = 'default' }) {
     const [app, setApp] = useState('')
 
     const home = [
-        { name: 'Home', href: '#', current: true },
+        { name: 'Home', href: '/', current: true },
         { name: 'Product', href: '#', current: false },
         { name: 'FAQ', href: '#', current: false }
     ]
@@ -43,12 +43,25 @@ export default function HeaderHome({ variant = 'default' }) {
     }
 
     const scrollToSection = (name) => {
-        scroller.scrollTo(name, {
-            duration: 800,
-            delay: 0,
-            smooth: "easeInOutQuart",
-            offset: name === 'Product' ? -110 : name === 'FAQ' ? -60 : -200
-        });
+        if(router.pathname !== '/'){
+            router.push('/')
+            setTimeout(() => {
+                scroller.scrollTo(name, {
+                    duration: 800,
+                    delay: 0,
+                    smooth: "easeInOutQuart",
+                    offset: name === 'Product' ? -110 : name === 'FAQ' ? -60 : -200
+                });
+            }, 1000);
+        }else{
+            scroller.scrollTo(name, {
+                duration: 800,
+                delay: 0,
+                smooth: "easeInOutQuart",
+                offset: name === 'Product' ? -110 : name === 'FAQ' ? -60 : -200
+            });
+        }
+        
     };
 
     const empty = () => {

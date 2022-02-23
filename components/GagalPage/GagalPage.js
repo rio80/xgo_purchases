@@ -5,7 +5,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function GagalPage() {
+export default function GagalPage(props) {
     const router = useRouter()
     return (
         <div className="px-3.5">
@@ -15,12 +15,12 @@ export default function GagalPage() {
                 </div>
                 <div className="w-full flex flex-col lg:flex-row">
                     <div className="lg:w-3/5 w-full">
-                        <p className="text-3xl text-center lg:text-left text-gray-600 font-semibold">
-                            Pembayaran Anda Gagal
+                        <p className="text-3xl text-center lg:text-left font-semibold">
+                            {props.title}
                         </p>
                         <div className="flex mt-4">
-                            <p className="text-gray-400 font-base text-base lg:text-left text-center">
-                                Pembayaran transaksi Anda gagal. Silahkan coba lagi
+                            <p className="text-[#5c5c5c] font-semibold font-base text-base lg:text-left text-center">
+                            {props.title}. Silahkan coba lagi
                             </p>
                         </div>
                     </div>
@@ -28,11 +28,12 @@ export default function GagalPage() {
                         <div className="flex justify-center lg:justify-end">
                             <button
                                 type="button"
-                                className="mx-auto lg:ml-auto w-48 mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className="mx-auto lg:ml-auto w-auto mt-6 px-4 py-4 border border-transparent text-base leading-4 font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 style={{ backgroundColor: '#0285e4' }}
-                                onClick={()=>router.push('/')}
+                                onClick={()=>router.push(props.onclick)}
                             >
-                                Kembali ke beranda
+                                {props.title_back}
+                                {/* Kembali ke beranda */}
                             </button>
                         </div>
 
