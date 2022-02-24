@@ -57,7 +57,7 @@ export default function VerifyOrder(props) {
                 status ? status === 'settlement'
                     ? <BerhasilPage harga={price} image={'../png/qris_logo.jpg'} />
                     : status === 'pending' ?
-                        <PendingPage harga={price} type={type} onclick='/qrcode' title='Masih menunggu pembayaran' title_back="Kembali ke QRIS" />
+                        <PendingPage harga={price} image={'../png/qris_logo.jpg'} onclick='/qrcode' title='Masih menunggu pembayaran' title_back="Kembali ke QRIS" />
                         : status === 'expire' ?
                             <GagalPage image={'../png/qris_logo.jpg'} onclick='/' title='Pembayaran sudah kadaluarsa' title_back="Kembali ke beranda"/>
                             : '' : ''

@@ -52,8 +52,7 @@ export default function PendingPage(prop) {
                                     Metode Pembayaran
                                 </div>
                                 <div className="mt-2">
-                                    {/* <img src={prop.image} className="mx-auto lg:mx-0" width="66px" hegiht="15px" /> */}
-                                   <span className='font-semibold text-lg'>{prop.type}</span>
+                                    <img src={prop.image} className="mx-auto lg:mx-0" width="66px" hegiht="15px" />
                                 </div>
                             </div>
                         </div>
