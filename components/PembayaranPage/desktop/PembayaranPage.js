@@ -98,9 +98,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 
                 const reqPayment = await createRequestPaymentMidtrans(submit)
               
-
                 if(isMobile){
-                    router.push(reqPayment?.data?.result?.data?.actions[1]?.url)
+                    return window.location = reqPayment?.data?.result?.data?.actions[1]?.url;
                 }
 
                 setLoading(false)
