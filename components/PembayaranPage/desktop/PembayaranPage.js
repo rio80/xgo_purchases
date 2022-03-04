@@ -98,12 +98,12 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 
                 const reqPayment = await createRequestPaymentMidtrans(submit)
               
+                setLoading(false)
+                
                 if(isMobile){
                     return window.location = reqPayment?.data?.result?.data?.actions[1]?.url;
                 }
-
-                setLoading(false)
-
+                
                 dispatch({
                     type: KodeAction.SET_QRCODE,
                     url : reqPayment?.data?.result?.data?.actions[0]?.url,
