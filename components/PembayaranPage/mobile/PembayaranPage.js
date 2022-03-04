@@ -13,6 +13,7 @@ import { KodeAction } from '../../../store/KodeBayar/KodeBayarAction'
 import { addMonths, format } from 'date-fns'
 import { FooterAction } from '../../../store/Footer/FooterAction'
 import { CheckoutAction } from '../../../store/Checkout/CheckoutAction'
+import { isMobile } from 'react-device-detect'
 
 const plans = [
     { name: 'Transvision Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
@@ -89,12 +90,19 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
             }
 
-            if (method_id === '9') {
+            if (method_id === '9' || method_id === '7') {
                 submit = {
                     ...submit,
-                    payment_channel: "qris"
+                    payment_channel: method_id === '9' ? 'qris' : method_id === '7' ? 'gopay' : ''
                 }
-                const reqPayment = await createRequestPaymentGopay(submit)
+                
+                const reqPayment = await createRequestPaymentMidtrans(submit)
+              
+
+                if(isMobile){
+                    router.push(reqPayment?.data?.result?.data?.actions[1]?.url)
+                }
+
                 setLoading(false)
 
                 dispatch({
