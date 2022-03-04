@@ -205,7 +205,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
     const handleComing = (data) => {
         // console.log('hai')
-        if (data === 'Gopay' || data === 'Pulsa') {
+        // if (data === 'Gopay' || data === 'Pulsa') {
+        if (data === 'Pulsa') {
             setComing(!coming)
         }
     }
@@ -648,7 +649,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
                                                             'relative block border p-4 cursor-pointer focus:outline-none sm:flex sm:justify-between'
                                                         )
                                                     }
-                                                    disabled={plan.name === 'Gopay' || plan.name === 'Pulsa' ? true : false}
+                                                    disabled={plan.name === 'Pulsa' ? true : false}
                                                 >
                                                     {({ active, checked }) => (
                                                         <>
