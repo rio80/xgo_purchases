@@ -17,7 +17,7 @@ import { CheckoutAction } from '../../../store/Checkout/CheckoutAction'
 const plans = [
     { name: 'Transvision Kode Bayar', logo: '../png/v+.png', width: '32px', height: '14px', id: '4' },
     { name: 'OVO', logo: '../png/ovo.png', width: '51px', height: '21px', id: '6' },
-    { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px', id: '' },
+    { name: 'Gopay', logo: '../png/gopay.png', width: '59px', height: '14px', id: '7' },
     { name: 'QRIS', logo: '../png/qris_logo.jpg', width: '45px', height: '15px', id: '9' },
     { name: 'Pulsa', logo: '../png/telkomsel.png', width: '66px', height: '16px', id: '' },
 ]
@@ -100,7 +100,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 dispatch({
                     type: KodeAction.SET_QRCODE,
                     url : reqPayment?.data?.result?.data?.actions[0]?.url,
-                    base64 : reqPayment?.data?.result?.qris_base64
+                    base64 : reqPayment?.data?.result?.qris_base64,
+                    midtrans_id : reqPayment?.data?.result?.id
                 });
                 router.push('/qrcode')
             }
@@ -137,8 +138,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
             const orderId = type === 'minipack' || type === 'stb' || type === 'xgo' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
-            if (selected.id === '6') {
-                checkPayment()
+            if (selected.id === '6'  || selected.id === '9') {
+                checkPayment(selected.id)
             } else {
                 dispatch({
                     type: KodeAction.SET_KODE,
