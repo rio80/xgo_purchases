@@ -2,7 +2,7 @@ import { useEffect, useState, Fragment } from 'react'
 import { RadioGroup, Dialog, Listbox, Transition, Popover } from '@headlessui/react'
 import { CheckIcon, MailIcon, SelectorIcon } from '@heroicons/react/solid'
 import css from './PembayaranPage.module.css'
-import { createOrderBox, createOrderMinipack, createRequestPayment, getProfil } from '../../../utils/apiHandlers'
+import { createOrderBox, createOrderMinipack, createRequestPayment, createRequestPaymentMidtrans, getProfil } from '../../../utils/apiHandlers'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
@@ -66,6 +66,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
         const datapayment = JSON.parse(localStorage.getItem('payment'))
         const phone = profil?.data?.result?.phone_number
         try {
+     
             let submit = ''
             if (type === 'minipack' || type === 'stb' || type === 'xgo') {
                 submit = {
@@ -98,9 +99,8 @@ export default function PembayaranPage({ type = 'minipack' }) {
                 
                 const reqPayment = await createRequestPaymentMidtrans(submit)
                 setLoading(false)
-              
 
-                if(isMobile){
+                if(isMobile && method_id === '7'){
                     return window.location = reqPayment?.data?.result?.data?.actions[1]?.url;
                 }
 
@@ -146,7 +146,7 @@ export default function PembayaranPage({ type = 'minipack' }) {
 
             const orderId = type === 'minipack' || type === 'stb' || type === 'xgo' ? postData?.data?.result?.order_id : postData?.data?.result?.OrderId
             Cookies.set('order_id', orderId)
-            if (selected.id === '6'  || selected.id === '9') {
+            if (selected.id === '6'  || selected.id === '9' || selected.id === '7') {
                 checkPayment(selected.id)
             } else {
                 dispatch({
